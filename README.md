@@ -21,13 +21,13 @@ This project uses Agile methodology and the MoSCoW prioritisation method to mana
 
 This setup ensures an organised and iterative development process with clear visibility on progress and priorities.
 
-### 📝 Code Formatting Setup
+### Code Formatting
 
-- **Python files** are automatically formatted on save using **Black Formatter** (PEP8 compliant).
-- **Django templates (`django-html`)** are not auto-formatted to preserve intentional spacing and layout choices.
-  - This ensures template readability and prevents unwanted collapsing of HTML structure.
-  - Developers are encouraged to use **Emmet abbreviations** and manual indentation (4 spaces) for clean, maintainable template files.
-- **VS Code Setup Includes**:
-  - Auto-activation of Python virtual environment.
-  - Prettier installed but **disabled for Django templates** to avoid structure disruption.
-  - Emmet enabled for quick HTML/Django template expansions.
+This project uses the following formatting setup for code consistency:
+
+- **Python files** are automatically formatted on save using **Black Formatter** (PEP8-compliant).
+- **Django templates** are formatted using **Beautify**, which provides clean indentation and spacing for improved readability.
+    - Beautify has been selected for this project to restore familiar auto-indentation behavior within templates and minimise manual formatting.
+    - Note: Beautify is no longer actively maintained but remains effective for Django templates in VS Code as of this project build.
+- **Emmet** is enabled for rapid HTML/Django template expansion.
+
