@@ -1,0 +1,107 @@
+[
+    {
+        "model": "products.product",
+        "pk": 1,
+        "fields": {
+            "category": 1,
+            "sku": "CK001",
+            "name": "Chocolate Celebration Cake",
+            "description": "A rich chocolate sponge layered with smooth chocolate buttercream and topped with chocolate curls.",
+            "price": "35.00",
+            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/chocolate_cake.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 2,
+        "fields": {
+            "category": 2,
+            "sku": "CC002",
+            "name": "Vanilla Cupcake Box (6)",
+            "description": "Six fluffy vanilla cupcakes with buttercream swirls and sprinkles.",
+            "price": "15.00",
+            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/vanilla_cupcakes.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 3,
+        "fields": {
+            "category": 3,
+            "sku": "CST003",
+            "name": "Custom Birthday Cake",
+            "description": "Design your own birthday cake with choice of flavour, size, and message.",
+            "price": "0.00",
+            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/custom_cake_placeholder.jpg",
+            "is_custom": true,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 4,
+        "fields": {
+            "category": 5,
+            "sku": "AC001",
+            "name": "Birthday Candles Pack",
+            "description": "Colourful candles to top off any birthday cake. Includes 12 candles and holders.",
+            "price": "2.50",
+            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/candles.jpg",
+            "is_custom": false,
+            "is_accessory": true,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 5,
+        "fields": {
+            "category": 6,
+            "sku": "AC002",
+            "name": "Happy Birthday Cake Topper - Gold",
+            "description": "A reusable acrylic topper in gold script to add a touch of elegance.",
+            "price": "3.50",
+            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/cake_topper.jpg",
+            "is_custom": false,
+            "is_accessory": true,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 6,
+        "fields": {
+            "category": 7,
+            "sku": "AC003",
+            "name": "Helium Balloon - Pink Star",
+            "description": "Large pink star-shaped helium balloon perfect for birthdays or baby showers.",
+            "price": "5.00",
+            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/balloon.jpg",
+            "is_custom": false,
+            "is_accessory": true,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 7,
+        "fields": {
+            "category": 10,
+            "sku": "GV001",
+            "name": "€20 Gift Voucher",
+            "description": "Perfect for any occasion, this digital gift voucher can be used online or in store.",
+            "price": "20.00",
+            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/gift_voucher.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": true
+        }
+    }
+]

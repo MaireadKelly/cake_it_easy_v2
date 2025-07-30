@@ -1,0 +1,110 @@
+[
+    {
+        "model": "products.category",
+        "pk": 1,
+        "fields": {
+            "name": "cakes",
+            "friendly_name": "Cakes",
+            "parent": null
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 2,
+        "fields": {
+            "name": "cupcakes",
+            "friendly_name": "Cupcakes",
+            "parent": 1
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 3,
+        "fields": {
+            "name": "custom",
+            "friendly_name": "Custom Cakes",
+            "parent": 1
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 4,
+        "fields": {
+            "name": "accessories",
+            "friendly_name": "Accessories",
+            "parent": null
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 5,
+        "fields": {
+            "name": "candles",
+            "friendly_name": "Candles",
+            "parent": 4
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 6,
+        "fields": {
+            "name": "toppers",
+            "friendly_name": "Toppers",
+            "parent": 4
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 7,
+        "fields": {
+            "name": "balloons",
+            "friendly_name": "Balloons",
+            "parent": 4
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 8,
+        "fields": {
+            "name": "banners",
+            "friendly_name": "Banners",
+            "parent": 4
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 9,
+        "fields": {
+            "name": "offers",
+            "friendly_name": "Special Offers",
+            "parent": null
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 10,
+        "fields": {
+            "name": "gift-vouchers",
+            "friendly_name": "Gift Vouchers",
+            "parent": 9
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 11,
+        "fields": {
+            "name": "deals",
+            "friendly_name": "Deals",
+            "parent": 9
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 12,
+        "fields": {
+            "name": "clearance",
+            "friendly_name": "Clearance",
+            "parent": 9
+        }
+    }
+]
