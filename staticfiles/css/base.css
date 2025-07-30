@@ -1,0 +1,265 @@
+html {
+    height: 100%;
+}
+
+/* ----------------------------
+   Colour Variables: Dark Blue, Gold & Neutral Palette
+---------------------------- */
+:root {
+    --primary-color: #044762;
+    --accent-color: #a68f51;
+    --neutral-dark: #555253;
+    --neutral-light: #f8f8f8;
+    --text-dark: #2f2f2f;
+}
+
+/* ----------------------------
+   Brand Colour Utilities
+---------------------------- */
+.bg-brand {
+    background-color: var(--primary-color) !important;
+}
+
+.text-brand {
+    color: var(--primary-color) !important;
+}
+
+.border-brand {
+    border: 1px solid var(--primary-color) !important;
+}
+
+.bg-accent {
+    background-color: var(--accent-color) !important;
+}
+
+.text-accent {
+    color: var(--accent-color) !important;
+}
+
+/* Optional additional utilities */
+.text-neutral-dark {
+    color: var(--neutral-dark) !important;
+}
+
+.bg-neutral-light {
+    background-color: var(--neutral-light) !important;
+}
+
+/* ----------------------------
+   Base Layout
+---------------------------- */
+body {
+    background-color: var(--neutral-light);
+    color: var(--text-dark);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* ----------------------------
+   Delivery Banner
+---------------------------- */
+.delivery-banner {
+    padding: 1.2rem 0;
+}
+
+.delivery-banner h4 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* ----------------------------
+   Header and Navigation
+---------------------------- */
+header {
+    background-color: white;
+    border-bottom: 2px solid var(--neutral-light);
+    padding: 1rem 0;
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.nav-link {
+    color: var(--primary-color) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.nav-link:hover {
+    color: var(--accent-color) !important;
+}
+
+/* ----------------------------
+   Logo Styling
+---------------------------- */
+.logo-img {
+    max-width: 180px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.logo-font {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    color: var(--accent-color);
+    text-transform: uppercase;
+}
+
+/* ----------------------------
+   Hero Section
+---------------------------- */
+.hero-overlay {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 60px 40px;
+    margin: 220px auto 3rem auto;
+    /* Added top margin to push it below header/banner */
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    max-width: 700px;
+    text-align: center;
+}
+
+.hero-overlay h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.hero-overlay p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* ----------------------------
+   Buttons
+---------------------------- */
+.btn-brand {
+    background-color: var(--primary-color);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 0.8rem 2rem;
+    border-radius: 30px;
+    text-transform: uppercase;
+    border: none;
+    transition: all 0.3s;
+}
+
+.btn-brand:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.btn-hero {
+    background-color: var(--primary-color);
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding: 1rem 3rem;
+    border-radius: 50px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    text-transform: uppercase;
+    border: none;
+    transition: all 0.3s;
+}
+
+.btn-hero:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* ----------------------------
+   Dropdown Styling
+---------------------------- */
+.dropdown-menu {
+    border: 2px solid var(--primary-color);
+}
+
+.dropdown-item {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.dropdown-item:hover {
+    background-color: var(--neutral-light);
+    color: var(--accent-color);
+}
+
+/* ----------------------------
+   Search Bar Styling
+---------------------------- */
+.input-group .form-control {
+    border: 2px solid var(--primary-color);
+    background-color: #fff;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.input-group .form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: none;
+}
+
+.input-group .form-control::placeholder {
+    color: var(--primary-color);
+    opacity: 0.8;
+}
+
+.input-group-append .btn {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.input-group-append .btn:hover {
+    background-color: var(--accent-color);
+}
+
+/* ----------------------------
+   Responsive Layout
+---------------------------- */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 85%;
+    }
+}
+
+@media (min-width: 992px) {
+    .fixed-top-desktop-only {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1030;
+    }
+
+    .header-container {
+        margin-top: 180px;
+    }
+}
+
+@media (max-width: 992px) {
+    .nav-link {
+        font-size: 1rem;
+        padding: 0.75rem 1rem;
+    }
+}
