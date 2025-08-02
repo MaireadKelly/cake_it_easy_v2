@@ -4,11 +4,11 @@
         "pk": 1,
         "fields": {
             "category": 1,
-            "sku": "CK001",
-            "name": "Chocolate Celebration Cake",
-            "description": "A rich chocolate sponge layered with smooth chocolate buttercream and topped with chocolate curls.",
-            "price": "35.00",
-            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/chocolate_cake.jpg",
+            "sku": "PROD0001",
+            "name": "Strawberry",
+            "description": "Delicious strawberry made to order.",
+            "price": 27.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754164440/strawberry-shortcake_y9zxkr.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -18,12 +18,12 @@
         "model": "products.product",
         "pk": 2,
         "fields": {
-            "category": 2,
-            "sku": "CC002",
-            "name": "Vanilla Cupcake Box (6)",
-            "description": "Six fluffy vanilla cupcakes with buttercream swirls and sprinkles.",
-            "price": "15.00",
-            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/vanilla_cupcakes.jpg",
+            "category": 1,
+            "sku": "PROD0002",
+            "name": "Strawberry",
+            "description": "Delicious strawberry made to order.",
+            "price": 30.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082376/strawberry-drip-cake_utem9e.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -33,13 +33,13 @@
         "model": "products.product",
         "pk": 3,
         "fields": {
-            "category": 3,
-            "sku": "CST003",
-            "name": "Custom Birthday Cake",
-            "description": "Design your own birthday cake with choice of flavour, size, and message.",
-            "price": "0.00",
-            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/custom_cake_placeholder.jpg",
-            "is_custom": true,
+            "category": 1,
+            "sku": "PROD0003",
+            "name": "Star",
+            "description": "Delicious star made to order.",
+            "price": 32.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082376/star-cake_cdi4ln.jpg",
+            "is_custom": false,
             "is_accessory": false,
             "is_offer": false
         }
@@ -48,14 +48,14 @@
         "model": "products.product",
         "pk": 4,
         "fields": {
-            "category": 5,
-            "sku": "AC001",
-            "name": "Birthday Candles Pack",
-            "description": "Colourful candles to top off any birthday cake. Includes 12 candles and holders.",
-            "price": "2.50",
-            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/candles.jpg",
+            "category": 1,
+            "sku": "PROD0004",
+            "name": "Winnie",
+            "description": "Delicious winnie made to order.",
+            "price": 35.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082376/winnie-the-pooh-cake_ncutjn.jpg",
             "is_custom": false,
-            "is_accessory": true,
+            "is_accessory": false,
             "is_offer": false
         }
     },
@@ -63,14 +63,14 @@
         "model": "products.product",
         "pk": 5,
         "fields": {
-            "category": 6,
-            "sku": "AC002",
-            "name": "Happy Birthday Cake Topper - Gold",
-            "description": "A reusable acrylic topper in gold script to add a touch of elegance.",
-            "price": "3.50",
-            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/cake_topper.jpg",
+            "category": 1,
+            "sku": "PROD0005",
+            "name": "Unicorn",
+            "description": "Delicious unicorn made to order.",
+            "price": 37.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082375/unicorn-cake_pqwwok.jpg",
             "is_custom": false,
-            "is_accessory": true,
+            "is_accessory": false,
             "is_offer": false
         }
     },
@@ -78,14 +78,14 @@
         "model": "products.product",
         "pk": 6,
         "fields": {
-            "category": 7,
-            "sku": "AC003",
-            "name": "Helium Balloon - Pink Star",
-            "description": "Large pink star-shaped helium balloon perfect for birthdays or baby showers.",
-            "price": "5.00",
-            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/balloon.jpg",
+            "category": 2,
+            "sku": "PROD0006",
+            "name": "Sprinkles",
+            "description": "Delicious sprinkles made to order.",
+            "price": 40.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082375/sprinkles-cupcake_kd8lgu.jpg",
             "is_custom": false,
-            "is_accessory": true,
+            "is_accessory": false,
             "is_offer": false
         }
     },
@@ -93,15 +93,600 @@
         "model": "products.product",
         "pk": 7,
         "fields": {
-            "category": 10,
-            "sku": "GV001",
-            "name": "€20 Gift Voucher",
-            "description": "Perfect for any occasion, this digital gift voucher can be used online or in store.",
-            "price": "20.00",
-            "image": "https://res.cloudinary.com/demo/image/upload/v1690000001/gift_voucher.jpg",
+            "category": 1,
+            "sku": "PROD0007",
+            "name": "Deluxe",
+            "description": "Delicious deluxe made to order.",
+            "price": 42.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082374/deluxe-christmas-cake_piw8si.png",
             "is_custom": false,
             "is_accessory": false,
-            "is_offer": true
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 8,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0008",
+            "name": "Dinosaur",
+            "description": "Delicious dinosaur made to order.",
+            "price": 45.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082374/dinosaur-cake_pufrcc.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 9,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0009",
+            "name": "Flower",
+            "description": "Delicious flower made to order.",
+            "price": 47.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082374/flower-drip-cake_f81hvr.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 10,
+        "fields": {
+            "category": 5,
+            "sku": "PROD0010",
+            "name": "Happy",
+            "description": "Delicious happy made to order.",
+            "price": 25.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082374/happy-birthday-candles_syowfo.jpg",
+            "is_custom": false,
+            "is_accessory": true,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 11,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0011",
+            "name": "Jungle",
+            "description": "Delicious jungle made to order.",
+            "price": 27.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082373/jungle-cake_qrjvlj.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 12,
+        "fields": {
+            "category": 6,
+            "sku": "PROD0012",
+            "name": "Colour",
+            "description": "Delicious colour made to order.",
+            "price": 30.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082373/colour-number-foil-balloon_pi7fax.png",
+            "is_custom": false,
+            "is_accessory": true,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 13,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0013",
+            "name": "Christmas",
+            "description": "Delicious christmas made to order.",
+            "price": 32.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082373/christmas-log-cake_swu2n6.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 14,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0014",
+            "name": "Girl",
+            "description": "Delicious girl made to order.",
+            "price": 35.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082373/girl-birthday-cake_jzyurj.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 15,
+        "fields": {
+            "category": 5,
+            "sku": "PROD0015",
+            "name": "Pink",
+            "description": "Delicious pink made to order.",
+            "price": 37.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082372/pink-candles_xmquto.jpg",
+            "is_custom": false,
+            "is_accessory": true,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 16,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0016",
+            "name": "Hello",
+            "description": "Delicious hello made to order.",
+            "price": 40.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082372/hello-kitty-cake_atjvan.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 17,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0017",
+            "name": "Car",
+            "description": "Delicious car made to order.",
+            "price": 42.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082372/car-cake_lhdoef.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 18,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0018",
+            "name": "Butterfly",
+            "description": "Delicious butterfly made to order.",
+            "price": 45.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082371/butterfly-cake_aj8gwl.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 19,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0019",
+            "name": "Bueno",
+            "description": "Delicious bueno made to order.",
+            "price": 47.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082371/bueno-drip-cake_ezlvy1.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 20,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0020",
+            "name": "Girl",
+            "description": "Delicious girl made to order.",
+            "price": 25.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082371/girl-christening-cake_m9xo3c.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 21,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0021",
+            "name": "Spongebob",
+            "description": "Delicious spongebob made to order.",
+            "price": 27.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082371/spongebob-cake_rpyfij.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 22,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0022",
+            "name": "Among",
+            "description": "Delicious among made to order.",
+            "price": 30.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082371/among-us-cake_vqt1gp.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 23,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0023",
+            "name": "Baby",
+            "description": "Delicious baby made to order.",
+            "price": 32.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082370/baby-girl-cake_glmnzg.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 24,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0024",
+            "name": "Spider",
+            "description": "Delicious spider made to order.",
+            "price": 35.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082370/spider-man-cake_cjawek.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 25,
+        "fields": {
+            "category": 6,
+            "sku": "PROD0025",
+            "name": "Balloons",
+            "description": "Delicious balloons made to order.",
+            "price": 37.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082370/balloons_gru4ja.jpg",
+            "is_custom": false,
+            "is_accessory": true,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 26,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0026",
+            "name": "Gender",
+            "description": "Delicious gender made to order.",
+            "price": 40.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082370/gender-reveal-cake-2_gpq7mt.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 27,
+        "fields": {
+            "category": 5,
+            "sku": "PROD0027",
+            "name": "Sparkler",
+            "description": "Delicious sparkler made to order.",
+            "price": 42.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082369/sparkler-candles_i3i1th.jpg",
+            "is_custom": false,
+            "is_accessory": true,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 28,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0028",
+            "name": "Rainbow",
+            "description": "Delicious rainbow made to order.",
+            "price": 45.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082369/rainbow-layer-cake_cpns2m.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 29,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0029",
+            "name": "Girl",
+            "description": "Delicious girl made to order.",
+            "price": 47.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082369/girl-bear-cake_bxjwa8.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 30,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0030",
+            "name": "Baby",
+            "description": "Delicious baby made to order.",
+            "price": 25.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082368/baby-boy-cake_rzui3a.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 31,
+        "fields": {
+            "category": 6,
+            "sku": "PROD0031",
+            "name": "Silver",
+            "description": "Delicious silver made to order.",
+            "price": 27.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082368/silver-foil-balloon_k7ltsb.png",
+            "is_custom": false,
+            "is_accessory": true,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 32,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0032",
+            "name": "Minnie",
+            "description": "Delicious minnie made to order.",
+            "price": 30.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082368/minnie-mouse-cake_t8sr7j.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 33,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0033",
+            "name": "Gender",
+            "description": "Delicious gender made to order.",
+            "price": 32.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082368/gender-reveal-cake-1_pkyhk1.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 34,
+        "fields": {
+            "category": 2,
+            "sku": "PROD0034",
+            "name": "Rose",
+            "description": "Delicious rose made to order.",
+            "price": 35.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082368/rose-top-cupcake_gs81eh.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 35,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0035",
+            "name": "Oreo",
+            "description": "Delicious oreo made to order.",
+            "price": 37.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082367/oreo-drip-cake_cnuk78.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 36,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0036",
+            "name": "Rainbow",
+            "description": "Delicious rainbow made to order.",
+            "price": 40.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082367/rainbow-drip-cake_gbssqe.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 37,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0037",
+            "name": "Merry",
+            "description": "Delicious merry made to order.",
+            "price": 42.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082367/merry-christmas-cake_xk1dbh.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 38,
+        "fields": {
+            "category": 5,
+            "sku": "PROD0038",
+            "name": "Number",
+            "description": "Delicious number made to order.",
+            "price": 45.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082366/number-birthday-candles_bt1poo.jpg",
+            "is_custom": false,
+            "is_accessory": true,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 39,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0039",
+            "name": "Baby",
+            "description": "Delicious baby made to order.",
+            "price": 47.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082366/baby-boy-cake-2_ewljhm.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 40,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0040",
+            "name": "Chocolate",
+            "description": "Delicious chocolate made to order.",
+            "price": 25.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082366/chocolate-lovers-drip-cake_u5jl8a.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 41,
+        "fields": {
+            "category": 2,
+            "sku": "PROD0041",
+            "name": "Love",
+            "description": "Delicious love made to order.",
+            "price": 27.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082366/love-cupcake_k8191e.png",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 42,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0042",
+            "name": "Mix",
+            "description": "Delicious mix made to order.",
+            "price": 30.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082366/mix-it-up_p1tuei.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 43,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0043",
+            "name": "Ocean",
+            "description": "Delicious ocean made to order.",
+            "price": 32.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082365/ocean-birthday-cake_zh8twi.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 44,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0044",
+            "name": "Cherry",
+            "description": "Delicious cherry made to order.",
+            "price": 35.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082365/cherry-drip-cake_jwvmah.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 45,
+        "fields": {
+            "category": 2,
+            "sku": "PROD0045",
+            "name": "Choco",
+            "description": "Delicious choco made to order.",
+            "price": 37.5,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082365/choco-swirl-cupcake_llaewg.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 46,
+        "fields": {
+            "category": 1,
+            "sku": "PROD0046",
+            "name": "Novelty",
+            "description": "Delicious novelty made to order.",
+            "price": 40.0,
+            "image": "https://res.cloudinary.com/mkswdev/image/upload/w_600,h_600,c_fill,g_auto,f_auto,q_auto/v1754082365/novelty-christmas-cake_pmmmxb.jpg",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
         }
     }
 ]
