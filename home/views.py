@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from products.models import Product
 
-""" A view to return to the index page """
+""" A view to return to the home page """
 def home(request):
-    return render(request, 'home/index.html')
+    products = Product.objects.all()
+    return render(request, 'home/index.html', {'products': products})

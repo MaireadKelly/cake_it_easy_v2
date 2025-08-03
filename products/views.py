@@ -1,13 +1,24 @@
-# products/views.py
 from django.shortcuts import render, get_object_or_404
 from .models import Product
 
-
 def product_list(request):
+    """
+    A view to display all products.
+    Allows future extension to add sorting, filtering, and search.
+    """
     products = Product.objects.all()
-    return render(request, 'products/product_list.html', {'products': products})
+    context = {
+        'products': products,
+    }
+    return render(request, 'products/product_list.html', context)
 
 
 def product_detail(request, product_id):
+    """
+    A view to show individual product details.
+    """
     product = get_object_or_404(Product, pk=product_id)
-    return render(request, 'products/product_detail.html', {'product': product})
+    context = {
+        'product': product,
+    }
+    return render(request, 'products/product_detail.html', context)

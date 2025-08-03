@@ -9,7 +9,6 @@
             "description": "Delicious strawberry shortcake made to order.",
             "price": 27.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754164440/strawberry-shortcake_y9zxkr.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -25,7 +24,6 @@
             "description": "Delicious strawberry drip cake made to order.",
             "price": 30.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082376/strawberry-drip-cake_utem9e.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -41,7 +39,6 @@
             "description": "Delicious star cake made to order.",
             "price": 32.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082376/star-cake_cdi4ln.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -57,7 +54,6 @@
             "description": "Delicious winnie the pooh cake made to order.",
             "price": 35.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082376/winnie-the-pooh-cake_ncutjn.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -73,7 +69,6 @@
             "description": "Delicious unicorn cake made to order.",
             "price": 37.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082375/unicorn-cake_pqwwok.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -89,7 +84,6 @@
             "description": "Delicious sprinkles cupcake made to order.",
             "price": 40.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082375/sprinkles-cupcake_kd8lgu.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -105,7 +99,6 @@
             "description": "Delicious deluxe christmas cake made to order.",
             "price": 42.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082374/deluxe-christmas-cake_piw8si.png",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -121,7 +114,6 @@
             "description": "Delicious dinosaur cake made to order.",
             "price": 45.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082374/dinosaur-cake_pufrcc.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -137,7 +129,6 @@
             "description": "Delicious flower drip cake made to order.",
             "price": 47.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082374/flower-drip-cake_f81hvr.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -153,7 +144,6 @@
             "description": "Delicious happy birthday candles made to order.",
             "price": 25.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082374/happy-birthday-candles_syowfo.jpg",
             "is_custom": false,
             "is_accessory": true,
             "is_offer": false
@@ -169,7 +159,6 @@
             "description": "Delicious jungle cake made to order.",
             "price": 27.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082373/jungle-cake_qrjvlj.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -185,7 +174,6 @@
             "description": "Delicious colour number foil balloon made to order.",
             "price": 30.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082373/colour-number-foil-balloon_pi7fax.png",
             "is_custom": false,
             "is_accessory": true,
             "is_offer": false
@@ -201,7 +189,6 @@
             "description": "Delicious christmas log cake made to order.",
             "price": 32.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082373/christmas-log-cake_swu2n6.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -217,7 +204,6 @@
             "description": "Delicious girl birthday cake made to order.",
             "price": 35.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082373/girl-birthday-cake_jzyurj.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -233,7 +219,6 @@
             "description": "Delicious pink candles made to order.",
             "price": 37.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082372/pink-candles_xmquto.jpg",
             "is_custom": false,
             "is_accessory": true,
             "is_offer": false
@@ -249,7 +234,6 @@
             "description": "Delicious hello kitty cake made to order.",
             "price": 40.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082372/hello-kitty-cake_atjvan.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -265,7 +249,6 @@
             "description": "Delicious car cake made to order.",
             "price": 42.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082372/car-cake_lhdoef.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -281,7 +264,6 @@
             "description": "Delicious butterfly cake made to order.",
             "price": 45.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082371/butterfly-cake_aj8gwl.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -297,7 +279,6 @@
             "description": "Delicious bueno drip cake made to order.",
             "price": 47.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082371/bueno-drip-cake_ezlvy1.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -313,7 +294,6 @@
             "description": "Delicious girl christening cake made to order.",
             "price": 25.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082371/girl-christening-cake_m9xo3c.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -329,7 +309,6 @@
             "description": "Delicious spongebob cake made to order.",
             "price": 27.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082371/spongebob-cake_rpyfij.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -345,7 +324,6 @@
             "description": "Delicious among us cake made to order.",
             "price": 30.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082371/among-us-cake_vqt1gp.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -361,7 +339,6 @@
             "description": "Delicious baby girl cake made to order.",
             "price": 32.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082370/baby-girl-cake_glmnzg.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -377,7 +354,6 @@
             "description": "Delicious spider man cake made to order.",
             "price": 35.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082370/spider-man-cake_cjawek.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -393,7 +369,6 @@
             "description": "Delicious balloons made to order.",
             "price": 37.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082370/balloons_gru4ja.jpg",
             "is_custom": false,
             "is_accessory": true,
             "is_offer": false
@@ -409,7 +384,6 @@
             "description": "Delicious gender reveal cake 2 made to order.",
             "price": 40.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082370/gender-reveal-cake-2_gpq7mt.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -425,7 +399,6 @@
             "description": "Delicious sparkler candles made to order.",
             "price": 42.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082369/sparkler-candles_i3i1th.jpg",
             "is_custom": false,
             "is_accessory": true,
             "is_offer": false
@@ -441,7 +414,6 @@
             "description": "Delicious rainbow layer cake made to order.",
             "price": 45.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082369/rainbow-layer-cake_cpns2m.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -457,7 +429,6 @@
             "description": "Delicious girl bear cake made to order.",
             "price": 47.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082369/girl-bear-cake_bxjwa8.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -473,7 +444,6 @@
             "description": "Delicious baby boy cake made to order.",
             "price": 25.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082368/baby-boy-cake_rzui3a.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -489,7 +459,6 @@
             "description": "Delicious silver foil balloon made to order.",
             "price": 27.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082368/silver-foil-balloon_k7ltsb.png",
             "is_custom": false,
             "is_accessory": true,
             "is_offer": false
@@ -505,7 +474,6 @@
             "description": "Delicious minnie mouse cake made to order.",
             "price": 30.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082368/minnie-mouse-cake_t8sr7j.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -521,7 +489,6 @@
             "description": "Delicious gender reveal cake 1 made to order.",
             "price": 32.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082368/gender-reveal-cake-1_pkyhk1.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -537,7 +504,6 @@
             "description": "Delicious rose top cupcake made to order.",
             "price": 35.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082368/rose-top-cupcake_gs81eh.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -553,7 +519,6 @@
             "description": "Delicious oreo drip cake made to order.",
             "price": 37.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082367/oreo-drip-cake_cnuk78.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -569,7 +534,6 @@
             "description": "Delicious rainbow drip cake made to order.",
             "price": 40.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082367/rainbow-drip-cake_gbssqe.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -585,7 +549,6 @@
             "description": "Delicious merry christmas cake made to order.",
             "price": 42.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082367/merry-christmas-cake_xk1dbh.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -601,7 +564,6 @@
             "description": "Delicious number birthday candles made to order.",
             "price": 45.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082366/number-birthday-candles_bt1poo.jpg",
             "is_custom": false,
             "is_accessory": true,
             "is_offer": false
@@ -617,7 +579,6 @@
             "description": "Delicious baby boy cake 2 made to order.",
             "price": 47.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082366/baby-boy-cake-2_ewljhm.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -633,7 +594,6 @@
             "description": "Delicious chocolate lovers drip cake made to order.",
             "price": 25.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082366/chocolate-lovers-drip-cake_u5jl8a.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -649,7 +609,6 @@
             "description": "Delicious love cupcake made to order.",
             "price": 27.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082366/love-cupcake_k8191e.png",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -665,7 +624,6 @@
             "description": "Delicious mix it up made to order.",
             "price": 30.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082366/mix-it-up_p1tuei.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -681,7 +639,6 @@
             "description": "Delicious ocean birthday cake made to order.",
             "price": 32.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082365/ocean-birthday-cake_zh8twi.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -697,7 +654,6 @@
             "description": "Delicious cherry drip cake made to order.",
             "price": 35.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082365/cherry-drip-cake_jwvmah.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -713,7 +669,6 @@
             "description": "Delicious choco swirl cupcake made to order.",
             "price": 37.5,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082365/choco-swirl-cupcake_llaewg.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
@@ -729,7 +684,6 @@
             "description": "Delicious novelty christmas cake made to order.",
             "price": 40.0,
             "image": null,
-            "image_url": "https://res.cloudinary.com/mkswdev/image/upload/v1754082365/novelty-christmas-cake_pmmmxb.jpg",
             "is_custom": false,
             "is_accessory": false,
             "is_offer": false
