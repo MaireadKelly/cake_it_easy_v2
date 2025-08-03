@@ -138,6 +138,15 @@ cloudinary.config(
     api_key=os.getenv('CLOUDINARY_API_KEY'),
     api_secret=os.getenv('CLOUDINARY_API_SECRET'),
 )
+CLOUDINARY_STORAGE = {
+    'UPLOAD_PREFIX': os.getenv('CLOUDINARY_UPLOAD_PREFIX', 'cake-it-easy'),
+    'MEDIA_OPTIONS': {
+        'use_filename': True,
+        'unique_filename': False,
+        'folder': os.getenv('CLOUDINARY_UPLOAD_PREFIX', 'cake-it-easy'),
+    }
+}
+
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
