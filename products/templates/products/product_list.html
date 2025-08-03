@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-5">
@@ -7,12 +8,10 @@
     {% for product in products %}
       <div class="col-md-4 mb-4">
         <div class="card h-100">
-          {% if product.image_url %}
-            <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
-          {% elif product.image %}
+          {% if product.image %}
             <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
           {% else %}
-            <img src="{% static 'images/placeholder.jpg' %}" class="card-img-top" alt="No image available">
+            <img src="{% static 'images/default.jpg' %}" class="card-img-top" alt="Image coming soon">
           {% endif %}
 
           <div class="card-body">

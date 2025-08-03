@@ -4,9 +4,11 @@ from .models import Product, Category
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price', 'is_custom', 'is_accessory', 'is_offer')
-    list_filter = ('category', 'is_custom', 'is_accessory', 'is_offer')
+    list_display = ('name', 'category', 'price', 'is_custom', 'is_accessory', 'is_offer', 'featured')
+    list_filter = ('category', 'is_custom', 'is_accessory', 'is_offer', 'featured')
     search_fields = ('name', 'sku', 'description')
+
+    ordering = ('sku',)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):

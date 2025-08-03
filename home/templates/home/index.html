@@ -9,16 +9,53 @@
     <div class="container h-100">
         <div class="row h-100">
             <div class="col-12 col-md-6 my-auto text-center text-md-center">
-            <div class="hero-overlay">
-                <h1 class="display-4 logo-font text-black">
-                    ORDER YOUR CUSTOM CAKE TODAY!!! 
-                </h1>
-                <h4 class="mt-4">
-                    <a href="" class="btn-hero">Shop Now</a>
-                </h4>
-              </div>
+                <div class="hero-overlay">
+                    <h1 class="display-4 logo-font text-black">
+                        ORDER YOUR CUSTOM CAKE TODAY!!!
+                    </h1>
+                    <h4 class="mt-4">
+                        <a href="{% url 'product_list' %}" class="btn-hero">Shop Now</a>
+                    </h4>
+                </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Product Showcase Section -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Our Cakes</h2>
+
+    {% if products %}
+        <div class="row">
+            {% for product in products %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card h-100 shadow-sm position-relative">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        {% else %}
+                            <img src="{% static 'images/default.jpg' %}" class="card-img-top" alt="Image coming soon">
+                        {% endif %}
+
+                        {% if product.featured %}
+                            <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2 px-3 py-2">Featured</span>
+                        {% endif %}
+
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">€{{ product.price }}</p>
+                            <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-primary mt-auto hover-button">View</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'product_list' %}" class="btn btn-lg btn-dark hover-button">Shop All Cakes</a>
+        </div>
+    {% else %}
+        <p class="text-center">No cakes to display at the moment.</p>
+    {% endif %}
 </div>
 {% endblock %}
