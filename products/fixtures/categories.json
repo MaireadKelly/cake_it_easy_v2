@@ -4,8 +4,7 @@
         "pk": 1,
         "fields": {
             "name": "cakes",
-            "friendly_name": "Cakes",
-            "parent": null
+            "friendly_name": "Cakes"
         }
     },
     {
@@ -13,26 +12,23 @@
         "pk": 2,
         "fields": {
             "name": "cupcakes",
-            "friendly_name": "Cupcakes",
-            "parent": null
+            "friendly_name": "Cupcakes"
         }
     },
     {
         "model": "products.category",
         "pk": 3,
         "fields": {
-            "name": "custom",
-            "friendly_name": "Custom Cakes",
-            "parent": null
+            "name": "occasions",
+            "friendly_name": "Occasions"
         }
     },
     {
         "model": "products.category",
         "pk": 4,
         "fields": {
-            "name": "toppers",
-            "friendly_name": "Cake Toppers",
-            "parent": null
+            "name": "custom",
+            "friendly_name": "Custom"
         }
     },
     {
@@ -40,8 +36,7 @@
         "pk": 5,
         "fields": {
             "name": "candles",
-            "friendly_name": "Candles",
-            "parent": null
+            "friendly_name": "Candles"
         }
     },
     {
@@ -49,26 +44,23 @@
         "pk": 6,
         "fields": {
             "name": "balloons",
-            "friendly_name": "Balloons",
-            "parent": null
+            "friendly_name": "Balloons"
         }
     },
     {
         "model": "products.category",
         "pk": 7,
         "fields": {
-            "name": "banners",
-            "friendly_name": "Cake Banners",
-            "parent": null
+            "name": "accessories",
+            "friendly_name": "Accessories"
         }
     },
     {
         "model": "products.category",
         "pk": 8,
         "fields": {
-            "name": "gift-vouchers",
-            "friendly_name": "Gift Vouchers",
-            "parent": null
+            "name": "gift",
+            "friendly_name": "Gift"
         }
     }
 ]
