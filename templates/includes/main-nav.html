@@ -1,61 +1,65 @@
 <div class="collapse navbar-collapse" id="main-nav">
-    <ul class="navbar-nav w-auto mx-auto">
-        <li class="nav-item dropdown">
-            <a class="logo-font font-weight-bold nav-link text-brand mr-5" href="#" id="cake-menu" data-toggle="dropdown">
-                Cakes
-            </a>
-            <div class="dropdown-menu border-0" aria-labelledby="cake-menu">
-                <a href="" class="dropdown-item">Buttercream</a>
-                <a href="" class="dropdown-item">Drip Cakes</a>
-                <a href="" class="dropdown-item">Cupcakes</a>
-                <a href="" class="dropdown-item">All Cakes</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="logo-font font-weight-bold nav-link text-brand mr-5" href="#" id="occasions-link" data-toggle="dropdown">
-                Occasions
-            </a>
-            <div class="dropdown-menu border-0" aria-labelledby="occasions-link">
-                <a href="" class="dropdown-item">Birthdays</a>
-                <a href="" class="dropdown-item">Anniversaries</a>
-                <a href="" class="dropdown-item">Christenings</a>
-                <a href="" class="dropdown-item">All Occasions</a>
-            </div>
-        </li>
+  <ul class="navbar-nav w-auto mx-auto">
 
+    <!-- All Products Dropdown -->
+    <li class="nav-item dropdown">
+      <a class="logo-font font-weight-bold nav-link text-black mr-5" href="#" id="all-products-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        All Products
+      </a>
+      <div class="dropdown-menu border-0" aria-labelledby="all-products-link">
+        <a href="{% url 'product_list' %}?sort=price&direction=asc" class="dropdown-item">By Price</a>
+        <a href="{% url 'product_list' %}?sort=name&direction=asc" class="dropdown-item">By Name</a>
+        <a href="{% url 'product_list' %}?sort=category&direction=asc" class="dropdown-item">By Category</a>
+        <a href="{% url 'product_list' %}" class="dropdown-item">All Products</a>
+      </div>
+    </li>
 
-        <li class="nav-item dropdown">
-            <a class="logo-font font-weight-bold nav-link text-brand mr-5" href="#" id="custom-link" data-toggle="dropdown">
-                Custom Cakes
-            </a>
-            <div class="dropdown-menu border-0" aria-labelledby="custom-link">
-                <a href="" class="dropdown-item">Customise</a>
-            </div>
-        </li>
+    <!-- Cakes Dropdown -->
+    <li class="nav-item dropdown">
+      <a class="logo-font font-weight-bold nav-link text-black mr-5" href="#" id="cakes-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Cakes
+      </a>
+      <div class="dropdown-menu border-0" aria-labelledby="cakes-link">
+        <a href="{% url 'product_list' %}?category=buttercream" class="dropdown-item">Buttercream</a>
+        <a href="{% url 'product_list' %}?category=drip" class="dropdown-item">Drip Cakes</a>
+        <a href="{% url 'product_list' %}?category=birthday" class="dropdown-item">Birthday Cakes</a>
+        <a href="{% url 'product_list' %}?category=buttercream,drip,birthday" class="dropdown-item">All Cakes</a>
+      </div>
+    </li>
 
+    <!-- Cupcakes -->
+    <li class="nav-item">
+      <a class="logo-font font-weight-bold nav-link text-black mr-5" href="{% url 'product_list' %}?category=cupcakes">
+        Cupcakes
+      </a>
+    </li>
 
-        <li class="nav-item dropdown">
-            <a class="logo-font font-weight-bold nav-link text-brand mr-5" href="#" id="accessories-link" data-toggle="dropdown">
-                Accessories
-            </a>
-            <div class="dropdown-menu border-0" aria-labelledby="accessories-link">
-                <a href="" class="dropdown-item">Candles</a>
-                <a href="" class="dropdown-item">Toppers</a>
-                <a href="" class="dropdown-item">Balloons</a>
-                <a href="" class="dropdown-item">Banners</a>
-                <a href="" class="dropdown-item">All Accessories</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="logo-font font-weight-bold nav-link text-brand" href="#" id="specials-link" data-toggle="dropdown">
-                Special Offers
-            </a>
-            <div class="dropdown-menu border-0" aria-labelledby="specials-link">
-                <a href="" class="dropdown-item">Gift Vouchers</a>
-                <a href="" class="dropdown-item">Deals</a>
-                <a href="" class="dropdown-item">Clearance</a>
-                <a href="" class="dropdown-item">All Specials</a>
-            </div>
-        </li>
-    </ul>
+    <!-- Accessories Dropdown -->
+    <li class="nav-item dropdown">
+      <a class="logo-font font-weight-bold nav-link text-black mr-5" href="#" id="accessories-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Accessories
+      </a>
+      <div class="dropdown-menu border-0" aria-labelledby="accessories-link">
+        <a href="{% url 'product_list' %}?category=balloons" class="dropdown-item">Balloons</a>
+        <a href="{% url 'product_list' %}?category=candles" class="dropdown-item">Candles</a>
+        <a href="{% url 'product_list' %}?category=gift_vouchers" class="dropdown-item">Gift Vouchers</a>
+        <a href="{% url 'product_list' %}?category=balloons,candles,gift_vouchers" class="dropdown-item">All Accessories</a>
+      </div>
+    </li>
+
+    <!-- Custom Cakes -->
+    <li class="nav-item">
+      <a class="logo-font font-weight-bold nav-link text-black mr-5" href="">
+        Custom Cakes
+      </a>
+    </li>
+
+    <!-- Special Offers -->
+    <li class="nav-item">
+      <a class="logo-font font-weight-bold nav-link text-black" href="{% url 'product_list' %}?is_offer=true">
+        Special Offers
+      </a>
+    </li>
+
+  </ul>
 </div>

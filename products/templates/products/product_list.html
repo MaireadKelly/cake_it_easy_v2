@@ -4,6 +4,19 @@
 {% block content %}
 <div class="container mt-5">
   <h1 class="text-center">All Cakes</h1>
+
+  {% if search_term %}
+    <p class="text-center">Search results for: <strong>{{ search_term }}</strong></p>
+  {% endif %}
+
+  {% if current_categories %}
+    <p class="text-center">Filtered by category:
+      {% for category in current_categories %}
+        <strong>{{ category.friendly_name }}</strong>{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+  {% endif %}
+
   <div class="row">
     {% for product in products %}
       <div class="col-md-4 mb-4">
@@ -23,5 +36,9 @@
       </div>
     {% endfor %}
   </div>
+
+  {% if not products %}
+    <p class="text-center mt-5">No products match your search.</p>
+  {% endif %}
 </div>
 {% endblock %}
