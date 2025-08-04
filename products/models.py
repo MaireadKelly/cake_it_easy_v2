@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.html import format_html
 
 
 class Category(models.Model):
@@ -22,7 +23,7 @@ class Product(models.Model):
     name = models.CharField(max_length=254)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(upload_to='products/', null=True, blank=True)
     featured = models.BooleanField(default=False)
     is_custom = models.BooleanField(default=False)
     is_accessory = models.BooleanField(default=False)
@@ -30,3 +31,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def image_preview(self):
+        if self.image:
+            return format_html('<img src="{}" width="100" height="100" style="object-fit:cover;" />', self.image.url)
+        return "No Image"
+
+    image_preview.short_description = 'Preview'

@@ -4,9 +4,10 @@ from .models import Product, Category
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price', 'is_custom', 'is_accessory', 'is_offer', 'featured')
+    list_display = ('name', 'category', 'price', 'is_custom', 'is_accessory', 'is_offer', 'featured', 'image_preview')
     list_filter = ('category', 'is_custom', 'is_accessory', 'is_offer', 'featured')
     search_fields = ('name', 'sku', 'description')
+    readonly_fields = ('image_preview',)
 
     ordering = ('sku',)
 
