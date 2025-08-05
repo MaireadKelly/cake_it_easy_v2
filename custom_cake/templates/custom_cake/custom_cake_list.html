@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2>My Custom Cakes</h2>
+  <ul class="list-group">
+    {% for cake in cakes %}
+      <li class="list-group-item">
+        <strong>{{ cake.name }}</strong> - {{ cake.flavor }} ({{ cake.size }}) for {{ cake.get_occasion_display }}
+      </li>
+    {% empty %}
+      <li class="list-group-item">No custom cakes yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
