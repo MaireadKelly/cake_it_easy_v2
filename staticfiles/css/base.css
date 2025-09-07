@@ -53,7 +53,7 @@ body {
     color: var(--text-dark);
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    padding: 0;
+    padding-top: 110px;
 }
 
 .container {
@@ -63,17 +63,20 @@ body {
 }
 
 /* ----------------------------
-   Delivery Banner
+   Delivery Banner (Non-Fixed)
 ---------------------------- */
+
 .delivery-banner {
-    padding: 1.2rem 0;
+    padding: 0.5rem 0;
 }
 
+/* Optional: slightly smaller heading in the banner */
 .delivery-banner h4 {
-    font-size: 1.6rem;
+    font-size: 1.1rem;
     font-weight: 700;
     letter-spacing: 1px;
 }
+
 
 /* ----------------------------
    Header and Navigation
@@ -81,7 +84,7 @@ body {
 header {
     background-color: white;
     border-bottom: 2px solid var(--neutral-light);
-    padding: 1rem 0;
+    padding: .5rem 0;
 }
 
 .navbar-nav {
@@ -96,11 +99,15 @@ header {
     color: var(--primary-color) !important;
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 1rem 1.5rem;
-    font-size: 1.2rem;
-    font-weight: 700;
+    padding: 0.5rem 1rem;
+    /* reduced from 1rem 1.5rem */
+    font-size: 1rem;
+    /* reduced from 1.2rem */
+    font-weight: 600;
+    /* lighter than 700 */
     text-align: center;
 }
+
 
 .nav-link:hover {
     color: var(--accent-color) !important;
@@ -111,7 +118,7 @@ header {
 ---------------------------- */
 .logo-img {
     max-width: 180px;
-    height: auto;
+    height: 56px;
     display: block;
     margin: 0 auto;
 }
@@ -123,30 +130,6 @@ header {
     text-transform: uppercase;
 }
 
-/* ----------------------------
-   Hero Section
----------------------------- */
-.hero-overlay {
-    background: rgba(255, 255, 255, 0.3);
-    padding: 60px 40px;
-    margin: 220px auto 3rem auto;
-    /* Added top margin to push it below header/banner */
-    border-radius: 20px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    max-width: 700px;
-    text-align: center;
-}
-
-.hero-overlay h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--primary-color);
-}
-
-.hero-overlay p {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-}
 
 /* ----------------------------
    Buttons
@@ -234,6 +217,24 @@ header {
     background-color: var(--accent-color);
 }
 
+
+/* ----------------------------
+   Card Hover Effects
+---------------------------- */
+.hover-button:hover {
+    background-color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+/* ----------------------------
+   Featured Badge Styling
+---------------------------- */
+.badge {
+    font-size: 0.85rem;
+    border-radius: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
 /* ----------------------------
    Responsive Layout
 ---------------------------- */
@@ -261,5 +262,9 @@ header {
     .nav-link {
         font-size: 1rem;
         padding: 0.75rem 1rem;
+    }
+
+    body {
+        padding-top: 100px;
     }
 }
