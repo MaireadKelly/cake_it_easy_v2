@@ -32,4 +32,4 @@ def add_to_bag(request, product_id):
 
     messages.success(request, f"Added {qty} × {product.name} to your bag.")
     # For the PASS demo flow, go straight to checkout
-    return redirect('checkout')
+    return redirect('view_bag')

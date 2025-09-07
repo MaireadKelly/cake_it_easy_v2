@@ -32,7 +32,7 @@ def checkout(request):
     items, total = _calc_bag_items_and_total(request)
     if not items:
         messages.info(request, "Your bag is empty.")
-        return redirect('product_list')  # use your list view name
+        return redirect('product_list')
 
     if request.method == 'POST':
         form = OrderForm(request.POST)
@@ -75,14 +75,26 @@ def checkout(request):
     else:
         form = OrderForm()
 
-    # GET branch (or POST invalid): create PaymentIntent only if Stripe is enabled
-    if STRIPE_ENABLED:
-        intent = stripe.PaymentIntent.create(
-            amount=int(total * 100),
-            currency=getattr(settings, "STRIPE_CURRENCY", "eur"),
-        )
-        client_secret = intent.client_secret
-    else:
+    # GET branch (or POST invalid): create PaymentIntent only if Stripe is enabled.
+    # If keys are invalid or Stripe is unavailable, gracefully fall back to demo mode.
+    client_secret = ''
+    do_stripe = STRIPE_ENABLED
+    if do_stripe:
+        try:
+            intent = stripe.PaymentIntent.create(
+                amount=int(total * 100),
+                currency=getattr(settings, "STRIPE_CURRENCY", "eur"),
+                metadata={'integration': 'cake_it_easy_v2'},
+            )
+            client_secret = intent.client_secret
+        except stripe.error.AuthenticationError:
+            messages.error(request, "Stripe keys look invalid. Continuing without payment for now.")
+            do_stripe = False
+        except Exception:
+            messages.error(request, "Stripe is temporarily unavailable. Continuing without payment.")
+            do_stripe = False
+
+    if not do_stripe:
         client_secret = "test_secret_disabled"
         messages.warning(request, "Stripe is not configured. Running in no-payment demo mode.")
 
