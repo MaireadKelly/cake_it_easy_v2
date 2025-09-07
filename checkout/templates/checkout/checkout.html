@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Checkout</h1>
+<ul>
+   {% for i in items %}
+   <li>{{ i.product.name }} × {{ i.quantity }} — €{{ i.line_total }}</li>
+</ul>
+<p><strong>Total: €{{ total }}</strong></p>
+<form id="checkout-form" method="POST">
+   {% csrf_token %}
+   {{ form.as_p }}
+   <input type="hidden" name="client_secret" id="client_secret" value="{{ client_secret }}" />
+   <button type="submit" id="pay-btn">Pay</button>
+</form>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+   const stripe = Stripe("{{ stripe_public_key }}");
+   const clientSecret = document.getElementById('client_secret').value;
+   const form = document.getElementById('checkout-form');
+   form.addEventListener('submit', async (e) => {
+   // Minimal demo flow; Elements UI can be added later if needed
+   });
+</script>
+{% endblock %} {% endfor %}
+</ul>
+<p><strong>Total: €{{ total }}</strong></p>
+<form id="checkout-form" method="POST">
+   {% csrf_token %}
+   {{ form.as_p }}
+   <input type="hidden" name="client_secret" id="client_secret" value="{{ client_secret }}" />
+   <button type="submit" id="pay-btn">Pay</button>
+</form>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+   const stripe = Stripe("{{ stripe_public_key }}");
+   const clientSecret = document.getElementById('client_secret').value;
+   const form = document.getElementById('checkout-form');
+   form.addEventListener('submit', async (e) => {
+   // Minimal demo flow; Elements UI can be added later if needed
+   });
+</script>
+{% endblock %}
