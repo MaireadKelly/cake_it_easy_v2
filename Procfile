@@ -1,1 +1,1 @@
-web: gunicorn cake_it_easy.wsgi
+web: gunicorn cake_it_easy_v2.wsgi:application --log-file -
