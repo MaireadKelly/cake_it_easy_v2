@@ -3,7 +3,5 @@ __pycache__/
 .env
 .venv/
 db.sqlite3
-
-# Track source assets in /static/, but ignore the collected build output
 /staticfiles/
 media/
