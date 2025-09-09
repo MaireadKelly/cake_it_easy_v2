@@ -11,7 +11,6 @@ from products.models import Product
 from .forms import OrderForm
 from .models import Order, OrderLineItem
 
-# Enable Stripe only when keys are present (lets you test locally without keys)
 STRIPE_ENABLED = bool(getattr(settings, "STRIPE_PUBLIC_KEY", "") and getattr(settings, "STRIPE_SECRET_KEY", ""))
 if STRIPE_ENABLED:
     stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -37,7 +36,6 @@ def checkout(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
-            # client_secret was created on GET and embedded in the page
             client_secret = request.POST.get('client_secret', '')
             pid = client_secret.split('_secret')[0] if '_secret' in client_secret else ''
 
@@ -49,16 +47,10 @@ def checkout(request):
             order.save()
 
             for i in items:
-                OrderLineItem.objects.create(
-                    order=order,
-                    product=i['product'],
-                    quantity=i['quantity'],
-                )
+                OrderLineItem.objects.create(order=order, product=i['product'], quantity=i['quantity'])
 
-            # clear bag
             request.session['bag'] = {}
 
-            # email (console backend in dev is fine)
             try:
                 send_mail(
                     subject=f"Cake It Easy — Order #{order.id} confirmed",
@@ -75,15 +67,14 @@ def checkout(request):
     else:
         form = OrderForm()
 
-    # GET branch (or POST invalid): create PaymentIntent only if Stripe is enabled.
-    # If keys are invalid or Stripe is unavailable, gracefully fall back to demo mode.
+    # GET branch: create PaymentIntent if Stripe is enabled; else demo mode
     client_secret = ''
     do_stripe = STRIPE_ENABLED
     if do_stripe:
         try:
             intent = stripe.PaymentIntent.create(
                 amount=int(total * 100),
-                currency=getattr(settings, "STRIPE_CURRENCY", "eur"),
+                currency=getattr(settings, 'STRIPE_CURRENCY', 'eur'),
                 metadata={'integration': 'cake_it_easy_v2'},
             )
             client_secret = intent.client_secret

@@ -1,12 +1,10 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.contrib.auth.models import User
 from products.models import Product
 
 
 class Order(models.Model):
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     full_name = models.CharField(max_length=80)
     email = models.EmailField()
     phone_number = models.CharField(max_length=32, blank=True)
@@ -16,15 +14,11 @@ class Order(models.Model):
     street_address1 = models.CharField(max_length=80, blank=True)
     street_address2 = models.CharField(max_length=80, blank=True)
 
-
-    date = models.DateTimeField(auto_now_add=True)
     order_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     stripe_pid = models.CharField(max_length=254, blank=True)
     original_bag = models.TextField(blank=True)
-
-
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
-
+    paid = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Order {self.id}"
@@ -36,11 +30,9 @@ class OrderLineItem(models.Model):
     quantity = models.IntegerField(default=1)
     lineitem_total = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
 
-
     def save(self, *args, **kwargs):
         self.lineitem_total = self.product.price * self.quantity
         super().save(*args, **kwargs)
-
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name} (Order {self.order_id})"
