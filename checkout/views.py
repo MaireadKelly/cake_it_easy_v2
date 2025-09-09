@@ -65,7 +65,24 @@ def checkout(request):
             messages.success(request, f"Order placed! Reference #{order.id}")
             return redirect(reverse('checkout_success', args=[order.id]))
     else:
-        form = OrderForm()
+        initial = {}
+        if request.user.is_authenticated:
+            try:
+                p = request.user.profile
+                initial = {
+                    'full_name': (request.user.get_full_name() or '').strip(),
+                    'email': (request.user.email or '').strip(),
+                    'phone_number': p.default_phone_number,
+                    'country': p.default_country,
+                    'postcode': p.default_postcode,
+                    'town_or_city': p.default_town_or_city,
+                    'street_address1': p.default_street_address1,
+                    'street_address2': p.default_street_address2,
+                }
+            except Exception:
+                initial = {'email': (request.user.email or '').strip()}
+        form = OrderForm(initial=initial)
+
 
     # GET branch: create PaymentIntent if Stripe is enabled; else demo mode
     client_secret = ''
