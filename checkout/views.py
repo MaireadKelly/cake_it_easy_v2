@@ -11,7 +11,10 @@ from products.models import Product
 from .forms import OrderForm
 from .models import Order, OrderLineItem
 
-STRIPE_ENABLED = bool(getattr(settings, "STRIPE_PUBLIC_KEY", "") and getattr(settings, "STRIPE_SECRET_KEY", ""))
+# Enable Stripe only when keys are present
+STRIPE_ENABLED = bool(
+    getattr(settings, "STRIPE_PUBLIC_KEY", "") and getattr(settings, "STRIPE_SECRET_KEY", "")
+)
 if STRIPE_ENABLED:
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -47,10 +50,29 @@ def checkout(request):
             order.save()
 
             for i in items:
-                OrderLineItem.objects.create(order=order, product=i['product'], quantity=i['quantity'])
+                OrderLineItem.objects.create(
+                    order=order, product=i['product'], quantity=i['quantity']
+                )
 
+            # clear bag
             request.session['bag'] = {}
 
+            # Save checkout details back to profile if requested
+            if request.user.is_authenticated and request.POST.get('save_info') == 'on':
+                try:
+                    profile = request.user.profile  # created by profiles.signals
+                    profile.default_phone_number = order.phone_number
+                    profile.default_country = order.country
+                    profile.default_postcode = order.postcode
+                    profile.default_town_or_city = order.town_or_city
+                    profile.default_street_address1 = order.street_address1
+                    profile.default_street_address2 = order.street_address2
+                    profile.save()
+                except Exception:
+                    # No profile found or other non-critical issue; ignore for MVP
+                    pass
+
+            # Confirmation email (best-effort)
             try:
                 send_mail(
                     subject=f"Cake It Easy — Order #{order.id} confirmed",
@@ -64,7 +86,9 @@ def checkout(request):
 
             messages.success(request, f"Order placed! Reference #{order.id}")
             return redirect(reverse('checkout_success', args=[order.id]))
+        # fall-through: invalid form -> re-render below with same context
     else:
+        # GET: prefill from profile/account where possible
         initial = {}
         if request.user.is_authenticated:
             try:
@@ -83,8 +107,7 @@ def checkout(request):
                 initial = {'email': (request.user.email or '').strip()}
         form = OrderForm(initial=initial)
 
-
-    # GET branch: create PaymentIntent if Stripe is enabled; else demo mode
+    # Create PaymentIntent (GET and also POST-invalid)
     client_secret = ''
     do_stripe = STRIPE_ENABLED
     if do_stripe:

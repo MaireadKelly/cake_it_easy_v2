@@ -53,8 +53,9 @@ INSTALLED_APPS = [
     'home',
     'products',
     'custom_cake',
-    'bag',        # <— added
-    'checkout',   # <— added
+    'bag',        
+    'checkout',
+    'profiles',   
 ]
 
 MIDDLEWARE = [
