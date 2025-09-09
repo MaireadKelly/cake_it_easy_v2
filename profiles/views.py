@@ -2,10 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from .forms import UserProfileForm
+from .models import UserProfile
 
 @login_required
 def profile(request):
-    profile = request.user.profile
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():

@@ -1,4 +1,3 @@
-import json
 import stripe
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -7,31 +6,24 @@ from .models import Order
 
 @csrf_exempt
 def stripe_webhook(request):
-    # "Minimal webhook to mark orders paid when Stripe confirms payment."
-    webhook_secret = getattr(settings, 'STRIPE_WEBHOOK_SECRET', '')
-    if not webhook_secret:
-        # No secret configured: acknowledge to avoid retries but do nothing
+    secret = getattr(settings, "STRIPE_WEBHOOK_SECRET", "")
+    if not secret:
         return HttpResponse(status=200)
 
     payload = request.body
-    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE', '')
-
+    sig = request.META.get("HTTP_STRIPE_SIGNATURE", "")
     try:
-        event = stripe.Webhook.construct_event(
-            payload=payload, sig_header=sig_header, secret=webhook_secret
-        )
+        event = stripe.Webhook.construct_event(payload, sig, secret)
     except Exception:
         return HttpResponseBadRequest()
 
-    if event.get('type') == 'payment_intent.succeeded':
-        pid = event['data']['object']['id']
+    if event.get("type") == "payment_intent.succeeded":
+        pid = event["data"]["object"].get("id")
         try:
             order = Order.objects.get(stripe_pid=pid)
             if not order.paid:
                 order.paid = True
-                order.save(update_fields=['paid'])
+                order.save(update_fields=["paid"])
         except Order.DoesNotExist:
-            pass  # Optional: log for reconciliation
-
-    # You can handle other event types if desired
+            pass
     return HttpResponse(status=200)
