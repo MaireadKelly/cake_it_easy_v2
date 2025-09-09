@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Your Bag</h1>
-<p class="mt-3">
-  <a class="btn btn-primary" href="{% url 'checkout' %}">Proceed to Checkout</a>
-</p>
-
+  <div class="container mt-5">
+    <h1>Your Bag</h1>
+    <p class="mt-3">
+      <a class="btn btn-primary" href="{% url 'checkout' %}">Proceed to Checkout</a>
+    </p>
+  </div>
 {% endblock %}
