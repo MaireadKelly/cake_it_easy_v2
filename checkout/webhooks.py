@@ -1,7 +1,8 @@
 import stripe
-from django.conf import settings
+
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 from .models import Order
 
 @csrf_exempt
