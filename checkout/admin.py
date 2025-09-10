@@ -1,14 +1,22 @@
+# checkout/admin.py — REPLACE ENTIRE FILE
 from django.contrib import admin
 from .models import Order, OrderLineItem
 
 
 class OrderLineItemInline(admin.TabularInline):
     model = OrderLineItem
-    readonly_fields = ('lineitem_total',)
+    readonly_fields = ("lineitem_total",)
+    extra = 0
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+    list_display = ("id", "full_name", "email", "order_total", "paid", "created_on")
+    list_filter = ("paid", "created_on")
+    search_fields = ("id", "full_name", "email", "stripe_pid")
+    readonly_fields = ("stripe_pid", "original_bag", "order_total", "created_on", "paid")
     inlines = (OrderLineItemInline,)
-    list_display = ('id','email','order_total','date')
-    readonly_fields = ('order_total','stripe_pid','original_bag','date')
+
+    # Optional admin polish (safe to keep or remove)
+    ordering = ("-created_on",)        # newest first
+    date_hierarchy = "created_on"      # sidebar date drilldown

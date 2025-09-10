@@ -48,18 +48,20 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'cloudinary',
     'cloudinary_storage',
+    'whitenoise.runserver_nostatic',
 
     # Local apps
     'home',
     'products',
     'custom_cake',
-    'bag',        # <— added
-    'checkout',   # <— added
+    'bag',        
+    'checkout',
+    'profiles',   
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # <— added for static in prod
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -171,6 +173,11 @@ CLOUDINARY_STORAGE = {
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_CURRENCY = os.getenv('STRIPE_CURRENCY', 'eur')
+# Add webhook secret in production
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@cakeiteasy.local")
 
 # --- Primary key type ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
