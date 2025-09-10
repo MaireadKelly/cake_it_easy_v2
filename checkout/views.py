@@ -11,8 +11,10 @@ from products.models import Product
 from .forms import OrderForm
 from .models import Order, OrderLineItem
 
-# Enable Stripe only when keys are present (lets you test locally without keys)
-STRIPE_ENABLED = bool(getattr(settings, "STRIPE_PUBLIC_KEY", "") and getattr(settings, "STRIPE_SECRET_KEY", ""))
+# Enable Stripe only when keys are present
+STRIPE_ENABLED = bool(
+    getattr(settings, "STRIPE_PUBLIC_KEY", "") and getattr(settings, "STRIPE_SECRET_KEY", "")
+)
 if STRIPE_ENABLED:
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -37,7 +39,6 @@ def checkout(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
-            # client_secret was created on GET and embedded in the page
             client_secret = request.POST.get('client_secret', '')
             pid = client_secret.split('_secret')[0] if '_secret' in client_secret else ''
 
@@ -50,15 +51,28 @@ def checkout(request):
 
             for i in items:
                 OrderLineItem.objects.create(
-                    order=order,
-                    product=i['product'],
-                    quantity=i['quantity'],
+                    order=order, product=i['product'], quantity=i['quantity']
                 )
 
             # clear bag
             request.session['bag'] = {}
 
-            # email (console backend in dev is fine)
+            # Save checkout details back to profile if requested
+            if request.user.is_authenticated and request.POST.get('save_info') == 'on':
+                try:
+                    profile = request.user.profile  # created by profiles.signals
+                    profile.default_phone_number = order.phone_number
+                    profile.default_country = order.country
+                    profile.default_postcode = order.postcode
+                    profile.default_town_or_city = order.town_or_city
+                    profile.default_street_address1 = order.street_address1
+                    profile.default_street_address2 = order.street_address2
+                    profile.save()
+                except Exception:
+                    # No profile found or other non-critical issue; ignore for MVP
+                    pass
+
+            # Confirmation email (best-effort)
             try:
                 send_mail(
                     subject=f"Cake It Easy — Order #{order.id} confirmed",
@@ -72,18 +86,35 @@ def checkout(request):
 
             messages.success(request, f"Order placed! Reference #{order.id}")
             return redirect(reverse('checkout_success', args=[order.id]))
+        # fall-through: invalid form -> re-render below with same context
     else:
-        form = OrderForm()
+        # GET: prefill from profile/account where possible
+        initial = {}
+        if request.user.is_authenticated:
+            try:
+                p = request.user.profile
+                initial = {
+                    'full_name': (request.user.get_full_name() or '').strip(),
+                    'email': (request.user.email or '').strip(),
+                    'phone_number': p.default_phone_number,
+                    'country': p.default_country,
+                    'postcode': p.default_postcode,
+                    'town_or_city': p.default_town_or_city,
+                    'street_address1': p.default_street_address1,
+                    'street_address2': p.default_street_address2,
+                }
+            except Exception:
+                initial = {'email': (request.user.email or '').strip()}
+        form = OrderForm(initial=initial)
 
-    # GET branch (or POST invalid): create PaymentIntent only if Stripe is enabled.
-    # If keys are invalid or Stripe is unavailable, gracefully fall back to demo mode.
+    # Create PaymentIntent (GET and also POST-invalid)
     client_secret = ''
     do_stripe = STRIPE_ENABLED
     if do_stripe:
         try:
             intent = stripe.PaymentIntent.create(
                 amount=int(total * 100),
-                currency=getattr(settings, "STRIPE_CURRENCY", "eur"),
+                currency=getattr(settings, 'STRIPE_CURRENCY', 'eur'),
                 metadata={'integration': 'cake_it_easy_v2'},
             )
             client_secret = intent.client_secret

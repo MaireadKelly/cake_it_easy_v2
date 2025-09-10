@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Thanks! 🎉</h1>
-<p>Your order <strong>#{{ order.id }}</strong> has been received.</p>
-<p>We’ve emailed a confirmation to {{ order.email }}.</p>
-<a href="{% url 'products' %}">Continue shopping</a>
+  <div class="container mt-5">
+    <h1>Thanks!</h1>
+    <p>Your order number is <strong>#{{ order.id }}</strong>.</p>
+  </div>
 {% endblock %}
