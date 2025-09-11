@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'custom_cake',
     'bag',        
     'checkout',
-    'profiles',   
+    'profiles.apps.ProfilesConfig', 
 ]
 
 MIDDLEWARE = [
@@ -114,9 +114,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SITE_ID = 1
-
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@example.com')
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -176,8 +173,10 @@ STRIPE_CURRENCY = os.getenv('STRIPE_CURRENCY', 'eur')
 # Add webhook secret in production
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
 
+# Email (console in dev)
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@cakeiteasy.local")
+
 
 # --- Primary key type ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
