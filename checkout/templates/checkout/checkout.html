@@ -31,7 +31,7 @@
         <hr>
         <h5>Card details</h5>
         <div id="card-element" class="form-control" style="padding:.6rem .75rem;"></div>
-        <div id="card-errors" class="text-danger mt-2" role="alert"></div>
+        <div id="card-errors" class="text-danger mt-2" role="alert" aria-live="polite"></div>
         <button type="submit" id="pay-btn" class="btn btn-primary mt-3">Pay €{{ total }}</button>
       {% else %}
         <button type="submit" class="btn btn-primary mt-3">Place Order</button>
