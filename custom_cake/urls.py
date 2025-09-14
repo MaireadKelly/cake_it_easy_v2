@@ -4,4 +4,6 @@ from . import views
 urlpatterns = [
     path('create/', views.create_custom_cake, name='create_custom_cake'),
     path('my-cakes/', views.custom_cake_list, name='custom_cake_list'),
+    path('edit/<int:pk>/', views.update_custom_cake, name='update_custom_cake'),
+    path('delete/<int:pk>/', views.delete_custom_cake, name='delete_custom_cake'),
 ]
