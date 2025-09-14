@@ -1,0 +1,243 @@
+diff --git a//dev/null b/custom_cake/templates/custom_cake/custom_cake_confirm_delete.html
+index 0000000000000000000000000000000000000000..ac88d5d9691e354a808e040ed06310089e68f3cf 100644
+--- a//dev/null
++++ b/custom_cake/templates/custom_cake/custom_cake_confirm_delete.html
+@@ -0,0 +1,18 @@
++{% extends "base.html" %}
++{% block content %}
++<div class="container mt-5">
++  <h2>Delete Custom Cake</h2>
++  {% if messages %}
++    {% for message in messages %}
++      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
++    {% endfor %}
++  {% endif %}
++  <p>Are you sure you want to delete "{{ cake.name }}"?</p>
++  <form method="post">
++    {% csrf_token %}
++    <button type="submit" class="btn btn-danger">Confirm Delete</button>
++    <a href="{% url 'custom_cake_list' %}" class="btn btn-secondary">Cancel</a>
++  </form>
++</div>
++{% endblock %}
++
+
+
+diff --git a//dev/null b/custom_cake/templates/custom_cake/custom_cake_edit.html
+index 0000000000000000000000000000000000000000..e6852ad38dfef26028856700cfbcedc9fbfaea2e 100644
+--- a//dev/null
++++ b/custom_cake/templates/custom_cake/custom_cake_edit.html
+@@ -0,0 +1,17 @@
++{% extends "base.html" %}
++{% block content %}
++<div class="container mt-5">
++  <h2>Edit Custom Cake</h2>
++  {% if messages %}
++    {% for message in messages %}
++      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
++    {% endfor %}
++  {% endif %}
++  <form method="post" enctype="multipart/form-data">
++    {% csrf_token %}
++    {{ form.as_p }}
++    <button type="submit" class="btn btn-primary">Save Changes</button>
++  </form>
++</div>
++{% endblock %}
++
+
+
+diff --git a/custom_cake/templates/custom_cake/custom_cake_form.html b/custom_cake/templates/custom_cake/custom_cake_form.html
+index 00c41ac35792504a46f849b4bb60bf6f378de4e5..90f85fffe87ae8b48bc83fd2f05cd16e1aecd2a5 100644
+--- a/custom_cake/templates/custom_cake/custom_cake_form.html
++++ b/custom_cake/templates/custom_cake/custom_cake_form.html
+@@ -1,11 +1,16 @@
+ {% extends "base.html" %}
+ {% block content %}
+ <div class="container mt-5">
+   <h2>Design Your Custom Cake</h2>
++  {% if messages %}
++    {% for message in messages %}
++      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
++    {% endfor %}
++  {% endif %}
+   <form method="post" enctype="multipart/form-data">
+     {% csrf_token %}
+     {{ form.as_p }}
+     <button type="submit" class="btn btn-primary">Submit</button>
+   </form>
+ </div>
+ {% endblock %}
+
+diff --git a/custom_cake/templates/custom_cake/custom_cake_list.html b/custom_cake/templates/custom_cake/custom_cake_list.html
+index b9ee1ffd13fe6a7b344505c8c21ee533a4cbcc3c..f2d802d610e924e2a45b1fedc054c02b6c80afdd 100644
+--- a/custom_cake/templates/custom_cake/custom_cake_list.html
++++ b/custom_cake/templates/custom_cake/custom_cake_list.html
+@@ -1,15 +1,20 @@
+ {% extends "base.html" %}
+ {% block content %}
+ <div class="container mt-5">
+   <h2>My Custom Cakes</h2>
++  {% if messages %}
++    {% for message in messages %}
++      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
++    {% endfor %}
++  {% endif %}
+   <ul class="list-group">
+     {% for cake in cakes %}
+       <li class="list-group-item">
+         <strong>{{ cake.name }}</strong> - {{ cake.flavor }} ({{ cake.size }}) for {{ cake.get_occasion_display }}
+       </li>
+     {% empty %}
+       <li class="list-group-item">No custom cakes yet.</li>
+     {% endfor %}
+   </ul>
+ </div>
+ {% endblock %}
+
+
+diff --git a/custom_cake/tests.py b/custom_cake/tests.py
+index 7ce503c2dd97ba78597f6ff6e4393132753573f6..7af875aafb0018c6dedd06df4e5af2576d490339 100644
+--- a/custom_cake/tests.py
++++ b/custom_cake/tests.py
+@@ -1,3 +1,60 @@
+ from django.test import TestCase
++from django.urls import reverse
++from django.contrib.auth.models import User
++from django.contrib.messages import get_messages
++
++from .models import CustomCake
++
++
++class CustomCakeViewsTests(TestCase):
++    def setUp(self):
++        self.user = User.objects.create_user(username='tester', password='pass')
++        self.client.login(username='tester', password='pass')
++        self.valid_data = {
++            'name': 'Test Cake',
++            'occasion': 'birthday',
++            'flavor': 'chocolate',
++            'size': '6',
++            'inscription': 'Happy',
++            'description': 'desc',
++        }
++
++    def test_create_custom_cake(self):
++        response = self.client.post(
++            reverse('create_custom_cake'), self.valid_data, follow=True
++        )
++        self.assertEqual(CustomCake.objects.count(), 1)
++        messages = list(get_messages(response.wsgi_request))
++        self.assertTrue(any('created successfully' in m.message for m in messages))
++
++    def test_update_custom_cake(self):
++        cake = CustomCake.objects.create(user=self.user, **self.valid_data)
++        update_data = self.valid_data.copy()
++        update_data['name'] = 'Updated Cake'
++        response = self.client.post(
++            reverse('update_custom_cake', args=[cake.pk]), update_data, follow=True
++        )
++        cake.refresh_from_db()
++        self.assertEqual(cake.name, 'Updated Cake')
++        messages = list(get_messages(response.wsgi_request))
++        self.assertTrue(any('updated successfully' in m.message for m in messages))
++
++    def test_delete_custom_cake(self):
++        cake = CustomCake.objects.create(user=self.user, **self.valid_data)
++        response = self.client.post(
++            reverse('delete_custom_cake', args=[cake.pk]), follow=True
++        )
++        self.assertFalse(CustomCake.objects.filter(pk=cake.pk).exists())
++        messages = list(get_messages(response.wsgi_request))
++        self.assertTrue(any('deleted successfully' in m.message for m in messages))
++
++    def test_create_invalid_shows_error_message(self):
++        invalid = self.valid_data.copy()
++        invalid['name'] = ''
++        response = self.client.post(
++            reverse('create_custom_cake'), invalid, follow=True
++        )
++        self.assertEqual(CustomCake.objects.count(), 0)
++        messages = list(get_messages(response.wsgi_request))
++        self.assertTrue(any('Error creating custom cake' in m.message for m in messages))
+ 
+-# Create your tests here.
+
+
+diff --git a/custom_cake/urls.py b/custom_cake/urls.py
+index 7128b9aa49fa99af921f84bf64865d7ae5f84c40..4d365efbdc850f2ec769a3a9092ecec805591330 100644
+--- a/custom_cake/urls.py
++++ b/custom_cake/urls.py
+@@ -1,7 +1,9 @@
+ from django.urls import path
+ from . import views
+ 
+ urlpatterns = [
+     path('create/', views.create_custom_cake, name='create_custom_cake'),
+     path('my-cakes/', views.custom_cake_list, name='custom_cake_list'),
++    path('edit/<int:pk>/', views.update_custom_cake, name='update_custom_cake'),
++    path('delete/<int:pk>/', views.delete_custom_cake, name='delete_custom_cake'),
+ ]
+
+
+diff --git a/custom_cake/views.py b/custom_cake/views.py
+index 7d61ef85dd2f7e8758dfd90bef14e7e6daaba521..22936ee89d3f2aea94a9322c6a5c6516bfe646de 100644
+--- a/custom_cake/views.py
++++ b/custom_cake/views.py
+@@ -1,23 +1,53 @@
+-from django.shortcuts import render, redirect
++from django.shortcuts import render, redirect, get_object_or_404
+ from django.contrib.auth.decorators import login_required
++from django.contrib import messages
+ from .forms import CustomCakeForm
+ from .models import CustomCake
+ 
+ @login_required
+ def create_custom_cake(request):
+     if request.method == 'POST':
+         form = CustomCakeForm(request.POST, request.FILES)
+         if form.is_valid():
+             custom_cake = form.save(commit=False)
+             custom_cake.user = request.user
+             custom_cake.save()
++            messages.success(request, 'Custom cake created successfully!')
+             return redirect('custom_cake_list')
++        else:
++            messages.error(request, 'Error creating custom cake. Please correct the errors below.')
+     else:
+         form = CustomCakeForm()
+     return render(request, 'custom_cake/custom_cake_form.html', {'form': form})
+ 
+ 
+ @login_required
+ def custom_cake_list(request):
+     cakes = CustomCake.objects.filter(user=request.user)
+     return render(request, 'custom_cake/custom_cake_list.html', {'cakes': cakes})
++
++
++@login_required
++def update_custom_cake(request, pk):
++    cake = get_object_or_404(CustomCake, pk=pk, user=request.user)
++    if request.method == 'POST':
++        form = CustomCakeForm(request.POST, request.FILES, instance=cake)
++        if form.is_valid():
++            form.save()
++            messages.success(request, 'Custom cake updated successfully!')
++            return redirect('custom_cake_list')
++        else:
++            messages.error(request, 'Error updating custom cake. Please correct the errors below.')
++    else:
++        form = CustomCakeForm(instance=cake)
++    return render(request, 'custom_cake/custom_cake_edit.html', {'form': form, 'cake': cake})
++
++
++@login_required
++def delete_custom_cake(request, pk):
++    cake = get_object_or_404(CustomCake, pk=pk, user=request.user)
++    if request.method == 'POST':
++        cake.delete()
++        messages.success(request, 'Custom cake deleted successfully.')
++        return redirect('custom_cake_list')
++    return render(request, 'custom_cake/custom_cake_confirm_delete.html', {'cake': cake})
+
+
