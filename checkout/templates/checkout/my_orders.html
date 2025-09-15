@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h1>My Orders</h1>
+  {% if orders %}
+  <table class="table mt-3">
+    <thead>
+      <tr><th>ID</th><th>Date</th><th>Total</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.created_on|date:"Y-m-d H:i" }}</td>
+        <td>€{{ order.order_total }}</td>
+        <td><a href="{% url 'checkout_success' order.id %}">View</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>You have no orders.</p>
+  {% endif %}
+</div>
+{% endblock %}
