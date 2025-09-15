@@ -4,6 +4,7 @@ from decimal import Decimal
 import stripe
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 
@@ -141,3 +142,8 @@ def checkout(request):
 def checkout_success(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     return render(request, 'checkout/checkout_success.html', {'order': order})
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_on')
+    return render(request, 'checkout/my_orders.html', {'orders': orders})
