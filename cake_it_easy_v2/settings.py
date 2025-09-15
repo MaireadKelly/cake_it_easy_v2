@@ -152,11 +152,22 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # --- Cloudinary (env-based) ---
-cloudinary.config(
-    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.getenv('CLOUDINARY_API_KEY'),
-    api_secret=os.getenv('CLOUDINARY_API_SECRET'),
-)
+_cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')
+_api_key = os.getenv('CLOUDINARY_API_KEY')
+_api_secret = os.getenv('CLOUDINARY_API_SECRET')
+_cloudinary_url = os.getenv('CLOUDINARY_URL')
+
+cloudinary_config = {'secure': True}
+if _cloud_name and _api_key and _api_secret:
+    cloudinary_config.update({
+        'cloud_name': _cloud_name,
+        'api_key': _api_key,
+        'api_secret': _api_secret,
+    })
+elif _cloudinary_url:
+    cloudinary_config['cloudinary_url'] = _cloudinary_url
+
+cloudinary.config(**cloudinary_config)
 CLOUDINARY_STORAGE = {
     'UPLOAD_PREFIX': os.getenv('CLOUDINARY_UPLOAD_PREFIX', 'cake-it-easy'),
     'MEDIA_OPTIONS': {
