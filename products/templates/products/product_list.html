@@ -27,9 +27,9 @@
       <div class="col-md-4 mb-4">
         <div class="card h-100">
           {% if product.image %}
-            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            <img src="{{ product.image.url }}" class="img-fluid card-img-top" alt="{{ product.name }}">
           {% else %}
-            <img src="{% static 'images/default.jpg' %}" class="card-img-top" alt="Image coming soon">
+            <img src="{% static 'images/default.jpg' %}" class="img-fluid card-img-top" alt="Image coming soon">
           {% endif %}
 
           <div class="card-body d-flex flex-column">
