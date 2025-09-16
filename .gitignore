@@ -6,6 +6,4 @@ db.sqlite3
 /staticfiles/
 media/
 *.zip
-PASS_CHECKLIST.md
-CONVENTIONS.md
-MENTOR_PROMPT.md
+TODO.md
