@@ -4,4 +4,4 @@ from .models import CustomCake
 class CustomCakeForm(forms.ModelForm):
     class Meta:
         model = CustomCake
-        fields = ['name', 'occasion', 'flavor', 'size', 'inscription', 'description', 'image']
+        fields = ['name', 'occasion', 'flavor', 'filling', 'size', 'inscription', 'description', 'image']

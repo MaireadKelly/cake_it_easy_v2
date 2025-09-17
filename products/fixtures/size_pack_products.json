@@ -1,0 +1,86 @@
+[
+    {
+        "model": "products.product",
+        "pk": 9001,
+        "fields": {
+            "category": 1,
+            "sku": "CK-VA-6",
+            "name": "Vanilla Celebration — 6-inch",
+            "description": "Classic vanilla sponge with vanilla buttercream. 6-inch size.",
+            "price": "30.00",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 9002,
+        "fields": {
+            "category": 1,
+            "sku": "CK-VA-8",
+            "name": "Vanilla Celebration — 8-inch",
+            "description": "Classic vanilla sponge with vanilla buttercream. 8-inch size.",
+            "price": "35.00",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 9003,
+        "fields": {
+            "category": 1,
+            "sku": "CK-VA-10",
+            "name": "Vanilla Celebration — 10-inch",
+            "description": "Classic vanilla sponge with vanilla buttercream. 10-inch size.",
+            "price": "40.00",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 9004,
+        "fields": {
+            "category": 2,
+            "sku": "CPK-06",
+            "name": "Cupcakes — 6 Pack",
+            "description": "Box of 6 assorted cupcakes.",
+            "price": "15.00",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 9005,
+        "fields": {
+            "category": 2,
+            "sku": "CPK-12",
+            "name": "Cupcakes — 12 Pack",
+            "description": "Box of 12 assorted cupcakes.",
+            "price": "28.00",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 9006,
+        "fields": {
+            "category": 2,
+            "sku": "CPK-18",
+            "name": "Cupcakes — 18 Pack",
+            "description": "Box of 18 assorted cupcakes.",
+            "price": "39.00",
+            "is_custom": false,
+            "is_accessory": false,
+            "is_offer": false
+        }
+    }
+]

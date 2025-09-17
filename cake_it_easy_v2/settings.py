@@ -48,18 +48,20 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'cloudinary',
     'cloudinary_storage',
+    'whitenoise.runserver_nostatic',
 
     # Local apps
     'home',
     'products',
     'custom_cake',
-    'bag',        # <— added
-    'checkout',   # <— added
+    'bag',        
+    'checkout',
+    'profiles.apps.ProfilesConfig', 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # <— added for static in prod
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -113,9 +115,6 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@example.com')
-
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
@@ -153,11 +152,22 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # --- Cloudinary (env-based) ---
-cloudinary.config(
-    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.getenv('CLOUDINARY_API_KEY'),
-    api_secret=os.getenv('CLOUDINARY_API_SECRET'),
-)
+_cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')
+_api_key = os.getenv('CLOUDINARY_API_KEY')
+_api_secret = os.getenv('CLOUDINARY_API_SECRET')
+_cloudinary_url = os.getenv('CLOUDINARY_URL')
+
+cloudinary_config = {'secure': True}
+if _cloud_name and _api_key and _api_secret:
+    cloudinary_config.update({
+        'cloud_name': _cloud_name,
+        'api_key': _api_key,
+        'api_secret': _api_secret,
+    })
+elif _cloudinary_url:
+    cloudinary_config['cloudinary_url'] = _cloudinary_url
+
+cloudinary.config(**cloudinary_config)
 CLOUDINARY_STORAGE = {
     'UPLOAD_PREFIX': os.getenv('CLOUDINARY_UPLOAD_PREFIX', 'cake-it-easy'),
     'MEDIA_OPTIONS': {
@@ -171,6 +181,25 @@ CLOUDINARY_STORAGE = {
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_CURRENCY = os.getenv('STRIPE_CURRENCY', 'eur')
+# Add webhook secret in production
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
+
+# Email (console in dev)
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@cakeiteasy.local")
+
 
 # --- Primary key type ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Emit errors to Heroku logs so 500s are visible
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {
+        "django": {"handlers": ["console"], "level": "INFO"},
+        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False},
+    },
+}
+
