@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 # --- Middleware ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # static files on Heroku
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
