@@ -41,7 +41,7 @@
   </div>
 
   {% if stripe_public_key and client_secret and client_secret != 'test_secret_disabled' %}
-    <script src="https://js.stripe.com/v3/"></script>
+     <script src="https://js.stripe.com/basil/stripe.js"></script>
     <script>
       (function () {
         const stripe = Stripe("{{ stripe_public_key }}");
