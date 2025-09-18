@@ -89,26 +89,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cake_it_easy_v2.wsgi.application'
 
-# --- Database ---
-# Prefer Postgres if DATABASE_URL is present; only use SQLite when explicitly requested.
-use_sqlite = os.getenv('USE_SQLITE', '').lower() == 'true'
-database_url = os.getenv('DATABASE_URL', '')
-
-if not use_sqlite and database_url:
-    # External/Postgres (Neon/Supabase/etc.)
+# -----------------------------------------------------
+# Database (Heroku Postgres via DATABASE_URL, else local sqlite)
+# -----------------------------------------------------
+if os.getenv("DATABASE_URL"):
     DATABASES = {
-        'default': dj_database_url.parse(
-            database_url,
-            conn_max_age=600,   # keep-alive
-            ssl_require=True    # required for Neon + friends
+        "default": dj_database_url.parse(
+            os.getenv("DATABASE_URL"),
+            conn_max_age=600,
+            ssl_require=not DEBUG,
         )
     }
 else:
-    # Local/dev SQLite
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
 
