@@ -12,14 +12,13 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- Security / Hosts ---
-# Read from env in production; keep a safe default for local dev
 SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-me')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-# Comma-separated in env, e.g. "localhost,127.0.0.1,cake-it-easy-xxxx.herokuapp.com"
+# Comma-separated, e.g. "localhost,127.0.0.1,cake-it-easy-xxxx.herokuapp.com"
 ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
 
-# For CSRF on Heroku: e.g. "https://cake-it-easy-xxxx.herokuapp.com"
+# CSRF trusted origins (full scheme), e.g. "https://cake-it-easy-xxxx.herokuapp.com"
 _csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
 CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',') if o.strip()]
 
@@ -54,12 +53,12 @@ INSTALLED_APPS = [
 # --- Middleware ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', 
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # keep just after SecurityMiddleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',  # <-- moved here (after Auth + Session)
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -91,14 +90,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cake_it_easy_v2.wsgi.application'
 
 # -----------------------------------------------------
-# Database (Heroku Postgres via DATABASE_URL, else local sqlite)
+# Database (External Postgres via DATABASE_URL, else local sqlite)
 # -----------------------------------------------------
 if os.getenv("DATABASE_URL"):
     DATABASES = {
         "default": dj_database_url.parse(
             os.getenv("DATABASE_URL"),
             conn_max_age=600,
-            ssl_require=not DEBUG,
+            ssl_require=True,   # Always require SSL for managed Postgres (Neon, etc.)
         )
     }
 else:
@@ -109,15 +108,13 @@ else:
         }
     }
 
-
-
 # --- Authentication / Allauth ---
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 SITE_ID = int(os.getenv("SITE_ID", "1"))
-ACCOUNT_EMAIL_VERIFICATION = 'none'  # you chose to skip email verification
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 LOGIN_REDIRECT_URL = '/'
 
 # --- Password validators ---
@@ -157,7 +154,7 @@ cloudinary.config(
     api_secret=os.getenv('CLOUDINARY_API_SECRET'),
 )
 
-# --- Email (best-effort console/cloud) ---
+# --- Email ---
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@cakeiteasy.local")
 
 # --- Stripe ---
@@ -167,7 +164,6 @@ STRIPE_CURRENCY = os.getenv('STRIPE_CURRENCY', 'eur')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
 
 # --- Security toggles for production ---
-# These keep local dev unchanged (DEBUG=True), and add HTTPS hardening in prod (DEBUG=False).
 SECURE_SSL_REDIRECT = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
