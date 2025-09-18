@@ -100,8 +100,13 @@ if os.getenv('USE_SQLITE', 'True') == 'True':
     }
 else:
     DATABASES = {
-        'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
+        'default': dj_database_url.parse(
+            os.getenv('DATABASE_URL'),
+            conn_max_age=600,   # keep connections open
+            ssl_require=True    # needed for Neon/Supabase/etc.
+        )
     }
+
 
 # --- Authentication / Allauth ---
 AUTHENTICATION_BACKENDS = [
