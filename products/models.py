@@ -1,11 +1,18 @@
 from django.db import models
 from django.utils.html import format_html
+import uuid
+
+
+def generate_sku() -> str:
+    """Return a short, unique, upper-case SKU."""
+    return uuid.uuid4().hex[:8].upper()
 
 
 class Category(models.Model):
     name = models.CharField(max_length=254)
     friendly_name = models.CharField(max_length=254, null=True, blank=True)
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='subcategories', on_delete=models.SET_NULL)
+    parent = models.ForeignKey('self', null=True, blank=True,
+                               related_name='subcategories', on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -19,7 +26,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
-    sku = models.CharField(max_length=254, null=True, blank=True)
+    sku = models.CharField(max_length=254, null=True, blank=True)  # auto-filled in save()
     name = models.CharField(max_length=254)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
@@ -31,10 +38,26 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     def image_preview(self):
         if self.image:
-            return format_html('<img src="{}" width="100" height="100" style="object-fit:cover;" />', self.image.url)
+            return format_html(
+                '<img src="{}" width="100" height="100" style="object-fit:cover;" />',
+                self.image.url
+            )
         return "No Image"
-
     image_preview.short_description = 'Preview'
+
+    def save(self, *args, **kwargs):
+        """
+        Auto-assign an SKU if missing.
+        Uses a short uppercase UUID slice; loops on the (extremely unlikely) collision.
+        No schema change required.
+        """
+        if not self.sku:
+            new = generate_sku()
+            # Use the model class to avoid any circular import
+            while type(self).objects.filter(sku=new).exists():
+                new = generate_sku()
+            self.sku = new
+        super().save(*args, **kwargs)
