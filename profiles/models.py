@@ -2,6 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
+    """
+    Stores default delivery/billing details for a user.
+    NOTE: related_name='profile' (access via request.user.profile)
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     default_phone_number = models.CharField(max_length=32, blank=True)
     default_country = models.CharField(max_length=40, blank=True)
@@ -9,5 +13,6 @@ class UserProfile(models.Model):
     default_town_or_city = models.CharField(max_length=40, blank=True)
     default_street_address1 = models.CharField(max_length=80, blank=True)
     default_street_address2 = models.CharField(max_length=80, blank=True)
+
     def __str__(self):
         return f"{self.user.username}"

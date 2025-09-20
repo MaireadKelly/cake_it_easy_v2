@@ -1,173 +1,118 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
+
 {% block content %}
-  <div class="container mt-5">
-    <h1 class="mb-3">Checkout</h1>
+<div class="container my-5">
+  <h1 class="mb-4">Checkout</h1>
 
+  <div class="row">
     <!-- Order summary -->
-    {% if items %}
-      <ul class="list-unstyled">
-        {% for i in items %}
-          <li>{{ i.product.name }} × {{ i.quantity }} — €{{ i.line_total }}</li>
-        {% endfor %}
-      </ul>
-      <p class="lead"><strong>Total: €{{ total }}</strong></p>
-    {% else %}
-      <div class="alert alert-warning">Your bag is empty.</div>
-    {% endif %}
-
-    <!-- Checkout form -->
-    <form id="checkout-form" method="POST" class="card card-body mt-3">
-      {% csrf_token %}
-
-      <!-- Django form non-field errors -->
-      {% if order_form.non_field_errors %}
-        <div class="alert alert-danger">
-          {{ order_form.non_field_errors }}
-        </div>
-      {% endif %}
-
-      <!-- Your details -->
-      <h5 class="mb-3">Your details</h5>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label for="{{ order_form.full_name.id_for_label }}" class="form-label">Full name</label>
-          {{ order_form.full_name }}
-          {{ order_form.full_name.errors }}
-        </div>
-        <div class="col-md-6">
-          <label for="{{ order_form.email.id_for_label }}" class="form-label">Email</label>
-          {{ order_form.email }}
-          {{ order_form.email.errors }}
-        </div>
-        <div class="col-md-6">
-          <label for="{{ order_form.phone_number.id_for_label }}" class="form-label">Phone number</label>
-          {{ order_form.phone_number }}
-          {{ order_form.phone_number.errors }}
-        </div>
+    <div class="col-md-6 mb-4">
+      <div class="card card-body">
+        <h5 class="mb-3">Your Order</h5>
+        {% if items %}
+          <ul class="list-unstyled">
+            {% for i in items %}
+              <li class="d-flex justify-content-between">
+                <span>{{ i.product.name }} × {{ i.quantity }}</span>
+                <span>€{{ i.line_total|floatformat:2 }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+          <hr>
+          <p class="mb-1">Subtotal:
+            <strong>€{{ bag_total|default:total|floatformat:2 }}</strong>
+          </p>
+          <p class="mb-1">Delivery:
+            <strong>
+              {% if delivery == 0 %}Free{% else %}€{{ delivery|floatformat:2 }}{% endif %}
+            </strong>
+          </p>
+          <p class="lead mb-0">Grand total:
+            <strong>€{{ grand_total|floatformat:2 }}</strong>
+          </p>
+        {% else %}
+          <p>Your bag is empty.</p>
+        {% endif %}
       </div>
+    </div>
 
-      <!-- Address -->
-      <h5 class="mt-4 mb-3">Billing / Delivery address</h5>
-      <div class="row g-3">
-        <div class="col-md-8">
-          <label for="{{ order_form.street_address1.id_for_label }}" class="form-label">Address line 1</label>
-          {{ order_form.street_address1 }}
-          {{ order_form.street_address1.errors }}
-        </div>
-        <div class="col-md-8">
-          <label for="{{ order_form.street_address2.id_for_label }}" class="form-label">
-            Address line 2 <span class="text-muted">(optional)</span>
-          </label>
-          {{ order_form.street_address2 }}
-          {{ order_form.street_address2.errors }}
-        </div>
-        <div class="col-md-4">
-          <label for="{{ order_form.town_or_city.id_for_label }}" class="form-label">Town / City</label>
-          {{ order_form.town_or_city }}
-          {{ order_form.town_or_city.errors }}
-        </div>
-        <div class="col-md-4">
-          <label for="{{ order_form.postcode.id_for_label }}" class="form-label">Postcode</label>
-          {{ order_form.postcode }}
-          {{ order_form.postcode.errors }}
-        </div>
-        <div class="col-md-4">
-          <label for="{{ order_form.country.id_for_label }}" class="form-label">Country</label>
-          <!-- NOTE: If your form uses a select/ChoiceField (e.g. django-countries), values will already be 2-letter codes -->
-          {{ order_form.country }}
-          {{ order_form.country.errors }}
-        </div>
+    <!-- Payment & details -->
+    <div class="col-md-6 mb-4">
+      <div class="card card-body">
+        <h5 class="mb-3">Billing & Payment</h5>
+
+        <form id="payment-form" method="post" novalidate>
+          {% csrf_token %}
+          {{ order_form.as_p }}
+
+          <!-- Save my details -->
+          <div class="form-check my-2">
+            <input class="form-check-input" type="checkbox" name="save_info" id="id_save_info"
+                   {% if request.user.is_authenticated and request.user.userprofile %}checked{% endif %}>
+            <label class="form-check-label" for="id_save_info">
+              Save my details for next time
+            </label>
+          </div>
+
+          {% if stripe_public_key and client_secret and client_secret != 'test_secret_disabled' %}
+            <label for="card-element" class="mt-2">Card details</label>
+            <div id="card-element" class="form-control"></div>
+            <div id="card-errors" class="text-danger small mt-2" role="alert"></div>
+
+            <input type="hidden" name="client_secret" id="id_client_secret" value="{{ client_secret }}">
+
+            <button type="submit" id="pay-btn" class="btn btn-primary mt-3">
+              Pay €{{ grand_total|floatformat:2 }}
+            </button>
+          {% else %}
+            <p class="text-muted small">
+              Stripe not configured — placing order without payment (dev only).
+            </p>
+            <input type="hidden" name="client_secret" value="test_secret_disabled">
+            <button type="submit" class="btn btn-primary mt-2">Place Order</button>
+          {% endif %}
+        </form>
       </div>
-
-      {% if user.is_authenticated %}
-        <div class="form-check mt-3">
-          <input class="form-check-input" type="checkbox" name="save_info" id="id_save_info" checked>
-          <label class="form-check-label" for="id_save_info">
-            Save these details to my profile
-          </label>
-        </div>
-      {% endif %}
-
-      <!-- Keep posting client_secret (used by view to link Order to PI) -->
-      <input type="hidden" name="client_secret" id="client_secret" value="{{ client_secret }}">
-
-      {% if stripe_public_key and client_secret and client_secret != 'test_secret_disabled' %}
-        <hr class="mt-4">
-        <h5>Card details</h5>
-        <div id="card-element" class="form-control" style="padding:.6rem .75rem;"></div>
-        <div id="card-errors" class="text-danger mt-2" role="alert" aria-live="polite"></div>
-        <button type="submit" id="pay-btn" class="btn btn-primary mt-3">Pay €{{ total }}</button>
-      {% else %}
-        <button type="submit" class="btn btn-primary mt-3">Place Order</button>
-        <p class="text-muted small mt-2">
-          Payment is disabled in this environment. Your order will still be recorded for assessment.
-        </p>
-      {% endif %}
-    </form>
+    </div>
   </div>
+</div>
 
-  {% if stripe_public_key and client_secret and client_secret != 'test_secret_disabled' %}
-    <!-- Stripe v3 -->
-    <script src="https://js.stripe.com/v3/"></script>
-    <script>
-      (function () {
-        const stripe = Stripe("{{ stripe_public_key }}");
-        const clientSecret = "{{ client_secret }}";
-        const elements = stripe.elements();
-        const card = elements.create('card');
-        card.mount('#card-element');
+{% if stripe_public_key and client_secret and client_secret != 'test_secret_disabled' %}
+  <script>
+    // Stripe Elements setup
+    const stripe = Stripe("{{ stripe_public_key }}");
+    const elements = stripe.elements();
+    const card = elements.create('card');
+    card.mount('#card-element');
 
-        // Helper to read values by element ID (Django will render IDs as id_<fieldname>)
-        const byId = (id) => {
-          const el = document.getElementById(id);
-          return el ? el.value : '';
-        };
+    card.on('change', function(event) {
+      const displayError = document.getElementById('card-errors');
+      displayError.textContent = event.error ? event.error.message : '';
+    });
 
-        // Remove empty keys so Stripe never receives "" for fields like country
-        const compact = (obj) =>
-          Object.fromEntries(Object.entries(obj).filter(([_, v]) => v && String(v).trim() !== ''));
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payBtn = document.getElementById('pay-btn');
+      if (payBtn) payBtn.disabled = true;
 
-        const form = document.getElementById('checkout-form');
-        const payBtn = document.getElementById('pay-btn');
-        const errorBox = document.getElementById('card-errors');
+      const clientSecret = document.getElementById('id_client_secret').value;
 
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          if (payBtn) payBtn.disabled = true;
-          errorBox.textContent = '';
+      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: { card }
+      });
 
-          const address = compact({
-            line1: byId('id_street_address1'),
-            line2: byId('id_street_address2'),
-            postal_code: byId('id_postcode'),
-            city: byId('id_town_or_city'),
-            country: byId('id_country').toUpperCase(), // only included if provided
-          });
+      if (error) {
+        const displayError = document.getElementById('card-errors');
+        displayError.textContent = error.message || 'Payment failed';
+        if (payBtn) payBtn.disabled = false;
+        return;
+      }
 
-          const billingDetails = compact({
-            name: byId('id_full_name'),
-            email: byId('id_email'),
-            address,
-          });
-
-          const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-            payment_method: { card, billing_details: billingDetails }
-          });
-
-          if (error) {
-            errorBox.textContent = error.message || 'Payment failed. Please try again.';
-            if (payBtn) payBtn.disabled = false;
-            return;
-          }
-          if (paymentIntent && paymentIntent.status === 'succeeded') {
-            form.submit(); // posts back to your Django view to finalize the Order
-          } else {
-            errorBox.textContent = 'Payment not completed. Please try again.';
-            if (payBtn) payBtn.disabled = false;
-          }
-        });
-      })();
-    </script>
-  {% endif %}
+      // Submit the form to create the Order server-side with the PI id stored
+      form.submit();
+    });
+  </script>
+{% endif %}
 {% endblock %}
