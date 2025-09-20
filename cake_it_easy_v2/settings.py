@@ -80,10 +80,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # Add bag totals to all templates (header mini-bag count, etc.)
-                'bag.context_processors.bag_totals',
+                'bag.context_processors.bag_contents',
                 'products.context_processors.all_categories',
-
             ],
         },
     },

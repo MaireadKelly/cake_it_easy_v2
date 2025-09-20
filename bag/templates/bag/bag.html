@@ -1,9 +1,102 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+
 {% block content %}
-  <div class="container mt-5">
-    <h1>Your Bag</h1>
-    <p class="mt-3">
-      <a class="btn btn-primary" href="{% url 'checkout' %}">Proceed to Checkout</a>
-    </p>
-  </div>
+<div class="container my-5">
+  <h1 class="mb-4">Your Bag</h1>
+
+  {% if bag_items %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col" class="text-center">Price</th>
+            <th scope="col" class="text-center" style="width:130px;">Qty</th>
+            <th scope="col" class="text-end">Total</th>
+            <th scope="col" class="text-end"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in bag_items %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="64" height="64" class="rounded me-3" style="object-fit:cover;">
+                  {% else %}
+                    <img src="{% static 'images/default.jpg' %}" alt="{{ item.product.name }}" width="64" height="64" class="rounded me-3" style="object-fit:cover;">
+                  {% endif %}
+                  <div>
+                    <a href="{% url 'product_detail' item.product.id %}" class="fw-semibold text-decoration-none">{{ item.product.name }}</a>
+                  </div>
+                </div>
+              </td>
+
+              <td class="text-center">&euro;{{ item.product.price|floatformat:2 }}</td>
+
+              <td>
+                <form action="{% url 'adjust_bag' item.product.id %}" method="post" class="d-flex justify-content-center">
+                  {% csrf_token %}
+                  <input type="number" name="quantity" min="0" value="{{ item.quantity }}" class="form-control form-control-sm text-center" style="width:80px;">
+                  <button class="btn btn-outline-secondary btn-sm ms-2" type="submit">Update</button>
+                </form>
+              </td>
+
+              <td class="text-end">&euro;{{ item.line_total|floatformat:2 }}</td>
+
+              <td class="text-end">
+                <form action="{% url 'remove_from_bag' item.product.id %}" method="post" class="d-inline">
+                  {% csrf_token %}
+                  <button class="btn btn-outline-danger btn-sm">Remove</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" class="text-end"><strong>Subtotal</strong></td>
+            <td class="text-end">&euro;{{ total|floatformat:2 }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="text-end">Delivery</td>
+            <td class="text-end">
+              {% if delivery == 0 %}
+                <span class="text-success">Free</span>
+              {% else %}
+                &euro;{{ delivery|floatformat:2 }}
+              {% endif %}
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="text-end"><strong>Grand Total</strong></td>
+            <td class="text-end"><strong>&euro;{{ grand_total|floatformat:2 }}</strong></td>
+            <td></td>
+          </tr>
+          {% if free_delta and free_delta > 0 %}
+          <tr>
+            <td colspan="5" class="text-end">
+              <small class="text-muted">Spend &euro;{{ free_delta|floatformat:2 }} more to get free delivery.</small>
+            </td>
+          </tr>
+          {% endif %}
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <a href="{% url 'product_list' %}" class="btn btn-outline-secondary">&larr; Keep Shopping</a>
+      <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+    </div>
+
+  {% else %}
+    <div class="text-center py-5">
+      <p class="lead mb-3">Your bag is empty.</p>
+      <a href="{% url 'product_list' %}" class="btn btn-primary">Browse Products</a>
+    </div>
+  {% endif %}
+</div>
 {% endblock %}
