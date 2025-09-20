@@ -1,53 +1,21 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
-from django.db.models import Q
 from django.contrib import messages
-from django.db.models.functions import Lower
 from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Q
+from django.db.models.functions import Lower
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Product, Category
 from .forms import ProductForm
+from .models import Category, Product
 
 
-def product_list(request):
-    """
-    Supports:
-      - ?category=cupcakes,cakes   (CSV; matches Category.name OR friendly_name)
-      - ?q=choc                    (search in name + description)
-      - ?sort=name|price|category  (case-insensitive for name/category)
-      - ?direction=asc|desc
-    Preserves the rest of the query string so the UI can keep state.
-    """
-    products = Product.objects.all()
-    query = None
-    categories = None
+def _apply_search_sort(products, request):
+    """Apply search (?q=) and sorting (?sort=&direction=) consistently."""
+    query = request.GET.get('q', '').strip()
+    if query:
+        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+
     sort = request.GET.get('sort', '')
     direction = request.GET.get('direction', 'asc').lower()
-
-    # ---- Category filter (CSV; accept name or friendly_name) ----
-    selected = []
-    if 'category' in request.GET and request.GET['category'].strip():
-        raw = request.GET['category']
-        selected = [s.strip() for s in raw.split(',') if s.strip()]
-        # filter by either field
-        products = products.filter(
-            Q(category__name__in=selected) | Q(category__friendly_name__in=selected)
-        ).distinct()
-        categories = Category.objects.filter(
-            Q(name__in=selected) | Q(friendly_name__in=selected)
-        ).distinct()
-
-    # ---- Search ----
-    if 'q' in request.GET:
-        query = request.GET['q']
-        if not query.strip():
-            messages.error(request, "You didn't enter any search criteria!")
-            return redirect('product_list')
-        products = products.filter(
-            Q(name__icontains=query) | Q(description__icontains=query)
-        )
-
-    # ---- Sorting (case-insensitive for name/category) ----
     sortkey = 'id'
     if sort == 'name':
         products = products.annotate(lower_name=Lower('name'))
@@ -55,24 +23,113 @@ def product_list(request):
     elif sort == 'price':
         sortkey = 'price'
     elif sort == 'category':
-        # sort by friendly_name for nicer UX
         products = products.annotate(cat_name=Lower('category__friendly_name'))
         sortkey = 'cat_name'
-
     if direction == 'desc':
         sortkey = f'-{sortkey}'
     products = products.order_by(sortkey)
 
+    return products, query, sort, direction
+
+
+def product_list(request):
+    """
+    Default list page.
+    Supports:
+      - ?category=cakes,accessories (CSV; uses Category.slug/name/friendly_name)
+      - ?q=…
+      - ?sort=name|price|category & ?direction=asc|desc
+    """
+    products = Product.objects.all()
+    selected_qs = Category.objects.none()
+
+    # CSV category filter (keep working to avoid breaking links), but custom-cakes is NOT part of products.
+    if 'category' in request.GET and request.GET['category'].strip():
+        tokens = [t.strip() for t in request.GET['category'].split(',') if t.strip()]
+        # If someone enters custom-cakes, we *do not* show products; we’ll just ignore it here.
+        tokens = [t for t in tokens if t != 'custom-cakes']
+        if tokens:
+            selected_qs = Category.objects.filter(
+                Q(slug__in=tokens) | Q(name__in=tokens) | Q(friendly_name__in=tokens)
+            ).distinct()
+            if selected_qs.exists():
+                products = products.filter(category__in=selected_qs)
+
+    products, query, sort, direction = _apply_search_sort(products, request)
+
     context = {
         'products': products,
+        'all_categories': Category.objects.exclude(slug='custom-cakes'),  # never show custom-cakes chip
+        'current_categories': selected_qs,
+        'selected_slugs': list(selected_qs.values_list('slug', flat=True)),
         'search_term': query,
-        'current_categories': categories,    # queryset of matched categories (if any)
-        'selected_categories': selected,     # raw list of chosen categories
         'current_sort': sort,
         'current_direction': direction,
         'current_sorting': f'{sort}_{direction}' if sort else '',
-        'request_get': request.GET,          # lets the template preserve other params
-        'all_categories': Category.objects.all(),  # chips without extra context processor
+        'request_get': request.GET,
+    }
+    return render(request, 'products/product_list.html', context)
+
+
+# ---- Dedicated nav targets ----
+
+def product_cakes(request):
+    """Cakes (normal catalogue items) – show only category slug 'cakes' if it exists; else show all non-accessory offers off."""
+    qs = Product.objects.all()
+    # If you created a 'Cakes' category, prefer it:
+    try:
+        cakes_cat = Category.objects.get(slug='cakes')
+        qs = qs.filter(category=cakes_cat)
+    except Category.DoesNotExist:
+        # Fallback: exclude accessories if you use that category; otherwise leave as-is
+        qs = qs.exclude(category__slug='accessories')
+    qs, query, sort, direction = _apply_search_sort(qs, request)
+    context = {
+        'products': qs,
+        'all_categories': Category.objects.exclude(slug__in=['custom-cakes']),  # keep chips simple
+        'current_categories': Category.objects.filter(slug='cakes') if 'cakes' in [c.slug for c in Category.objects.all()] else Category.objects.none(),
+        'selected_slugs': ['cakes'],
+        'search_term': query,
+        'current_sort': sort,
+        'current_direction': direction,
+        'current_sorting': f'{sort}_{direction}' if sort else '',
+        'request_get': request.GET,
+    }
+    return render(request, 'products/product_list.html', context)
+
+
+def product_accessories(request):
+    """Accessories category page."""
+    qs = Product.objects.filter(category__slug='accessories')
+    qs, query, sort, direction = _apply_search_sort(qs, request)
+    context = {
+        'products': qs,
+        'all_categories': Category.objects.exclude(slug__in=['custom-cakes']),
+        'current_categories': Category.objects.filter(slug='accessories'),
+        'selected_slugs': ['accessories'],
+        'search_term': query,
+        'current_sort': sort,
+        'current_direction': direction,
+        'current_sorting': f'{sort}_{direction}' if sort else '',
+        'request_get': request.GET,
+    }
+    return render(request, 'products/product_list.html', context)
+
+
+def product_offers(request):
+    """Special Offers (uses your boolean flag on Product)."""
+    qs = Product.objects.filter(is_offer=True)
+    qs, query, sort, direction = _apply_search_sort(qs, request)
+    context = {
+        'products': qs,
+        'all_categories': Category.objects.exclude(slug__in=['custom-cakes']),
+        'current_categories': Category.objects.none(),
+        'selected_slugs': [],
+        'search_term': query,
+        'current_sort': sort,
+        'current_direction': direction,
+        'current_sorting': f'{sort}_{direction}' if sort else '',
+        'request_get': request.GET,
     }
     return render(request, 'products/product_list.html', context)
 
@@ -82,10 +139,11 @@ def product_detail(request, product_id):
     return render(request, 'products/product_detail.html', {'product': product})
 
 
-# -------- RBAC: Admin-only CRUD --------
+# ---- Dedicated nav targets ----
 
 @staff_member_required
 def add_product(request):
+    """Create a new product (staff only)."""
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
@@ -96,9 +154,9 @@ def add_product(request):
         form = ProductForm()
     return render(request, 'products/product_form.html', {'form': form, 'mode': 'add'})
 
-
 @staff_member_required
 def edit_product(request, product_id):
+    """Edit an existing product (staff only)."""
     product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)
@@ -110,9 +168,9 @@ def edit_product(request, product_id):
         form = ProductForm(instance=product)
     return render(request, 'products/product_form.html', {'form': form, 'mode': 'edit', 'product': product})
 
-
 @staff_member_required
 def delete_product(request, product_id):
+    """Delete a product (staff only, with confirmation)."""
     product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':
         name = product.name
