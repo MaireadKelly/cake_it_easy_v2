@@ -6,6 +6,7 @@ class Category(models.Model):
     name = models.CharField(max_length=254)
     friendly_name = models.CharField(max_length=254, null=True, blank=True)
     parent = models.ForeignKey('self', null=True, blank=True, related_name='subcategories', on_delete=models.SET_NULL)
+    slug = models.SlugField(max_length=60, unique=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Categories'
