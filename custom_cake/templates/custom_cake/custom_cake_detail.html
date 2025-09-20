@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h1>Custom Cake #{{ cake.pk }}</h1>
+
+  <div class="card card-body my-3">
+    <dl class="row">
+      {# Render some common fields if they exist; otherwise show __str__ #}
+      {% if cake.name %}<dt class="col-sm-3">Name</dt><dd class="col-sm-9">{{ cake.name }}</dd>{% endif %}
+      {% if cake.flavor %}<dt class="col-sm-3">Flavour</dt><dd class="col-sm-9">{{ cake.flavor }}</dd>{% endif %}
+      {% if cake.filling %}<dt class="col-sm-3">Filling</dt><dd class="col-sm-9">{{ cake.filling }}</dd>{% endif %}
+      {% if cake.size %}<dt class="col-sm-3">Size</dt><dd class="col-sm-9">{{ cake.size }}</dd>{% endif %}
+      {% if cake.inscription %}<dt class="col-sm-3">Inscription</dt><dd class="col-sm-9">{{ cake.inscription }}</dd>{% endif %}
+      {% if cake.date_needed %}<dt class="col-sm-3">Date Needed</dt><dd class="col-sm-9">{{ cake.date_needed }}</dd>{% endif %}
+      {% if cake.description %}<dt class="col-sm-3">Notes</dt><dd class="col-sm-9">{{ cake.description }}</dd>{% endif %}
+    </dl>
+  </div>
+
+  <div class="mt-3">
+    <a href="{% url 'custom_cake_edit' cake.pk %}" class="btn btn-outline-primary btn-sm">Edit</a>
+    <a href="{% url 'custom_cake_delete' cake.pk %}" class="btn btn-outline-danger btn-sm">Delete</a>
+    <a href="{% url 'custom_cake_list' %}" class="btn btn-secondary btn-sm ms-2">Back</a>
+  </div>
+</div>
+{% endblock %}

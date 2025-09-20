@@ -2,12 +2,12 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # Make /custom_cake/ land on the public create form (best UX)
-    path("", views.create_custom_cake, name="custom_cake_index"),
+    # Logged-in user's list (used by your navbar)
+    path('my-cakes/', views.custom_cake_list, name='custom_cake_list'),
 
-    # existing routes
-    path("create/", views.create_custom_cake, name="create_custom_cake"),
-    path("my-cakes/", views.custom_cake_list, name="custom_cake_list"),
-    path("edit/<int:pk>/", views.update_custom_cake, name="update_custom_cake"),
-    path("delete/<int:pk>/", views.delete_custom_cake, name="delete_custom_cake"),
+    # CRUD (login required; owner or staff can edit/delete)
+    path('create/', views.custom_cake_create, name='custom_cake_create'),
+    path('<int:pk>/', views.custom_cake_detail, name='custom_cake_detail'),
+    path('<int:pk>/edit/', views.custom_cake_edit, name='custom_cake_edit'),
+    path('<int:pk>/delete/', views.custom_cake_delete, name='custom_cake_delete'),
 ]

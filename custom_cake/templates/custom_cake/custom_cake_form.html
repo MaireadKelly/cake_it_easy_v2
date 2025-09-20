@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5">
-  <h2>Design Your Custom Cake</h2>
-    {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-  {% endif %}
-  <form method="post" enctype="multipart/form-data">
+  <h1 class="mb-3">
+    {% if mode == 'edit' %}Edit Custom Cake{% else %}Create Custom Cake{% endif %}
+  </h1>
+  <form method="post" enctype="multipart/form-data" class="card card-body">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="mt-3">
+      <button type="submit" class="btn btn-primary">
+        {% if mode == 'edit' %}Save Changes{% else %}Create{% endif %}
+      </button>
+      <a href="{% url 'custom_cake_list' %}" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
   </form>
 </div>
 {% endblock %}
