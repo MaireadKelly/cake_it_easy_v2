@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.html import format_html
+from django.utils.text import slugify
 import uuid
 
 
@@ -11,8 +12,11 @@ def generate_sku() -> str:
 class Category(models.Model):
     name = models.CharField(max_length=254)
     friendly_name = models.CharField(max_length=254, null=True, blank=True)
-    parent = models.ForeignKey('self', null=True, blank=True,
-                               related_name='subcategories', on_delete=models.SET_NULL)
+    parent = models.ForeignKey(
+        'self', null=True, blank=True,
+        related_name='subcategories', on_delete=models.SET_NULL
+    )
+    slug = models.SlugField(max_length=60, unique=True)
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -22,6 +26,12 @@ class Category(models.Model):
 
     def get_friendly_name(self):
         return self.friendly_name if self.friendly_name else self.name
+
+    def save(self, *args, **kwargs):
+        # auto-create slug from name if missing
+        if not self.slug and self.name:
+            self.slug = slugify(self.name)[:60]
+        super().save(*args, **kwargs)
 
 
 class Product(models.Model):
@@ -52,11 +62,9 @@ class Product(models.Model):
         """
         Auto-assign an SKU if missing.
         Uses a short uppercase UUID slice; loops on the (extremely unlikely) collision.
-        No schema change required.
         """
         if not self.sku:
             new = generate_sku()
-            # Use the model class to avoid any circular import
             while type(self).objects.filter(sku=new).exists():
                 new = generate_sku()
             self.sku = new
