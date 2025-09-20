@@ -12,7 +12,7 @@ from products.models import Product
 from .forms import OrderForm
 from .models import Order, OrderLineItem
 
-# Enable Stripe only when keys are present
+# --- Stripe enablement guard (keeps local running even without keys) ---
 STRIPE_ENABLED = bool(
     getattr(settings, "STRIPE_PUBLIC_KEY", "") and getattr(settings, "STRIPE_SECRET_KEY", "")
 )
@@ -21,6 +21,10 @@ if STRIPE_ENABLED:
 
 
 def _calc_bag_items_and_total(request):
+    """
+    Reads the current session 'bag' and returns (items, total).
+    items: [{'product': Product, 'quantity': int, 'line_total': Decimal}, ...]
+    """
     bag = request.session.get('bag', {})
     items, total = [], Decimal('0.00')
     for pid, qty in bag.items():
@@ -31,37 +35,56 @@ def _calc_bag_items_and_total(request):
     return items, total
 
 
+def _get_user_profile(user):
+    """
+    Safely get either user.userprofile (Boutique Ado style)
+    or user.profile (your alternative). Returns None if absent.
+    """
+    return getattr(user, 'userprofile', getattr(user, 'profile', None))
+
+
+@login_required
 def checkout(request):
+    """
+    - GET: render OrderForm (prefilled from profile if available) and create a PaymentIntent.
+    - POST: validate OrderForm, save Order + OrderLineItems, optionally persist defaults to profile,
+            then redirect to checkout_success.
+    """
     items, total = _calc_bag_items_and_total(request)
     if not items:
         messages.info(request, "Your bag is empty.")
+        # Adjust this url name if your list view differs
         return redirect('product_list')
 
     if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
+        order_form = OrderForm(request.POST)
+        if order_form.is_valid():
+            # Pull Stripe PaymentIntent id (pid) from hidden client_secret input
             client_secret = request.POST.get('client_secret', '')
             pid = client_secret.split('_secret')[0] if '_secret' in client_secret else ''
 
-            order = form.save(commit=False)
-            order.user = request.user if request.user.is_authenticated else None
+            # Create the Order but don't commit yet
+            order = order_form.save(commit=False)
+            order.user = request.user
             order.order_total = total
             order.stripe_pid = pid
             order.original_bag = json.dumps(request.session.get('bag', {}))
             order.save()
 
+            # Create line items
             for i in items:
                 OrderLineItem.objects.create(
                     order=order, product=i['product'], quantity=i['quantity']
                 )
 
-            # clear bag
+            # Clear bag
             request.session['bag'] = {}
 
             # Save checkout details back to profile if requested
-            if request.user.is_authenticated and request.POST.get('save_info') == 'on':
-                try:
-                    profile = request.user.profile  # created by profiles.signals
+            if request.POST.get('save_info') == 'on':
+                profile = _get_user_profile(request.user)
+                if profile:
+                    # These field names assume Boutique Ado-style UserProfile defaults
                     profile.default_phone_number = order.phone_number
                     profile.default_country = order.country
                     profile.default_postcode = order.postcode
@@ -69,11 +92,8 @@ def checkout(request):
                     profile.default_street_address1 = order.street_address1
                     profile.default_street_address2 = order.street_address2
                     profile.save()
-                except Exception:
-                    # No profile found or other non-critical issue; ignore for MVP
-                    pass
 
-            # Confirmation email (best-effort)
+            # Best-effort confirmation email
             try:
                 send_mail(
                     subject=f"Cake It Easy — Order #{order.id} confirmed",
@@ -87,36 +107,42 @@ def checkout(request):
 
             messages.success(request, f"Order placed! Reference #{order.id}")
             return redirect(reverse('checkout_success', args=[order.id]))
-        # fall-through: invalid form -> re-render below with same context
+        # If invalid, fall through to re-render the page with errors
+        order_form = order_form
     else:
-        # GET: prefill from profile/account where possible
+        # GET: prefill form from profile/account where possible
         initial = {}
-        if request.user.is_authenticated:
-            try:
-                p = request.user.profile
-                initial = {
-                    'full_name': (request.user.get_full_name() or '').strip(),
-                    'email': (request.user.email or '').strip(),
-                    'phone_number': p.default_phone_number,
-                    'country': p.default_country,
-                    'postcode': p.default_postcode,
-                    'town_or_city': p.default_town_or_city,
-                    'street_address1': p.default_street_address1,
-                    'street_address2': p.default_street_address2,
-                }
-            except Exception:
-                initial = {'email': (request.user.email or '').strip()}
-        form = OrderForm(initial=initial)
+        profile = _get_user_profile(request.user)
+        if profile:
+            initial = {
+                'full_name': (request.user.get_full_name() or '').strip(),
+                'email': (request.user.email or '').strip(),
+                'phone_number': profile.default_phone_number,
+                'country': profile.default_country,
+                'postcode': profile.default_postcode,
+                'town_or_city': profile.default_town_or_city,
+                'street_address1': profile.default_street_address1,
+                'street_address2': profile.default_street_address2,
+            }
+        else:
+            initial = {
+                'full_name': (request.user.get_full_name() or '').strip(),
+                'email': (request.user.email or '').strip(),
+            }
+        order_form = OrderForm(initial=initial)
 
-    # Create PaymentIntent (GET and also POST-invalid)
+    # --- Create PaymentIntent (both GET and POST-invalid) ---
     client_secret = ''
     do_stripe = STRIPE_ENABLED
     if do_stripe:
         try:
             intent = stripe.PaymentIntent.create(
-                amount=int(total * 100),
+                amount=int(total * 100),  # cents
                 currency=getattr(settings, 'STRIPE_CURRENCY', 'eur'),
-                metadata={'integration': 'cake_it_easy_v2'},
+                metadata={
+                    'bag': json.dumps(request.session.get('bag', {})),
+                    'username': request.user.username,
+                },
             )
             client_secret = intent.client_secret
         except stripe.error.AuthenticationError:
@@ -127,11 +153,12 @@ def checkout(request):
             do_stripe = False
 
     if not do_stripe:
+        # Tell the template not to render Elements; form will still submit & create an Order
         client_secret = "test_secret_disabled"
         messages.warning(request, "Stripe is not configured. Running in no-payment demo mode.")
 
     return render(request, 'checkout/checkout.html', {
-        'form': form,
+        'order_form': order_form,  # <-- template expects this key
         'items': items,
         'total': total,
         'stripe_public_key': getattr(settings, "STRIPE_PUBLIC_KEY", ""),
@@ -139,11 +166,19 @@ def checkout(request):
     })
 
 
+@login_required
 def checkout_success(request, order_id):
+    """
+    Simple success page showing the order reference.
+    """
     order = get_object_or_404(Order, pk=order_id)
     return render(request, 'checkout/checkout_success.html', {'order': order})
 
+
 @login_required
 def my_orders(request):
+    """
+    List a user's orders (assumes Order has a created_on DateTimeField).
+    """
     orders = Order.objects.filter(user=request.user).order_by('-created_on')
     return render(request, 'checkout/my_orders.html', {'orders': orders})
