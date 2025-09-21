@@ -1,0 +1,4 @@
+static/** linguist-vendored
+staticfiles/** linguist-vendored
+*.min.js linguist-vendored
+*.map linguist-generated
