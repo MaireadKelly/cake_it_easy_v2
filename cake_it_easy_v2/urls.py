@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from cake_it_easy_v2 import views as core_views
 
 
 urlpatterns = [
@@ -31,5 +32,10 @@ urlpatterns = [
     path('checkout/', include('checkout.urls')),
     path('profile/', include('profiles.urls')),
     path('about/', TemplateView.as_view(template_name='about.html'), name='about'),
+    path("robots.txt", core_views.robots_txt, name="robots_txt"),
+    path("sitemap.xml", core_views.sitemap_xml, name="sitemap_xml"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = "cake_it_easy_v2.views.custom_404"
+
