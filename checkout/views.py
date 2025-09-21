@@ -172,6 +172,17 @@ def checkout_success(request, order_id):
 
 
 @login_required
+def order_detail(request, order_id):
+    """
+    Read-only order detail page for owner or staff.
+    """
+    order = get_object_or_404(Order, pk=order_id)
+    if not (request.user.is_staff or order.user_id == request.user.id):
+        raise PermissionDenied
+    return render(request, 'checkout/order_detail.html', {'order': order})
+
+
+@login_required
 def my_orders(request):
     """List current user's orders (staff see all)."""
     if request.user.is_staff:
@@ -188,3 +199,4 @@ def my_orders(request):
             .order_by("-id")
         )
     return render(request, "checkout/my_orders.html", {"orders": orders})
+

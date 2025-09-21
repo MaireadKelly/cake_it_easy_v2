@@ -12,8 +12,10 @@
       <tr>
         <td>{{ order.id }}</td>
         <td>{{ order.created_on|date:"Y-m-d H:i" }}</td>
-        <td>€{{ order.order_total }}</td>
-        <td><a href="{% url 'checkout_success' order.id %}">View</a></td>
+        <td>€{{ order.order_total|floatformat:2 }}</td>
+        <td class="text-right">
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'order_detail' order.id %}">View</a>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
