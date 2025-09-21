@@ -12,7 +12,6 @@ class CustomCakeForm(forms.ModelForm):
             "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "e.g. Unicorn Birthday Cake"}),
             "inscription": forms.TextInput(attrs={"class": "form-control", "placeholder": "Short message on cake"}),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 4, "placeholder": "Design notes, colors, allergies…"}),
-            "occasion": forms.Select(attrs={"class": "form-control"}),
             "flavor": forms.Select(attrs={"class": "form-control"}),
             "filling": forms.Select(attrs={"class": "form-control"}),
             "size": forms.Select(attrs={"class": "form-control"}),
@@ -24,7 +23,7 @@ class CustomCakeForm(forms.ModelForm):
         }
 
     def clean_inscription(self):
-        text = self.cleaned_data.get("inscription", "") or ""
+        text = (self.cleaned_data.get("inscription") or "").strip()
         if len(text) > 60:
             raise ValidationError("Please keep the inscription under 60 characters.")
         return text

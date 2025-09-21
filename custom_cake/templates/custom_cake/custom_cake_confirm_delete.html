@@ -7,12 +7,11 @@
       <div class="alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
   {% endif %}
-  <p>Are you sure you want to delete "{{ cake.name }}"?</p>
+  <p>Are you sure you want to delete “{{ cake.name|default:'this request' }}”?</p>
   <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Confirm Delete</button>
-    <a href="{% url 'custom_cake_list' %}" class="btn btn-secondary">Cancel</a>
+    <a href="{% url 'custom_cake_detail' cake.pk %}" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
 {% endblock %}
-
