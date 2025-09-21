@@ -1,0 +1,43 @@
+{% load static %}
+<footer class="mt-5 pt-4 pb-5 bg-light border-top">
+  <div class="container">
+    <div class="row">
+      <!-- Brand -->
+      <div class="col-md-4 mb-3">
+        <h5 class="mb-3">Cake It Easy</h5>
+        <p class="small text-muted mb-2">Fresh bakes, custom designs, and party accessories.</p>
+        <p class="small text-muted mb-0">Free delivery over €50.</p>
+      </div>
+
+      <!-- Nav -->
+      <div class="col-md-4 mb-3">
+        <h6 class="mb-3">Shop</h6>
+        <ul class="list-unstyled">
+          <li><a class="text-dark" href="{% url 'product_cakes' %}">Cakes</a></li>
+          <li><a class="text-dark" href="{% url 'product_accessories' %}">Accessories</a></li>
+          <li><a class="text-dark" href="{% url 'product_offers' %}">Special Offers</a></li>
+          <li><a class="text-dark" href="{% url 'custom_cake_list' %}">Custom Cakes</a></li>
+          <li><a class="text-dark" href="{% url 'about' %}">About Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact / Social (placeholders) -->
+      <div class="col-md-4 mb-3">
+        <h6 class="mb-3">Contact</h6>
+        <p class="small text-muted mb-1">Email: hello@example.com</p>
+        <p class="small text-muted mb-3">Phone: +353 1 234 5678</p>
+        <div>
+          <a class="text-dark mr-3" href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a class="text-dark mr-3" href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a class="text-dark" href="#" aria-label="Twitter/X"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <div class="d-flex justify-content-between">
+      <small class="text-muted">&copy; {{ now|date:"Y" }} Cake It Easy</small>
+      <small class="text-muted">Powered by Django</small>
+    </div>
+  </div>
+</footer>
