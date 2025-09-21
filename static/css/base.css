@@ -236,6 +236,13 @@ header {
 }
 
 /* ----------------------------
+   Footer Styling
+---------------------------- */
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* ----------------------------
    Responsive Layout
 ---------------------------- */
 @media (min-width: 1200px) {

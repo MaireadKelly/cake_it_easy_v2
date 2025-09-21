@@ -3,8 +3,9 @@
 
 {% block content %}
 <div class="container mt-5">
+
   <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-    <h1 class="m-0">All Cakes</h1>
+    <h1 class="m-0">{{ page_title|default:"All Products" }}</h1>
 
     <div class="d-flex flex-wrap align-items-center gap-2">
       {% if request.user.is_staff %}
@@ -12,14 +13,14 @@
       {% endif %}
 
       {# Search (preserves current filters/sort) #}
-      <form method="get" action="{% url 'product_list' %}" class="form-inline">
+      <form method="get" action="" class="form-inline">
         {% for key,val in request_get.items %}
           {% if key != 'q' %}
             <input type="hidden" name="{{ key }}" value="{{ val }}">
           {% endif %}
         {% endfor %}
         <div class="input-group input-group-sm">
-          <input class="form-control" type="text" name="q" value="{{ search_term }}" placeholder="Search cakes…">
+          <input class="form-control" type="text" name="q" value="{{ search_term }}" placeholder="Search…">
           <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="submit">Search</button>
           </div>
@@ -47,28 +48,26 @@
     </div>
   </div>
 
-  {# Category chips (slug-based) #}
-  <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-    <a href="{% url 'product_list' %}"
-       class="btn btn-sm btn-outline-secondary{% if not selected_slugs %} active{% endif %}">
-      All Cakes
-    </a>
-
-    {# Toggling logic: remove if selected; otherwise add. Uses simple cut on the CSV. #}
-    {% for c in all_categories %}
-      {% if selected_slugs and c.slug in selected_slugs %}
-        <a class="btn btn-sm btn-secondary"
-           href="{% url 'product_list' %}?category={{ selected_slugs|join:','|cut:c.slug }}">
-          {{ c.friendly_name|default:c.name }}
+  {# Walkthrough-style category links #}
+  {% if page_title == "Cakes" %}
+    <p class="mb-3">
+      <a href="{% url 'product_cakes' %}" class="mr-2">All Cakes</a>
+      {% for sub in subcategories %}
+        <a href="{% url 'product_cakes' %}?category={{ sub.slug }}" class="mr-2">
+          {{ sub.friendly_name|default:sub.name }}
         </a>
-      {% else %}
-        <a class="btn btn-sm btn-outline-secondary"
-           href="{% url 'product_list' %}?category={% if selected_slugs %}{{ selected_slugs|join:',' }},{% endif %}{{ c.slug }}">
-          {{ c.friendly_name|default:c.name }}
+      {% endfor %}
+    </p>
+  {% elif page_title == "Accessories" %}
+    <p class="mb-3">
+      <a href="{% url 'product_accessories' %}" class="mr-2">All Accessories</a>
+      {% for sub in subcategories %}
+        <a href="{% url 'product_accessories' %}?category={{ sub.slug }}" class="mr-2">
+          {{ sub.friendly_name|default:sub.name }}
         </a>
-      {% endif %}
-    {% endfor %}
-  </div>
+      {% endfor %}
+    </p>
+  {% endif %}
 
   {% if search_term %}
     <p class="text-center">Search results for: <strong>{{ search_term }}</strong></p>
@@ -76,7 +75,7 @@
 
   {% if current_categories %}
     <p class="text-center">
-      Filtered by category:
+      Filtered by:
       {% for category in current_categories %}
         <strong>{{ category.friendly_name|default:category.name }}</strong>{% if not forloop.last %}, {% endif %}
       {% endfor %}
@@ -86,21 +85,34 @@
   <div class="row">
     {% for product in products %}
       <div class="col-md-4 mb-4">
-        <div class="card h-100">
+        <div class="card h-100 position-relative">
+          {% if product.is_offer %}
+            <span class="badge badge-danger position-absolute" style="top:8px;left:8px;z-index:2;">Offer</span>
+          {% endif %}
+
           {% if product.image %}
-            <img src="{{ product.image.url }}" class="img-fluid card-img-top" alt="{{ product.name }}">
+            <a href="{% url 'product_detail' product.id %}">
+              <img src="{{ product.image.url }}" class="img-fluid card-img-top" alt="{{ product.name }}">
+            </a>
           {% else %}
-            <img src="{% static 'images/default.jpg' %}" class="img-fluid card-img-top" alt="Image coming soon">
+            <a href="{% url 'product_detail' product.id %}">
+              <img src="{% static 'images/default.jpg' %}" class="img-fluid card-img-top" alt="Image coming soon">
+            </a>
           {% endif %}
 
           <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text mb-3">&euro;{{ product.price|floatformat:2 }}</p>
-            <div class="mt-auto">
-              <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm">View Details</a>
-              {% if request.user.is_staff %}
-                <a href="{% url 'edit_product' product.id %}" class="btn btn-outline-secondary btn-sm ml-1">Edit</a>
-              {% endif %}
+            <h5 class="card-title mb-1">
+              <a class="text-dark text-decoration-none" href="{% url 'product_detail' product.id %}">
+                {{ product.name }}
+              </a>
+            </h5>
+            {% if product.category %}
+              <small class="text-muted">{{ product.category.friendly_name|default:product.category.name }}</small>
+            {% endif %}
+
+            <div class="mt-auto d-flex justify-content-between align-items-center pt-2">
+              <strong>&euro;{{ product.price|floatformat:2 }}</strong>
+              <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm">View</a>
             </div>
           </div>
         </div>
