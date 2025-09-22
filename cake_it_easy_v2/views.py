@@ -5,10 +5,13 @@ from django.urls import reverse
 def robots_txt(_request):
     lines = [
         "User-agent: *",
-        "Disallow:",
+        "Disallow: /bag/",
+        "Disallow: /checkout/",
+        "Disallow: /accounts/",
         "Sitemap: /sitemap.xml",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
+
 
 def sitemap_xml(request):
     """
@@ -22,6 +25,7 @@ def sitemap_xml(request):
         "product_offers",
         "my_orders",      # auth required; still okay to list
         "about",
+        "custom_cake_list",
     ]
     urls = []
     for name in url_names:
