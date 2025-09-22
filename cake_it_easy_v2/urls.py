@@ -34,6 +34,7 @@ urlpatterns = [
     path('about/', TemplateView.as_view(template_name='about.html'), name='about'),
     path("robots.txt", core_views.robots_txt, name="robots_txt"),
     path("sitemap.xml", core_views.sitemap_xml, name="sitemap_xml"),
+    path('newsletter/', include('newsletter.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

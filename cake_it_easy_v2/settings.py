@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'checkout',
     'profiles',
     'custom_cake',
+    'newsletter',
 ]
 
 # --- Middleware ---
