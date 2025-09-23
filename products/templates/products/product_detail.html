@@ -1,25 +1,38 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-5 product-detail">
   <div class="row">
-    <div class="col-md-6">
-      {% if product.image %}
-        <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
-      {% else %}
-        <img src="{% static 'images/default.jpg' %}" class="img-fluid" alt="Image coming soon">
-      {% endif %}
+    <div class="col-md-6 mb-3">
+      <div class="image-hero">
+        {% if product.image %}
+          {# If you later add the Cloudinary filter, you can do:
+             {{ product.image.url|cloudinary_thumb:'w_1200,h_900,c_fill,f_auto,q_auto' }} #}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+          <img src="{% static 'images/default.jpg' %}" alt="Image coming soon">
+        {% endif %}
+      </div>
     </div>
 
     <div class="col-md-6">
-      <h1>{{ product.name }}</h1>
-      <p class="lead">&euro;{{ product.price }}</p>
-      <p>{{ product.description }}</p>
+      <h1 class="mb-1">{{ product.name }}</h1>
+      <p class="lead mb-3">&euro;{{ product.price|floatformat:2 }}</p>
+
+      {% if product.category %}
+        <p class="text-muted small mb-2">
+          Category: {{ product.category.friendly_name|default:product.category.name }}
+        </p>
+      {% endif %}
+
+      {% if product.description %}
+        <p class="mb-4">{{ product.description }}</p>
+      {% endif %}
 
       {# Add to Bag #}
       <form action="{% url 'add_to_bag' product.id %}" method="post" class="mt-3">
         {% csrf_token %}
-        <label for="qty">Quantity</label>
+        <label for="qty" class="mr-2">Quantity</label>
         {% if product.category and product.category.name and product.category.name|lower == "cupcakes" %}
           <input id="qty" type="number" name="quantity" min="1" step="1"
                  value="1" class="form-control w-auto d-inline-block ml-2">
