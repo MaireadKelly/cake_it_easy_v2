@@ -25,6 +25,9 @@
     {% block corecss %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Font Awesome for icons used in header/bag -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-dymI6YbqY0d2t4q+e1v1C8u0gCwq4fYtQkCw0mMd8s9x1m3w0wJQ1z8xO3g3h8J3o4Xo9sXyYbYQ+2qkW6xDPw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
     {% block extra_css %}{% endblock %}
@@ -47,12 +50,7 @@
   </head>
 
   <body>
-    <!-- Free Delivery Banner (non-fixed) -->
-    <div class="delivery-banner text-center bg-brand text-white">
-      <h4 class="my-1">Free delivery on orders over €50!</h4>
-    </div>
-
-    <!-- Header (fixed at top; no inline offsets) -->
+    <!-- Header (fixed at top) -->
     <header class="container-fluid fixed-top" role="banner">
       <div id="topnav" class="row bg-white d-none d-lg-flex align-items-center">
         <!-- Logo -->
@@ -130,6 +128,10 @@
           {% include "includes/mobile-top-header.html" %}
           {% include "includes/main-nav.html" %}
         </nav>
+      </div>
+      <!-- Free Delivery Banner (placed UNDER the fixed header) -->
+      <div class="delivery-banner text-center bg-brand text-white">
+        <h4 class="my-1">Free delivery on orders over €50!</h4>
       </div>
     </header>
 

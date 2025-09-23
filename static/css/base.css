@@ -53,7 +53,7 @@ body {
     color: var(--text-dark);
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    padding-top: 110px;
+    padding-top: 140px;
 }
 
 .container {
@@ -63,18 +63,20 @@ body {
 }
 
 /* ----------------------------
-   Delivery Banner (Non-Fixed)
+   Delivery Banner
 ---------------------------- */
 
 .delivery-banner {
-    padding: 0.5rem 0;
+    background-color: var(--primary-color) !important;
+    color: #fff;
+    padding: 0.25rem 0;
+    border-top: 1px solid rgba(255, 255, 255, .15);
+    border-bottom: 1px solid rgba(0, 0, 0, .08);
 }
 
-/* Optional: slightly smaller heading in the banner */
-.delivery-banner h4 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 1px;
+.delivery-banner small {
+    font-weight: 600;
+    letter-spacing: .3px;
 }
 
 
@@ -242,6 +244,59 @@ footer a:hover {
     text-decoration: underline;
 }
 
+
+/* ----------------------------
+  Hero
+---------------------------- */
+.hero-card {
+    background: linear-gradient(180deg, #ffffff, #fafafa);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.hero .badge {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.hero-img {
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* ----------------------------
+   Category Tiles
+---------------------------- */
+.tile {
+    transition: transform .18s ease, box-shadow .18s ease;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+}
+
+.tile-icon {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+}
+
+/* ----------------------------
+  USP Card
+---------------------------- */
+.usp {
+    background: #fff;
+    border: 1px dashed rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+}
+
+
 /* ----------------------------
    Responsive Layout
 ---------------------------- */
@@ -272,6 +327,6 @@ footer a:hover {
     }
 
     body {
-        padding-top: 100px;
+        padding-top: 120px;
     }
 }
