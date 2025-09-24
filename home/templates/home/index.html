@@ -33,46 +33,7 @@ Celebration cakes, cupcakes, custom designs, balloons & candles. Sign up for 10%
   </div>
 </section>
 
-<!-- QUICK CATEGORIES -->
-<section class="container my-4">
-  <div class="row">
-    <div class="col-sm-6 col-lg-3 mb-3">
-      <a class="tile card card-body text-center h-100" href="{% url 'product_cakes' %}">
-        <img src="{% static 'images/tiles/cakes.png' %}" alt="" class="tile-icon mb-2">
-        <h5 class="mb-0">Cakes</h5>
-      </a>
-    </div>
-    <div class="col-sm-6 col-lg-3 mb-3">
-      <a class="tile card card-body text-center h-100" href="{% url 'product_accessories' %}">
-        <img src="{% static 'images/tiles/accessories.png' %}" alt="" class="tile-icon mb-2">
-        <h5 class="mb-0">Accessories</h5>
-      </a>
-    </div>
-    <div class="col-sm-6 col-lg-3 mb-3">
-      <a class="tile card card-body text-center h-100" href="{% url 'custom_cake_list' %}">
-        <img src="{% static 'images/tiles/custom.png' %}" alt="" class="tile-icon mb-2">
-        <h5 class="mb-0">Design Your Own</h5>
-      </a>
-    </div>
-    <div class="col-sm-6 col-lg-3 mb-3">
-      <a class="tile card card-body text-center h-100" href="{% url 'product_offers' %}">
-        <img src="{% static 'images/tiles/offers.png' %}" alt="" class="tile-icon mb-2">
-        <h5 class="mb-0">Special Offers</h5>
-      </a>
-    </div>
-  </div>
-</section>
 
-<!-- MINI USP STRIP -->
-<section class="container my-4">
-  <div class="card card-body usp">
-    <div class="row text-center">
-      <div class="col-12 col-md-4 mb-2 mb-md-0"><strong>Made Fresh</strong> daily</div>
-      <div class="col-12 col-md-4 mb-2 mb-md-0"><strong>Secure</strong> Stripe checkout</div>
-      <div class="col-12 col-md-4"><strong>Free Delivery</strong> over €50</div>
-    </div>
-  </div>
-</section>
 
 <!-- FEATURED / LATEST -->
 {% if products %}

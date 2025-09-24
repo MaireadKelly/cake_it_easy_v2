@@ -1,41 +1,62 @@
-<div class="collapse navbar-collapse" id="main-nav">
-  <ul class="navbar-nav w-auto mx-auto">
+{% load static %}
 
-    <!-- Cakes -->
+{# Grid layout: [LEFT MENU] [CENTER LOGO] [RIGHT ICONS] #}
+<div class="navbar-grid collapse navbar-collapse" id="main-nav">
+
+  <!-- LEFT: main links -->
+  <ul class="navbar-nav main-menu">
     <li class="nav-item">
-      <a class="logo-font font-weight-bold nav-link text-black mr-5" href="{% url 'product_cakes' %}">
-        Cakes
-      </a>
+      <a class="logo-font font-weight-bold nav-link text-brand" href="{% url 'product_cakes' %}">Cakes</a>
     </li>
-
-    <!-- Accessories -->
     <li class="nav-item">
-      <a class="logo-font font-weight-bold nav-link text-black mr-5" href="{% url 'product_accessories' %}">
-        Accessories
-      </a>
+      <a class="logo-font font-weight-bold nav-link text-brand" href="{% url 'product_accessories' %}">Accessories</a>
     </li>
-
-    <!-- Custom Cakes (separate app) -->
     <li class="nav-item">
-      <a class="logo-font font-weight-bold nav-link text-black mr-5" href="{% url 'custom_cake_list' %}">
-        Design Your Own
-      </a>
+      <a class="logo-font font-weight-bold nav-link text-brand" href="{% url 'custom_cake_list' %}">Design Your Own</a>
     </li>
-
-    <!-- Special Offers -->
     <li class="nav-item">
-      <a class="logo-font font-weight-bold nav-link text-black mr-5" href="{% url 'product_offers' %}">
-        Special Offers
-      </a>
+      <a class="logo-font font-weight-bold nav-link text-brand" href="{% url 'about' %}">About Us</a>
     </li>
-
-    <!-- About Us -->
-    <li class="nav-item">
-      <!-- Update 'about' if your project uses a different URL name -->
-      <a class="logo-font font-weight-bold nav-link text-black" href="{% url 'about' %}">
-        About Us
-      </a>
-    </li>
-
   </ul>
+
+  <!-- CENTER: logo (desktop only) -->
+  <a href="{% url 'home' %}" class="nav-center-logo d-none d-lg-inline-flex">
+    <img
+      src="{% static 'images/logo.png' %}"
+      srcset="{% static 'images/logo@2x.png' %} 2x"
+      alt="Cake It Easy"
+      width="280" height="96"
+      class="nav-center-logo-img">
+    <span class="sr-only visually-hidden">Cake It Easy — Home</span>
+  </a>
+
+  <!-- RIGHT: icons (desktop) -->
+  <ul class="navbar-nav header-icons d-none d-lg-flex">
+    <li class="nav-item">
+      <a class="nav-link icon-link" href="{% url 'view_bag' %}" aria-label="Bag">
+        <i class="fas fa-shopping-bag"></i>
+        {% if bag_count and bag_count > 0 %}
+          <span class="badge bag-count">{{ bag_count }}</span>
+        {% endif %}
+        <span class="bag-total">€{{ bag_total|default:0|floatformat:2 }}</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link icon-link" href="{% url 'product_list' %}" aria-label="Search">
+        <i class="fas fa-search"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      {% if request.user.is_authenticated %}
+        <a class="nav-link icon-link" href="{% url 'profile' %}" aria-label="My Account">
+          <i class="fas fa-user"></i>
+        </a>
+      {% else %}
+        <a class="nav-link icon-link" href="{% url 'account_login' %}" aria-label="Login">
+          <i class="fas fa-user"></i>
+        </a>
+      {% endif %}
+    </li>
+  </ul>
+
 </div>

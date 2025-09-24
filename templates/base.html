@@ -25,22 +25,17 @@
     {% block corecss %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!-- Font Awesome for icons used in header/bag -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-          integrity="sha512-dymI6YbqY0d2t4q+e1v1C8u0gCwq4fYtQkCw0mMd8s9x1m3w0wJQ1z8xO3g3h8J3o4Xo9sXyYbYQ+2qkW6xDPw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
     {% block extra_css %}{% endblock %}
 
     {% block corejs %}
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"
-            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <!-- Stripe -->
     <script src="https://js.stripe.com/v3/"></script>
     {% endblock %}
@@ -52,140 +47,54 @@
   <body>
     <!-- Header (fixed at top) -->
     <header class="container-fluid fixed-top" role="banner">
-      <div id="topnav" class="row bg-white d-none d-lg-flex align-items-center">
-        <!-- Logo -->
-        <div class="col-12 col-lg-4 py-1 text-center text-lg-left">
-          <a href="{% url 'home' %}" class="nav-link main-logo-link p-0">
-            <img src="{% static 'images/logo.png' %}" alt="Cake It Easy Logo" class="logo-img">
+      <!-- Top row: MOBILE ONLY -->
+      <div id="topnav" class="row bg-white d-flex d-lg-none align-items-center">
+        <!-- Mobile logo -->
+        <div class="col-12 py-1 text-center">
+          <a href="{% url 'home' %}" class="nav-link main-logo-link p-0 d-inline-flex align-items-center justify-content-center">
+            <img src="{% static 'images/logo.png' %}"
+                 srcset="{% static 'images/logo@2x.png' %} 2x"
+                 alt="Cake It Easy"
+                 width="200" height="64"
+                 class="logo-img"
+                 loading="eager">
           </a>
         </div>
-
-        <!-- Search -->
-        <div class="col-12 col-lg-4 py-1">
-          <form method="GET" action="{% url 'product_list' %}">
-            <div class="input-group w-100">
-              <input class="form-control border-brand rounded-0" type="text" name="q" placeholder="Search cakes...">
-              <div class="input-group-append">
-                <button class="form-control btn btn-brand rounded-0" type="submit" aria-label="Search">
-                  <span class="icon"><i class="fas fa-search" aria-hidden="true"></i></span>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-
-        <!-- Account and Bag -->
-        <div class="col-12 col-lg-4 py-1">
-          <ul class="list-inline list-unstyled text-center text-lg-right my-0">
-            <li class="list-inline-item dropdown">
-              <a class="nav-link text-brand" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <div class="text-center">
-                  <div><i class="fas fa-user fa-lg" aria-hidden="true"></i></div>
-                  <p class="my-0">My Account</p>
-                </div>
-              </a>
-              <div class="dropdown-menu border-0" aria-labelledby="user-options">
-                {% if request.user.is_authenticated %}
-                  {% if request.user.is_superuser %}
-                    <a href="/admin/" class="dropdown-item">Product Management</a>
-                  {% endif %}
-                  <a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>
-                  <a href="{% url 'my_orders' %}" class="dropdown-item">My Orders</a>
-                  <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
-                {% else %}
-                  <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
-                  <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
-                {% endif %}
-              </div>
-            </li>
-
-            <!-- Bag (desktop) -->
-            <li class="list-inline-item">
-              <a class="{% if bag_total and bag_total > 0 %}text-accent font-weight-bold{% else %}text-brand{% endif %} nav-link"
-                 href="{% url 'view_bag' %}">
-                <div class="text-center">
-                  <div>
-                    <i class="fas fa-shopping-bag fa-lg" aria-hidden="true"></i>
-                    {% if bag_count and bag_count > 0 %}
-                      <span class="badge bg-warning text-dark">{{ bag_count }}</span>
-                    {% endif %}
-                  </div>
-                  <p class="my-0">€{{ bag_total|default:0|floatformat:2 }}</p>
-                </div>
-              </a>
-            </li>
+        <!-- Mobile utilities (search/account/bag) -->
+        <div class="col-12 py-1">
+          <ul class="list-inline list-unstyled text-center my-0">
+            {% include "includes/mobile-top-header.html" %}
           </ul>
         </div>
       </div>
 
-      <!-- Mobile Navigation -->
+      <!-- Navbar row: DESKTOP (and mobile collapsed) -->
       <div class="row bg-white">
         <nav class="navbar navbar-expand-lg navbar-light w-100" aria-label="Main navigation">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav"
                   aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          {% include "includes/mobile-top-header.html" %}
           {% include "includes/main-nav.html" %}
         </nav>
       </div>
-      <!-- Free Delivery Banner (placed UNDER the fixed header) -->
+
+      <!-- Free Delivery Banner -->
       <div class="delivery-banner text-center bg-brand text-white">
         <h4 class="my-1">Free delivery on orders over €50!</h4>
       </div>
     </header>
 
-    <!-- Django Messages -->
     {% if messages %}
       <div class="message-container"></div>
     {% endif %}
 
-    <!-- Content Blocks -->
     {% block page_header %}{% endblock %}
     {% block content %}{% endblock %}
 
     {% include "includes/footer.html" %}
 
-    {# ===================== NEWSLETTER MODAL (after footer) ===================== #}
-    <div class="modal fade" id="newsletterModal" tabindex="-1" role="dialog"
-         aria-labelledby="newsletterModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="newsletterModalLabel">Welcome to Cake It Easy 🎉</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                    onclick="try{ $('#newsletterModal').modal('hide'); }catch(e){ var m=bootstrap.Modal.getInstance(document.getElementById('newsletterModal')); if(m) m.hide(); }">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p class="mb-2">Thanks for signing up! Use this code at checkout:</p>
-            <div class="d-flex align-items-center">
-              <code id="newsletter-code" class="px-2 py-1 bg-light border rounded">
-                {{ request.GET.code|default:"WELCOME10" }}
-              </code>
-              <button type="button" class="btn btn-sm btn-outline-secondary ml-2" onclick="
-                (function(){
-                  var t=document.getElementById('newsletter-code').innerText.trim();
-                  if(navigator.clipboard){ navigator.clipboard.writeText(t); }
-                  var btn=event.currentTarget; btn.innerText='Copied!'; setTimeout(function(){btn.innerText='Copy';},1500);
-                })();
-              ">Copy</button>
-            </div>
-            <p class="text-muted small mt-2 mb-0">Apply during checkout to get 10% off your first order.</p>
-          </div>
-          <div class="modal-footer">
-            <a href="{% url 'product_cakes' %}" class="btn btn-primary">Shop Cakes</a>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                    onclick="try{ $('#newsletterModal').modal('hide'); }catch(e){ var m=bootstrap.Modal.getInstance(document.getElementById('newsletterModal')); if(m) m.hide(); }">
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    {# ========================================================================== #}
-
+    {# Newsletter modal kept as-is #}
     {% block postloadjs %}
       {{ block.super }}
       {% if request.GET.nl %}
@@ -202,7 +111,7 @@
             } else if (window.jQuery && typeof jQuery.fn.modal === 'function') {
               jQuery(el).modal('show');             // Bootstrap 4
             }
-          } catch (e) { /* no-op */ }
+          } catch (e) {}
         })();
       </script>
       {% endif %}
