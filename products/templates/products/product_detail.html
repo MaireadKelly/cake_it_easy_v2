@@ -6,8 +6,10 @@
     <div class="col-md-6 mb-3">
       <div class="image-hero">
         {% if product.image %}
-          {# If you later add the Cloudinary filter, you can do:
-             {{ product.image.url|cloudinary_thumb:'w_1200,h_900,c_fill,f_auto,q_auto' }} #}
+          {% comment %}
+            If you later add the Cloudinary filter, replace the <img> below with:
+            <img src="{{ product.image.url|cloudinary_thumb:'w_1200,h_900,c_fill,f_auto,q_auto' }}" alt="{{ product.name }}">
+          {% endcomment %}
           <img src="{{ product.image.url }}" alt="{{ product.name }}">
         {% else %}
           <img src="{% static 'images/default.jpg' %}" alt="Image coming soon">
