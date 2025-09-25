@@ -1,4 +1,5 @@
 ﻿from decimal import Decimal
+
 from products.models import Product
 
 FREE_DELIVERY_THRESHOLD = Decimal('50.00')

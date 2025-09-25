@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from bag.context_processors import bag_contents
 from products.models import Product
 from profiles.models import UserProfile
+
 from .forms import OrderForm
 from .models import Order, OrderLineItem
 

@@ -13,8 +13,8 @@ Safe to re-run; uses use_filename+overwrite so you don't get duplicates.
 import os
 from pathlib import Path
 
-from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from products.models import Product

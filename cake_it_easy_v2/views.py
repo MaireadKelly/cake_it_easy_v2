@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
+
 def robots_txt(_request):
     lines = [
         "User-agent: *",

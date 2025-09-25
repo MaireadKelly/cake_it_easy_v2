@@ -3,9 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import CustomCake
 from .forms import CustomCakeForm  # uses your existing ModelForm
+from .models import CustomCake
 from .utils import get_or_create_deposit_product
+
 
 def _can_access(user, cake: CustomCake) -> bool:
     return user.is_staff or (cake.user_id == getattr(user, "id", None))

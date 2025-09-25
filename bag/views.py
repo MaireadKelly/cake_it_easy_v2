@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
+
 from products.models import Product
+
 
 def _get_bag(session):
     """Ensure a bag dict exists in the session and return it."""

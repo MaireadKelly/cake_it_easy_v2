@@ -1,11 +1,13 @@
+import os
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
+
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
-import os
-from urllib.parse import urlencode, urlparse, parse_qsl, urlunparse
 
 from .forms import NewsletterSignupForm
 from .models import NewsletterSubscriber
+
 
 def _append_query(url: str, extra: dict) -> str:
     """
