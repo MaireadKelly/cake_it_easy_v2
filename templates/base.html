@@ -23,11 +23,9 @@
     {% endblock %}
 
     {% block corecss %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
     {% block extra_css %}{% endblock %}
@@ -85,16 +83,23 @@
       </div>
     </header>
 
+    <!-- Messages (inline and visible during testing) -->
     {% if messages %}
-      <div class="message-container"></div>
+      <div class="container my-2">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags|default:'info' }} mb-2">{{ message }}</div>
+        {% endfor %}
+      </div>
     {% endif %}
 
-    {% block page_header %}{% endblock %}
-    {% block content %}{% endblock %}
+    <!-- Main content wrapped for sticky footer -->
+    <main class="site-main">
+      {% block page_header %}{% endblock %}
+      {% block content %}{% endblock %}
+    </main>
 
     {% include "includes/footer.html" %}
 
-    {# Newsletter modal kept as-is #}
     {% block postloadjs %}
       {{ block.super }}
       {% if request.GET.nl %}
@@ -107,9 +112,9 @@
             if (codeEl) codeEl.textContent = code;
 
             if (window.bootstrap && window.bootstrap.Modal) {
-              new bootstrap.Modal(el).show();       // Bootstrap 5
+              new bootstrap.Modal(el).show();
             } else if (window.jQuery && typeof jQuery.fn.modal === 'function') {
-              jQuery(el).modal('show');             // Bootstrap 4
+              jQuery(el).modal('show');
             }
           } catch (e) {}
         })();
