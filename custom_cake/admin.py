@@ -7,11 +7,11 @@ from .models import CustomCake
 @admin.register(CustomCake)
 class CustomCakeAdmin(admin.ModelAdmin):
     # columns in the list view (kept your choices)
-    list_display = ("name", "flavor", "filling", "size", "created_on", "user", "image_preview")
+    list_display = ("name", "flavor", "filling", "size", "created_on", "user", "needed_date", "image_preview")
     list_display_links = ("name",)
 
     # quick filters and search (kept yours)
-    list_filter = ("occasion", "flavor", "filling", "size", "created_on")
+    list_filter = ("occasion", "flavor", "filling", "size", "needed_date", "created_on")
     search_fields = ("name", "description", "inscription", "user__username")
 
     # usability & performance
