@@ -64,7 +64,7 @@ def custom_cake_detail(request, pk: int):
 def custom_cake_edit(request, pk: int):
     """
     Update an existing custom cake.
-    Tests only verify that a valid POST changes the name; optional error message included for UX.
+    Tests verify that a valid POST changes the name.
     """
     cake = get_object_or_404(CustomCake, pk=pk)
     if not _can_access(request.user, cake):
@@ -80,7 +80,7 @@ def custom_cake_edit(request, pk: int):
             messages.error(request, "Error updating custom cake")
     else:
         form = CustomCakeForm(instance=cake)
-    # You can keep a separate edit template or reuse the form template
+
     return render(
         request,
         "custom_cake/custom_cake_edit.html",
@@ -96,7 +96,8 @@ def custom_cake_delete(request, pk: int):
 
     if request.method == "POST":
         cake.delete()
-        messages.success(request, "Custom cake deleted.")
+        # match test expectation text:
+        messages.success(request, "Custom cake deleted successfully.")
         return redirect("custom_cake_list")
 
     return render(request, "custom_cake/custom_cake_confirm_delete.html", {"cake": cake})
