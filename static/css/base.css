@@ -1,4 +1,5 @@
-html {
+html,
+body {
     height: 100%;
 }
 
@@ -18,17 +19,17 @@ html {
     --brand-logo-h-desk: 96px;
     /* desktop header logo height */
 
-    /* Desktop measured values (you reported no separate top row on desktop) */
+    /* Desktop measured values */
     --navbar-min-h: 0px;
-    /* top row not contributing on desktop */
+    /* no separate top row on desktop */
     --nav-row-min-h: 134px;
     /* main nav (collapse row) height */
     --banner-h: 47px;
     /* delivery banner height */
 
-    /* One source of truth: total fixed stack height */
+    /* One source of truth: total fixed stack height (rounded) */
     --fixed-stack-h: 214px;
-    /* 134 + 47 ≈ 181.98 → round up */
+    /* desktop offset for fixed header + banner */
 }
 
 /* Accessibility helper */
@@ -77,15 +78,31 @@ html {
 }
 
 /* ----------------------------
-   Base Layout
+   Base Layout + Sticky Footer
 ---------------------------- */
 body {
     background-color: var(--neutral-light);
     color: var(--text-dark);
     font-family: 'Poppins', sans-serif;
     margin: 0;
+
+    /* Offset content below fixed header+banner */
     padding-top: var(--fixed-stack-h);
-    /* single offset for fixed header + banner */
+
+    /* Sticky footer */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content wrapper should flex to push footer down */
+main.site-main {
+    flex: 1 0 auto;
+}
+
+/* If a page’s first container adds extra top margin, zero it safely */
+.site-main>.container:first-child {
+    margin-top: 0;
 }
 
 .container {
@@ -606,7 +623,7 @@ header {
     /* Use your measured mobile totals: row ≈ 134px + banner ≈ 47px */
     :root {
         --navbar-min-h: 0px;
-        /* top row not present on mobile per your capture */
+        /* no separate top row on mobile */
         --nav-row-min-h: 134px;
         /* mobile nav row */
         --banner-h: 47px;
