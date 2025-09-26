@@ -1,7 +1,8 @@
+import uuid
+
 from django.db import models
 from django.utils.html import format_html
 from django.utils.text import slugify
-import uuid
 
 
 def generate_sku() -> str:

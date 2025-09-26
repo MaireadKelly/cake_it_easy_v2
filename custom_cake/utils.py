@@ -1,5 +1,6 @@
 import os
 from decimal import Decimal
+
 from products.models import Product  # uses your existing Product model
 
 DEPOSIT_SKU = "CUST-DEP"

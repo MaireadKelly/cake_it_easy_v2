@@ -1,6 +1,9 @@
 import json
+
 from django.core.management.base import BaseCommand, CommandError
+
 from products.models import Product
+
 
 class Command(BaseCommand):
     help = "Update Product.description from a JSON mapping of {name: description}."

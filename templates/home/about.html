@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}About Us{% endblock %}
+
+{% block content %}
+<!-- Shopfront hero (replace the background image path as needed) -->
+<section class="shopfront-hero position-relative">
+  <div class="hero-overlay"></div>
+  <div class="container py-5">
+    <div class="row align-items-center">
+      <div class="col-12 col-lg-6 text-white">
+        <h1 class="display-5 fw-bold mb-3">About Cake It Easy</h1>
+        <p class="lead mb-0">
+          We’re a Dublin-based bakery specialising in made-to-order celebration cakes and cupcakes.
+          Every order is baked fresh, decorated by hand, and available for collection or local delivery.
+        </p>
+      </div>
+      <div class="col-12 col-lg-6 text-center mt-4 mt-lg-0">
+        <!-- Brand logo -->
+        <img
+          src="{% static 'images/logo.png' %}"
+          class="img-fluid about-logo"
+          alt="Cake It Easy brand logo"
+          width="280" height="280"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Story -->
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-8">
+        <h2 class="h3">Our Story</h2>
+        <p>
+          Cake It Easy started with a simple idea: great cake should be straightforward to order
+          and a joy to receive. From classic sponges and drip cakes to custom flavours and
+          dietary-friendly options, we focus on quality ingredients, reliable service,
+          and beautiful presentation.
+        </p>
+        <p>
+          Our online shop is built for convenience—browse, customise, and checkout securely with
+          Stripe. Need something extra special? Use our Custom Cake form to choose flavours,
+          fillings, colours, and an inscription. If you’re in a hurry, pick from our curated
+          favourites and seasonal designs.
+        </p>
+      </div>
+    </div>
+
+    <!-- Values -->
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h3 class="h5">Made to Order</h3>
+            <p class="mb-0">We bake fresh for every order—no freezer cake here. Your cake is crafted for your date and occasion.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h3 class="h5">Quality Ingredients</h3>
+            <p class="mb-0">From Belgian chocolate to seasonal fruit, we choose ingredients that taste as good as they look.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h3 class="h5">Friendly Service</h3>
+            <p class="mb-0">Clear lead times, honest guidance, and quick replies—ordering a cake should be easy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .shopfront-hero {
+    min-height: 360px;
+    background: url("{% static 'images/shopfront.jpg' %}") center/cover no-repeat;
+  }
+  .shopfront-hero .hero-overlay {
+    position:absolute; inset:0; background: rgba(0,0,0,0.35);
+  }
+  .about-logo { max-width: 280px; border-radius: 9999px; background: #fff; padding: .75rem; }
+</style>
+{% endblock %}

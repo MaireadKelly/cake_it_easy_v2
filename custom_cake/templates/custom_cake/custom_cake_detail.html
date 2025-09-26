@@ -11,7 +11,7 @@
       {% if cake.filling %}<dt class="col-sm-3">Filling</dt><dd class="col-sm-9">{{ cake.filling }}</dd>{% endif %}
       {% if cake.size %}<dt class="col-sm-3">Size</dt><dd class="col-sm-9">{{ cake.size }}</dd>{% endif %}
       {% if cake.inscription %}<dt class="col-sm-3">Inscription</dt><dd class="col-sm-9">{{ cake.inscription }}</dd>{% endif %}
-      {% if cake.date_needed %}<dt class="col-sm-3">Date Needed</dt><dd class="col-sm-9">{{ cake.date_needed }}</dd>{% endif %}
+      {% if cake.needed_date %}<dt class="col-sm-3">Needed for</dt><dd class="col-sm-9">{{ cake.needed_date|date:"Y-m-d" }}</dd>{% endif %}
       {% if cake.description %}<dt class="col-sm-3">Notes</dt><dd class="col-sm-9">{{ cake.description }}</dd>{% endif %}
     </dl>
 

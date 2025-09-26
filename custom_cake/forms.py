@@ -1,12 +1,22 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils import timezone
+
 from .models import CustomCake
 
 
 class CustomCakeForm(forms.ModelForm):
+    # New: explicit date field so we control widget/validation
+    needed_date = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+        label="Needed for",
+        help_text="If set, please choose a future date."
+    )
+
     class Meta:
         model = CustomCake
-        # We set user in the view; created_on is read-only
+        # We set user in the view; created_on is read-only. Everything else (incl. needed_date) is editable.
         exclude = ("user", "created_on")
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "e.g. Unicorn Birthday Cake"}),
@@ -16,6 +26,7 @@ class CustomCakeForm(forms.ModelForm):
             "filling": forms.Select(attrs={"class": "form-control"}),
             "size": forms.Select(attrs={"class": "form-control"}),
             "image": forms.ClearableFileInput(attrs={"class": "form-control-file"}),
+            # (Optional) you can also set a widget here for needed_date, but we already did above.
         }
         help_texts = {
             "inscription": "Keep it short for best readability (e.g., under 30 characters).",
@@ -37,3 +48,10 @@ class CustomCakeForm(forms.ModelForm):
         if hasattr(img, "size") and img.size and img.size > max_bytes:
             raise ValidationError("Image too large (max 5 MB).")
         return img
+
+    # New: prevent past dates
+    def clean_needed_date(self):
+        d = self.cleaned_data.get("needed_date")
+        if d and d < timezone.localdate():
+            raise ValidationError("Please choose today or a future date.")
+        return d

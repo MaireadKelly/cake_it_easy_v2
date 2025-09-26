@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from bag.context_processors import bag_contents
 from products.models import Product
 from profiles.models import UserProfile
+
 from .forms import OrderForm
 from .models import Order, OrderLineItem
 
@@ -109,24 +110,26 @@ def checkout(request):
     else:
         # A) Prefill from existing profile
         initial = {}
-        try:
-            profile = request.user.profile  # related_name='profile'
-            initial = {
-                "full_name": f"{request.user.first_name} {request.user.last_name}".strip()
-                or getattr(request.user, "username", ""),
-                "email": request.user.email,
-                "phone_number": profile.default_phone_number,
-                "country": profile.default_country,
-                "postcode": profile.default_postcode,
-                "town_or_city": profile.default_town_or_city,
-                "street_address1": profile.default_street_address1,
-                "street_address2": profile.default_street_address2,
-            }
-        except UserProfile.DoesNotExist:
-            pass
+        if request.user.is_authenticated:
+            # handle both related_name='userprofile' and 'profile'
+            profile = (getattr(request.user, 'userprofile', None)
+                    or getattr(request.user, 'profile', None))
+            if profile:
+                initial = {
+                    "full_name": (f"{request.user.first_name} {request.user.last_name}".strip()
+                                or getattr(request.user, "username", "")),
+                    "email": request.user.email,
+                    "phone_number": getattr(profile, "default_phone_number", ""),
+                    "country": getattr(profile, "default_country", ""),
+                    "postcode": getattr(profile, "default_postcode", ""),
+                    "town_or_city": getattr(profile, "default_town_or_city", ""),
+                    "street_address1": getattr(profile, "default_street_address1", ""),
+                    "street_address2": getattr(profile, "default_street_address2", ""),
+                }
         order_form = OrderForm(initial=initial)
 
-    # Create PaymentIntent for grand_total
+
+    # Create PaymentIntent for grand_totalFix
     client_secret = "test_secret_disabled"
     if STRIPE_ENABLED and grand_total > 0:
         try:

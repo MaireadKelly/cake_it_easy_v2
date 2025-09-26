@@ -9,31 +9,47 @@ Celebration cakes, cupcakes, custom designs, balloons & candles. Sign up for 10%
 
 <!-- HERO -->
 <section class="hero container my-4">
-  <div class="hero-card row no-gutters align-items-center">
+  <div class="hero-card row align-items-center">
     <!-- Text / CTAs -->
     <div class="col-lg-6 p-4 p-md-5">
-      <span class="badge badge-pill badge-light text-uppercase mb-2">Fresh · Local · Made to order</span>
-      <h1 class="display-5 font-weight-bold mb-2">Hand-made cakes for every celebration</h1>
+      <span class="badge rounded-pill bg-light text-dark text-uppercase mb-2">Fresh · Local · Made to order</span>
+      <h1 class="display-5 fw-bold mb-2">Hand-made cakes for every celebration</h1>
       <p class="lead text-muted mb-4">
         From classic sponges to <em>one-of-a-kind</em> designs. Sign up and get <strong>10% off</strong> your first order.
       </p>
+
+      {% url 'products' as products_url %}
+      {% if not products_url %}{% url 'product_list' as products_url %}{% endif %}
+      {% if not products_url %}{% url 'all_products' as products_url %}{% endif %}
+
       <div class="d-flex flex-wrap gap-2">
-        <a href="#newsletter" class="btn btn-primary btn-lg mr-2">Get 10% Off</a>
-        <a href="{% url 'product_cakes' %}" class="btn btn-outline-secondary btn-lg">Shop Cakes</a>
+        <!-- Modal trigger -->
+        <button class="btn btn-primary"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#newsletterModal">
+          Get 10% off
+        </button>
+
+        <!-- Noscript fallback (only shows if JS disabled) -->
+        <noscript>
+          <a href="#newsletter" class="btn btn-primary">Get 10% off</a>
+        </noscript>
+
+        <!-- Products link: falls back to /products/ if no named URL present -->
+        <a href="{{ products_url|default:'/products/' }}" class="btn btn-outline-secondary">Shop Cakes</a>
       </div>
     </div>
 
     <!-- Image -->
     <div class="col-lg-6 text-center p-3 p-md-4">
       <img
-        src="{% static 'images/hero-cake.jpg' %}"
+        src="{% static 'images/shopfront.jpg' %}"
         alt="Layered celebration cake with frosting and flowers"
         class="hero-img img-fluid rounded shadow-sm" />
     </div>
   </div>
 </section>
-
-
 
 <!-- FEATURED / LATEST -->
 {% if products %}

@@ -1,4 +1,5 @@
-html {
+html,
+body {
     height: 100%;
 }
 
@@ -16,14 +17,22 @@ html {
     --brand-logo-h-mob: 44px;
     /* mobile header logo height */
     --brand-logo-h-desk: 96px;
-    /* desktop header logo height (try 112px if you want larger) */
-    --navbar-min-h: 86px;
-    /* top row height to balance larger logo */
-    --nav-row-min-h: 118px;
-    /* space for big centered logo on desktop */
+    /* desktop header logo height */
+
+    /* Desktop measured values */
+    --navbar-min-h: 0px;
+    /* no separate top row on desktop */
+    --nav-row-min-h: 134px;
+    /* main nav (collapse row) height */
+    --banner-h: 47px;
+    /* delivery banner height */
+
+    /* One source of truth: total fixed stack height (rounded) */
+    --fixed-stack-h: 214px;
+    /* desktop offset for fixed header + banner */
 }
 
-/* Accessibility helper: works for both Bootstrap 4 and 5 */
+/* Accessibility helper */
 .visually-hidden,
 .sr-only {
     position: absolute !important;
@@ -69,15 +78,31 @@ html {
 }
 
 /* ----------------------------
-   Base Layout
+   Base Layout + Sticky Footer
 ---------------------------- */
 body {
     background-color: var(--neutral-light);
     color: var(--text-dark);
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    padding-top: 160px;
-    /* fixed header + delivery banner (desktop default; mobile override below) */
+
+    /* Offset content below fixed header+banner */
+    padding-top: var(--fixed-stack-h);
+
+    /* Sticky footer */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content wrapper should flex to push footer down */
+main.site-main {
+    flex: 1 0 auto;
+}
+
+/* If a page’s first container adds extra top margin, zero it safely */
+.site-main>.container:first-child {
+    margin-top: 0;
 }
 
 .container {
@@ -117,6 +142,8 @@ header {
     min-height: var(--navbar-min-h);
 }
 
+/* 0 on desktop per your measure */
+
 /* ----------------------------
    Main Nav (collapse row)
 ---------------------------- */
@@ -126,7 +153,6 @@ header {
 }
 
 .navbar::after {
-    /* thin gold underline */
     content: "";
     position: absolute;
     left: 0;
@@ -142,14 +168,10 @@ header {
 -------------------------------------------------- */
 .navbar-grid {
     display: grid;
-    /* size columns by content, center the whole bar */
     grid-template-columns: max-content auto max-content;
     align-items: center;
     min-height: var(--nav-row-min-h);
-
-    /* center the grid on the page */
     max-width: 1200px;
-    /* adjust 1140–1280 to taste */
     margin: 0 auto;
     padding: 0 16px;
     column-gap: 2.5rem;
@@ -187,7 +209,6 @@ header {
 }
 
 .nav-link::after {
-    /* gold hover underline */
     content: "";
     position: absolute;
     left: 0;
@@ -211,7 +232,7 @@ header {
     border-radius: 4px;
 }
 
-/* Center logo (grid, not absolute) */
+/* Center logo (grid) */
 .nav-center-logo {
     justify-self: center;
     align-items: center;
@@ -219,7 +240,6 @@ header {
 
 .nav-center-logo-img {
     height: 104px;
-    /* adjust 96–112px to taste */
     width: auto;
     display: block;
 }
@@ -227,7 +247,6 @@ header {
 /* Right icons */
 .header-icons {
     justify-self: end;
-    /* pushes icons to the right edge of the bar */
     display: flex;
     gap: .75rem;
     align-items: center;
@@ -579,47 +598,41 @@ header {
 }
 
 /* ====================================================
-   Responsive layout (all media queries grouped here)
+   Responsive layout (media queries)
    ==================================================== */
 
 /* Desktop+ adjustments */
-@media (min-width:992px) {
-
-    /* taller desktop logo */
+@media (min-width: 992px) {
     .logo-img {
         height: var(--brand-logo-h-desk);
     }
 
-    /* body offset for fixed header + banner */
-    body {
-        padding-top: 160px;
-    }
-
-    /* optional helpers */
-    .fixed-top-desktop-only {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1030;
-    }
-
-    .header-container {
-        margin-top: 180px;
-    }
+    /* taller desktop logo */
 }
 
 /* XL container width */
-@media (min-width:1200px) {
+@media (min-width: 1200px) {
     .container {
         max-width: 85%;
     }
 }
 
 /* Mobile / tablet adjustments */
-@media (max-width:991.98px) {
+@media (max-width: 991.98px) {
 
-    /* Hide the desktop grid’s center logo & right icons; mobile top row handles branding + search */
+    /* Use your measured mobile totals: row ≈ 134px + banner ≈ 47px */
+    :root {
+        --navbar-min-h: 0px;
+        /* no separate top row on mobile */
+        --nav-row-min-h: 134px;
+        /* mobile nav row */
+        --banner-h: 47px;
+        /* mobile banner */
+        --fixed-stack-h: 182px;
+        /* total mobile offset */
+    }
+
+    /* Hide desktop-only pieces */
     .nav-center-logo,
     .header-icons {
         display: none !important;
@@ -629,10 +642,5 @@ header {
     .nav-link {
         font-size: 1rem;
         padding: .75rem 1rem;
-    }
-
-    /* smaller body offset for shorter mobile header */
-    body {
-        padding-top: 120px;
     }
 }

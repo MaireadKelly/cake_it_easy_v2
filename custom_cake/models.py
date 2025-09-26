@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 
 class CustomCake(models.Model):
@@ -44,6 +44,10 @@ class CustomCake(models.Model):
     filling = models.CharField(max_length=32, choices=FILLING_CHOICES)
     size = models.CharField(max_length=10, choices=SIZE_CHOICES)
     inscription = models.CharField(max_length=100, blank=True)
+    needed_date = models.DateField(
+        null=True, blank=True,
+        help_text="Date you need the cake for (optional)."
+    )
     image = models.ImageField(upload_to='custom_cakes/', blank=True, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
 

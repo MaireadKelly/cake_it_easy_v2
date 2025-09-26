@@ -3,7 +3,7 @@ html {
 }
 
 /* ----------------------------
-   Colour Variables: Dark Blue, Gold & Neutral Palette
+   Brand Colours & Header Tokens
 ---------------------------- */
 :root {
     --primary-color: #044762;
@@ -11,10 +11,34 @@ html {
     --neutral-dark: #555253;
     --neutral-light: #f8f8f8;
     --text-dark: #2f2f2f;
+
+    /* Header sizing (centered large logo) */
+    --brand-logo-h-mob: 44px;
+    /* mobile header logo height */
+    --brand-logo-h-desk: 96px;
+    /* desktop header logo height (try 112px if you want larger) */
+    --navbar-min-h: 86px;
+    /* top row height to balance larger logo */
+    --nav-row-min-h: 118px;
+    /* space for big centered logo on desktop */
+}
+
+/* Accessibility helper: works for both Bootstrap 4 and 5 */
+.visually-hidden,
+.sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* ----------------------------
-   Brand Colour Utilities
+   Utilities
 ---------------------------- */
 .bg-brand {
     background-color: var(--primary-color) !important;
@@ -36,7 +60,6 @@ html {
     color: var(--accent-color) !important;
 }
 
-/* Optional additional utilities */
 .text-neutral-dark {
     color: var(--neutral-dark) !important;
 }
@@ -53,7 +76,8 @@ body {
     color: var(--text-dark);
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    padding-top: 110px;
+    padding-top: 160px;
+    /* fixed header + delivery banner (desktop default; mobile override below) */
 }
 
 .container {
@@ -63,73 +87,211 @@ body {
 }
 
 /* ----------------------------
-   Delivery Banner (Non-Fixed)
+   Delivery Banner
 ---------------------------- */
-
 .delivery-banner {
-    padding: 0.5rem 0;
+    background-color: var(--primary-color) !important;
+    color: #fff;
+    margin-top: 0;
+    padding: .25rem 0;
+    border-top: 1px solid rgba(255, 255, 255, .15);
+    border-bottom: 1px solid rgba(0, 0, 0, .08);
 }
 
-/* Optional: slightly smaller heading in the banner */
-.delivery-banner h4 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 1px;
+.delivery-banner small {
+    font-weight: 600;
+    letter-spacing: .3px;
 }
-
 
 /* ----------------------------
-   Header and Navigation
+   Header (top row)
 ---------------------------- */
 header {
-    background-color: white;
+    background-color: #fff;
     border-bottom: 2px solid var(--neutral-light);
     padding: .5rem 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .04);
 }
 
+#topnav {
+    min-height: var(--navbar-min-h);
+}
+
+/* ----------------------------
+   Main Nav (collapse row)
+---------------------------- */
+.navbar {
+    position: relative;
+    min-height: var(--nav-row-min-h);
+}
+
+.navbar::after {
+    /* thin gold underline */
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--accent-color);
+    opacity: .8;
+}
+
+/* === Grid navbar layout ===
+   [ LEFT MENU ]  [ CENTER LOGO ]  [ RIGHT ICONS ]
+-------------------------------------------------- */
+.navbar-grid {
+    display: grid;
+    /* size columns by content, center the whole bar */
+    grid-template-columns: max-content auto max-content;
+    align-items: center;
+    min-height: var(--nav-row-min-h);
+
+    /* center the grid on the page */
+    max-width: 1200px;
+    /* adjust 1140–1280 to taste */
+    margin: 0 auto;
+    padding: 0 16px;
+    column-gap: 2.5rem;
+}
+
+/* Left menu */
 .navbar-nav {
     display: flex;
-    gap: 2rem;
+    gap: 1.75rem;
     justify-content: center;
     font-size: 1.1rem;
     font-weight: 600;
 }
 
+.main-menu {
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: flex-end;
+}
+
 .nav-link {
     color: var(--primary-color) !important;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 0.5rem 1rem;
-    /* reduced from 1rem 1.5rem */
+    letter-spacing: .03em;
+    padding: .5rem 1rem;
     font-size: 1rem;
-    /* reduced from 1.2rem */
-    font-weight: 600;
-    /* lighter than 700 */
+    font-weight: 800;
     text-align: center;
+    position: relative;
 }
-
 
 .nav-link:hover {
     color: var(--accent-color) !important;
 }
 
-/* ----------------------------
-   Logo Styling
----------------------------- */
-.logo-img {
-    max-width: 180px;
-    height: 56px;
-    display: block;
-    margin: 0 auto;
+.nav-link::after {
+    /* gold hover underline */
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 2px;
+    background: var(--accent-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .2s ease;
 }
 
+.nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+.nav-link:focus-visible,
+.icon-link:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Center logo (grid, not absolute) */
+.nav-center-logo {
+    justify-self: center;
+    align-items: center;
+}
+
+.nav-center-logo-img {
+    height: 104px;
+    /* adjust 96–112px to taste */
+    width: auto;
+    display: block;
+}
+
+/* Right icons */
+.header-icons {
+    justify-self: end;
+    /* pushes icons to the right edge of the bar */
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+    margin: 0;
+}
+
+.icon-link {
+    position: relative;
+    color: var(--primary-color) !important;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: .5rem .6rem;
+    vertical-align: middle;
+}
+
+.icon-link i {
+    font-size: 1.1rem;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+.icon-link:hover {
+    color: var(--accent-color) !important;
+}
+
+.icon-link .bag-total {
+    position: relative;
+    margin-left: .35rem;
+    font-weight: 700;
+    top: 1px;
+    font-size: .95rem;
+    color: var(--primary-color);
+}
+
+.bag-count {
+    position: absolute;
+    top: .15rem;
+    right: .15rem;
+    background: var(--accent-color);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 0 .35rem;
+    font-size: .7rem;
+}
+
+/* ----------------------------
+   Logo (top row) – crisp base
+---------------------------- */
+.logo-img {
+    height: var(--brand-logo-h-mob);
+    width: auto;
+    display: block;
+    margin: 0 auto;
+    image-rendering: auto;
+}
+
+/* Optional display font */
 .logo-font {
     font-family: 'Bangers', cursive;
     font-size: 2rem;
     color: var(--accent-color);
     text-transform: uppercase;
 }
-
 
 /* ----------------------------
    Buttons
@@ -139,11 +301,11 @@ header {
     color: #fff;
     font-size: 1.2rem;
     font-weight: 600;
-    padding: 0.8rem 2rem;
+    padding: .8rem 2rem;
     border-radius: 30px;
     text-transform: uppercase;
     border: none;
-    transition: all 0.3s;
+    transition: all .3s;
 }
 
 .btn-brand:hover {
@@ -158,20 +320,20 @@ header {
     font-weight: 700;
     padding: 1rem 3rem;
     border-radius: 50px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .15);
     text-transform: uppercase;
     border: none;
-    transition: all 0.3s;
+    transition: all .3s;
 }
 
 .btn-hero:hover {
     background-color: var(--accent-color);
     transform: translateY(-3px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, .25);
 }
 
 /* ----------------------------
-   Dropdown Styling
+   Dropdowns
 ---------------------------- */
 .dropdown-menu {
     border: 2px solid var(--primary-color);
@@ -188,63 +350,252 @@ header {
 }
 
 /* ----------------------------
-   Search Bar Styling
+   Search (crisp)
 ---------------------------- */
-.input-group .form-control {
-    border: 2px solid var(--primary-color);
-    background-color: #fff;
+.header-search .form-control {
+    height: 44px;
+    border: 1px solid rgba(4, 71, 98, .25);
+    background: #fff;
     color: var(--primary-color);
     font-weight: 500;
+    padding: .5rem .75rem;
 }
 
-.input-group .form-control:focus {
+.header-search .form-control:focus {
     border-color: var(--accent-color);
     box-shadow: none;
 }
 
-.input-group .form-control::placeholder {
-    color: var(--primary-color);
-    opacity: 0.8;
+.header-search .form-control::placeholder {
+    color: #808080;
+    opacity: .95;
 }
 
-.input-group-append .btn {
-    background-color: var(--primary-color);
-    color: white;
-    font-weight: 600;
+.header-search .search-input {
+    height: 44px;
+    border-radius: .6rem 0 0 .6rem;
+    border: 1px solid rgba(4, 71, 98, .25);
+    padding: .5rem .75rem;
 }
 
-.input-group-append .btn:hover {
-    background-color: var(--accent-color);
+.header-search .search-btn {
+    height: 44px;
+    border-radius: 0 .6rem .6rem 0;
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    color: #fff;
+    padding: 0 .9rem;
 }
 
+.header-search .search-btn:hover {
+    filter: brightness(.95);
+}
 
 /* ----------------------------
-   Card Hover Effects
+   Cards / Tiles / Product imagery
 ---------------------------- */
 .hover-button:hover {
     background-color: var(--primary-color);
-    transition: all 0.3s ease;
+    transition: all .3s ease;
 }
 
-/* ----------------------------
-   Featured Badge Styling
----------------------------- */
 .badge {
-    font-size: 0.85rem;
+    font-size: .85rem;
     border-radius: 50px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .15);
+}
+
+.hero-card {
+    background: linear-gradient(180deg, #ffffff, #fafafa);
+    border: 1px solid rgba(0, 0, 0, .06);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
+}
+
+.hero .badge {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .06);
+}
+
+.hero-img {
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.tile {
+    transition: transform .18s ease, box-shadow .18s ease;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, .06);
+}
+
+.tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+    text-decoration: none;
+}
+
+.tile-icon {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+}
+
+.usp {
+    background: #fff;
+    border: 1px dashed rgba(0, 0, 0, .12);
+    border-radius: 12px;
+}
+
+/* Product grid image framing */
+.product-grid .image-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+    background: #f7f7f7;
+}
+
+.product-grid .image-frame::before {
+    content: "";
+    display: block;
+    padding-top: 75%;
+}
+
+.product-grid .image-frame>img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-grid .card {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-grid .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-grid .card-body .mt-auto {
+    margin-top: auto;
+}
+
+/* Product detail hero */
+.product-detail .image-hero {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #f7f7f7;
+    border: 1px solid rgba(0, 0, 0, .06);
+}
+
+.product-detail .image-hero::before {
+    content: "";
+    display: block;
+    padding-top: 75%;
+}
+
+.product-detail .image-hero>img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* ----------------------------
-   Responsive Layout
+   Bootstrap colour overrides
 ---------------------------- */
-@media (min-width: 1200px) {
-    .container {
-        max-width: 85%;
-    }
+.btn-primary,
+.btn-primary:focus {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #fff !important;
 }
 
-@media (min-width: 992px) {
+.btn-primary:hover,
+.btn-primary:active {
+    background-color: #03384d !important;
+    border-color: #03384d !important;
+    color: #fff !important;
+}
+
+.btn-outline-primary,
+.btn-outline-primary:focus {
+    color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    background-color: transparent !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:active {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Map success to accent (gold) */
+.btn-success,
+.btn-success:focus {
+    background-color: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    color: #fff !important;
+}
+
+.btn-success:hover,
+.btn-success:active {
+    filter: brightness(.9);
+    color: #fff !important;
+}
+
+.badge-primary,
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.border-primary {
+    border-color: var(--primary-color) !important;
+}
+
+.tile h5 {
+    color: var(--primary-color);
+}
+
+.tile:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 20px rgba(4, 71, 98, .12);
+}
+
+/* ====================================================
+   Responsive layout (all media queries grouped here)
+   ==================================================== */
+
+/* Desktop+ adjustments */
+@media (min-width:992px) {
+
+    /* taller desktop logo */
+    .logo-img {
+        height: var(--brand-logo-h-desk);
+    }
+
+    /* body offset for fixed header + banner */
+    body {
+        padding-top: 160px;
+    }
+
+    /* optional helpers */
     .fixed-top-desktop-only {
         position: fixed;
         top: 0;
@@ -258,13 +609,30 @@ header {
     }
 }
 
-@media (max-width: 992px) {
-    .nav-link {
-        font-size: 1rem;
-        padding: 0.75rem 1rem;
+/* XL container width */
+@media (min-width:1200px) {
+    .container {
+        max-width: 85%;
+    }
+}
+
+/* Mobile / tablet adjustments */
+@media (max-width:991.98px) {
+
+    /* Hide the desktop grid’s center logo & right icons; mobile top row handles branding + search */
+    .nav-center-logo,
+    .header-icons {
+        display: none !important;
     }
 
+    /* smaller nav links and padding */
+    .nav-link {
+        font-size: 1rem;
+        padding: .75rem 1rem;
+    }
+
+    /* smaller body offset for shorter mobile header */
     body {
-        padding-top: 100px;
+        padding-top: 120px;
     }
 }

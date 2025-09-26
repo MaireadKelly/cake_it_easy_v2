@@ -2,12 +2,18 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # Logged-in user's list (used by your navbar)
-    path('my-cakes/', views.custom_cake_list, name='custom_cake_list'),
-
-    # CRUD (login required; owner or staff can edit/delete)
-    path('create/', views.custom_cake_create, name='custom_cake_create'),
+    # List & detail
+    path('', views.custom_cake_list, name='custom_cake_list'),
     path('<int:pk>/', views.custom_cake_detail, name='custom_cake_detail'),
-    path('<int:pk>/edit/', views.custom_cake_edit, name='custom_cake_edit'),
+
+    # Create / Update / Delete – expose BOTH name styles:
+    path('create/', views.custom_cake_create, name='custom_cake_create'),
+    path('create/', views.custom_cake_create, name='create_custom_cake'),
+
+    path('<int:pk>/edit/', views.custom_cake_edit, name='custom_cake_edit'), 
+    path('<int:pk>/edit/', views.custom_cake_edit, name='custom_cake_update'),
+    path('<int:pk>/edit/', views.custom_cake_edit, name='update_custom_cake'),
+
     path('<int:pk>/delete/', views.custom_cake_delete, name='custom_cake_delete'),
+    path('<int:pk>/delete/', views.custom_cake_delete, name='delete_custom_cake'),
 ]
