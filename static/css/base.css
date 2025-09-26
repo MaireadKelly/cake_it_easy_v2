@@ -175,6 +175,7 @@ header {
     margin: 0 auto;
     padding: 0 16px;
     column-gap: 2.5rem;
+    overflow: visible;
 }
 
 /* Left menu */
