@@ -1,6 +1,18 @@
 {% extends "base.html" %}
+
 {% block content %}
-  <div class="container mt-5 pt-4">  {# match your site’s offset #}
-    {% block account_content %}{% endblock %}
+<div class="account-page container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          {% block account_content %}{% endblock %}
+        </div>
+      </div>
+      {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+      {% endif %}
+    </div>
   </div>
+</div>
 {% endblock %}
