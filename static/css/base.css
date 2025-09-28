@@ -672,29 +672,35 @@ header.container-fluid.fixed-top {
 /* Mobile / tablet adjustments */
 @media (max-width: 991.98px) {
 
-    /* Use your measured mobile totals: row ≈ 134px + banner ≈ 47px */
-    :root {
-        --navbar-min-h: 0px;
-        /* no separate top row on mobile */
-        --nav-row-min-h: 134px;
-        /* mobile nav row */
-        --banner-h: 47px;
-        /* mobile banner */
-        --fixed-stack-h: 182px;
-        /* total mobile offset */
+    /* Hide the mobile quick-actions row entirely */
+    #topnav {
+        display: none !important;
     }
 
-    /* Hide desktop-only pieces */
+    /* Header sizing on mobile (tweak nav row if you see extra gap) */
+    :root {
+        --navbar-min-h: 0px;
+        /* no separate top row */
+        --nav-row-min-h: 134px;
+        /* height of your logo/toggler row */
+        --banner-h: 47px;
+        /* delivery banner */
+        --fixed-stack-h: calc(var(--nav-row-min-h) + var(--banner-h));
+    }
+
+    /* Desktop-only bits stay hidden on mobile */
     .nav-center-logo,
     .header-icons {
         display: none !important;
     }
 
-    /* smaller nav links and padding */
+    /* Comfortable touch targets inside the collapsed menu */
+    #main-nav {
+        gap: .5rem;
+    }
+
     .nav-link {
         font-size: 1rem;
         padding: .75rem 1rem;
     }
-
-    /* On mobile, collapse is vertical so spacing is natural */
 }

@@ -1,33 +1,31 @@
 ﻿from decimal import Decimal
-
-from products.models import Product
+from products.models import Product, ProductOption
 
 FREE_DELIVERY_THRESHOLD = Decimal('50.00')
 STANDARD_DELIVERY = Decimal('5.00')
 
+
+def _pack_price(product, option: ProductOption | None) -> Decimal:
+    if option:
+        return Decimal(option.pack_price())
+    return Decimal(product.price or 0)
+
+
 def bag_contents(request):
     """
-    Session schema (simple):
-        session['bag'] = { "<product_id>": quantity, ... }
-
-    Returns keys compatible with your existing templates:
-        - bag_items: list of { item_id, product, quantity, line_total }
-        - product_count: int
-        - total: Decimal               (a.k.a. subtotal)
-        - bag_total: Decimal           (alias of total for walkthrough compatibility)
-        - delivery: Decimal
-        - free_delta: Decimal          (amount left to free delivery)
-        - grand_total: Decimal
+    session['bag']: { "<product_id>[_<option_id>]": quantity, ... }
+    quantity = number of boxes when an option is present.
     """
     bag = request.session.get('bag', {})
-
     items = []
     product_count = 0
     total = Decimal('0.00')
 
-    for item_id, quantity in bag.items():
+    for key, quantity in bag.items():
         try:
-            pid = int(item_id)
+            parts = str(key).split('_')
+            pid = int(parts[0])
+            opt_id = int(parts[1]) if len(parts) == 2 else None
             qty = int(quantity)
         except (TypeError, ValueError):
             continue
@@ -36,13 +34,26 @@ def bag_contents(request):
         if not product:
             continue
 
-        line_total = (product.price or Decimal('0.00')) * qty
+        option = None
+        if opt_id:
+            option = ProductOption.objects.filter(pk=opt_id, product_id=pid).first()
+
+        unit_price = _pack_price(product, option)  # price per **box**
+        line_total = unit_price * qty
         total += line_total
         product_count += qty
+
+        per_unit = None
+        if option and option.quantity:
+            per_unit = (unit_price / Decimal(option.quantity))
+
         items.append({
-            'item_id': pid,
+            'key': key,
             'product': product,
-            'quantity': qty,
+            'option': option,
+            'quantity': qty,       # number of boxes if option present
+            'unit_price': unit_price,     # price per box
+            'per_unit': per_unit,         # price per cupcake (Decimal or None)
             'line_total': line_total,
         })
 
@@ -58,13 +69,13 @@ def bag_contents(request):
     return {
         'bag_items': items,
         'product_count': product_count,
-        'total': total,              # subtotal
-        'bag_total': total,          # alias for compatibility with templates/walkthrough
+        'total': total,
+        'bag_total': total,
         'delivery': delivery,
         'free_delta': free_delta,
         'grand_total': grand_total,
     }
 
-# Backward-compat: if settings still reference 'bag.context_processors.bag_totals'
+
 def bag_totals(request):
     return bag_contents(request)

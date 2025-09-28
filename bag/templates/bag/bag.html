@@ -29,15 +29,22 @@
                   {% endif %}
                   <div>
                     <a href="{% url 'product_detail' item.product.id %}" class="fw-semibold text-decoration-none">{{ item.product.name }}</a>
+                    {% if item.option %}
+                      <div class="text-muted small">{{ item.option.label }}</div>
+                      {% if item.per_unit %}
+                        <div class="text-muted xsmall">≈ €{{ item.per_unit|floatformat:2 }} per cupcake</div>
+                      {% endif %}
+                    {% endif %}
                   </div>
                 </div>
               </td>
 
-              <td class="text-center">&euro;{{ item.product.price|floatformat:2 }}</td>
+              <td class="text-center">&euro;{{ item.unit_price|floatformat:2 }}</td>
 
               <td>
                 <form action="{% url 'adjust_bag' item.product.id %}" method="post" class="d-flex justify-content-center">
                   {% csrf_token %}
+                  <input type="hidden" name="option_id" value="{% if item.option %}{{ item.option.id }}{% endif %}">
                   <input type="number" name="quantity" min="0" value="{{ item.quantity }}" class="form-control form-control-sm text-center" style="width:80px;">
                   <button class="btn btn-outline-secondary btn-sm ms-2" type="submit">Update</button>
                 </form>
@@ -48,6 +55,7 @@
               <td class="text-end">
                 <form action="{% url 'remove_from_bag' item.product.id %}" method="post" class="d-inline">
                   {% csrf_token %}
+                  <input type="hidden" name="option_id" value="{% if item.option %}{{ item.option.id }}{% endif %}">
                   <button class="btn btn-outline-danger btn-sm">Remove</button>
                 </form>
               </td>

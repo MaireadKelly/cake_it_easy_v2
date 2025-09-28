@@ -15,8 +15,16 @@
           <ul class="list-unstyled">
             {% for i in items %}
               <li class="d-flex justify-content-between">
-                <span>{{ i.product.name }} × {{ i.quantity }}</span>
+                <span>
+                  {{ i.product.name }}
+                  {% if i.option %}<span class="text-muted">({{ i.option.label }})</span>{% endif %}
+                  &times; {{ i.quantity }}
+                </span>
                 <span>€{{ i.line_total|floatformat:2 }}</span>
+              </li>
+              <li class="d-flex justify-content-between small text-muted">
+                <span>Unit price</span>
+                <span>€{{ i.unit_price|floatformat:2 }}</span>
               </li>
             {% endfor %}
           </ul>

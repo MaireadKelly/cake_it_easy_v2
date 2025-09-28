@@ -1,7 +1,13 @@
 from django.contrib.auth.models import User
 from django.db import models
+from decimal import Decimal
 
 from products.models import Product
+# Optional FK – only importable if you added ProductOption in products app
+try:
+    from products.models import ProductOption
+except Exception:
+    ProductOption = None
 
 
 class Order(models.Model):
@@ -27,12 +33,27 @@ class Order(models.Model):
 class OrderLineItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='lineitems')
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    # NEW: which option (e.g., Box of 6/12). Nullable for products without options.
+    option = models.ForeignKey(
+        ProductOption, null=True, blank=True, on_delete=models.SET_NULL
+    )
     quantity = models.IntegerField(default=1)
+    # NEW: unit price captured at time of order
+    lineitem_price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     lineitem_total = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
 
     def save(self, *args, **kwargs):
-        self.lineitem_total = self.product.price * self.quantity
+        unit = self.lineitem_price
+        if not unit or unit <= 0:
+            # Prefer option price; fallback to product base price
+            if self.option and hasattr(self.option, 'price') and self.option.price:
+                unit = self.option.price
+            else:
+                unit = self.product.price
+            self.lineitem_price = unit
+        self.lineitem_total = unit * self.quantity
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.quantity} x {self.product.name} (Order {self.order_id})"
+        label = f" ({self.option.label})" if self.option else ""
+        return f"{self.quantity} x {self.product.name}{label} (Order {self.order_id})"

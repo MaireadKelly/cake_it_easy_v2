@@ -6,10 +6,6 @@
     <div class="col-md-6 mb-3">
       <div class="image-hero">
         {% if product.image %}
-          {% comment %}
-            If you later add the Cloudinary filter, replace the <img> below with:
-            <img src="{{ product.image.url|cloudinary_thumb:'w_1200,h_900,c_fill,f_auto,q_auto' }}" alt="{{ product.name }}">
-          {% endcomment %}
           <img src="{{ product.image.url }}" alt="{{ product.name }}">
         {% else %}
           <img src="{% static 'images/default.jpg' %}" alt="Image coming soon">
@@ -19,7 +15,14 @@
 
     <div class="col-md-6">
       <h1 class="mb-1">{{ product.name }}</h1>
-      <p class="lead mb-3">&euro;{{ product.price|floatformat:2 }}</p>
+
+      <!-- Per-cupcake price (unit) -->
+      <p id="unit-price" class="text-muted mb-1">€{{ product.price|floatformat:2 }} per cupcake</p>
+
+      <!-- Selected pack total (updates when dropdown changes) -->
+      <p class="lead mb-3">
+        <span id="selected-pack-price">Select a box size</span>
+      </p>
 
       {% if product.category %}
         <p class="text-muted small mb-2">
@@ -28,25 +31,43 @@
       {% endif %}
 
       {% if product.description %}
-        <p class="mb-4">{{ product.description }}</p>
+        <p class="mb-3">{{ product.description }}</p>
       {% endif %}
+      <p class="small text-muted">Sold in boxes of 4, 6, 12, 18 (and more if configured).</p>
 
-      {# Add to Bag #}
+      <!-- Add to Bag -->
       <form action="{% url 'add_to_bag' product.id %}" method="post" class="mt-3">
         {% csrf_token %}
-        <label for="qty" class="mr-2">Quantity</label>
-        {% if product.category and product.category.name and product.category.name|lower == "cupcakes" %}
-          <input id="qty" type="number" name="quantity" min="1" step="1"
-                 value="1" class="form-control w-auto d-inline-block ml-2">
-          <small class="text-muted d-block">Sold as packs (6, 12, 18…). Choose pack size from the product title/price.</small>
-        {% else %}
-          <input id="qty" type="number" name="quantity" min="1" step="1"
-                 value="1" class="form-control w-auto d-inline-block ml-2">
-        {% endif %}
-        <button type="submit" class="btn btn-success ml-2">Add to Bag</button>
+
+        <label for="option_id" class="form-label">Box size</label>
+        <select id="option_id" name="option_id" class="form-select w-auto mb-2" required>
+          {% for opt in product.options.all %}
+            {% with pack_total=opt.pack_price %}
+              <option
+                value="{{ opt.id }}"
+                data-qty="{{ opt.quantity }}"
+                data-pack-price="{{ pack_total }}"
+                {% if opt.is_default %}selected{% endif %}
+              >
+                {{ opt.label }} — €{{ pack_total|floatformat:2 }}
+              </option>
+            {% endwith %}
+          {% empty %}
+            <!-- No options configured: keep a single hidden option so form remains valid -->
+            <option value="" hidden disabled selected>No box sizes available</option>
+          {% endfor %}
+        </select>
+
+        <label for="qty" class="form-label">Quantity (boxes)</label>
+        <input id="qty" type="number" name="quantity" min="1" step="1"
+               value="1" class="form-control w-auto">
+
+        <button type="submit" class="btn btn-success mt-3"
+                {% if product.options.all|length == 0 %}disabled{% endif %}>
+          Add to Bag
+        </button>
       </form>
 
-      {# Admin-only controls #}
       {% if request.user.is_staff %}
       <div class="mt-3">
         <a href="{% url 'edit_product' product.id %}" class="btn btn-outline-primary btn-sm">Edit</a>
@@ -56,4 +77,26 @@
     </div>
   </div>
 </div>
+
+<script>
+  (function() {
+    const select = document.getElementById('option_id');
+    const out = document.getElementById('selected-pack-price');
+    if (!select || !out) return;
+
+    function render() {
+      const opt = select.options[select.selectedIndex];
+      const price = opt && opt.getAttribute('data-pack-price');
+      const qty = opt && opt.getAttribute('data-qty');
+      if (price && qty) {
+        out.textContent = `€${parseFloat(price).toFixed(2)} per box (${qty} cupcakes)`;
+      } else {
+        out.textContent = 'Select a box size';
+      }
+    }
+
+    select.addEventListener('change', render);
+    render();
+  })();
+</script>
 {% endblock %}

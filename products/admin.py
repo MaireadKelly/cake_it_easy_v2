@@ -1,8 +1,8 @@
+# products/admin.py
 from django.contrib import admin
 from django.utils.text import Truncator
 
-from .models import Category, Product
-
+from .models import Category, Product, ProductOption
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -11,6 +11,11 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name', 'friendly_name', 'slug')
     ordering = ('name',)
     prepopulated_fields = {"slug": ("name",)}
+
+class ProductOptionInline(admin.TabularInline):
+    model = ProductOption
+    extra = 1
+    fields = ('label', 'quantity', 'price', 'is_default')
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -25,6 +30,7 @@ class ProductAdmin(admin.ModelAdmin):
         'image', 'featured', 'is_custom', 'is_accessory', 'is_offer',
         'image_preview', 'sku',
     )
+    inlines = [ProductOptionInline]
 
     actions = ['fill_missing_descriptions']
     def fill_missing_descriptions(self, request, queryset):
