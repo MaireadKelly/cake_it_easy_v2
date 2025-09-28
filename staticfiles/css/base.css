@@ -1,4 +1,5 @@
-html {
+html,
+body {
     height: 100%;
 }
 
@@ -16,14 +17,22 @@ html {
     --brand-logo-h-mob: 44px;
     /* mobile header logo height */
     --brand-logo-h-desk: 96px;
-    /* desktop header logo height (try 112px if you want larger) */
-    --navbar-min-h: 86px;
-    /* top row height to balance larger logo */
-    --nav-row-min-h: 118px;
-    /* space for big centered logo on desktop */
+    /* desktop header logo height */
+
+    /* Desktop measured values */
+    --navbar-min-h: 0px;
+    /* no separate top row on desktop */
+    --nav-row-min-h: 134px;
+    /* main nav (collapse row) height */
+    --banner-h: 47px;
+    /* delivery banner height */
+
+    /* One source of truth: total fixed stack height (rounded) */
+    --fixed-stack-h: 214px;
+    /* desktop offset for fixed header + banner */
 }
 
-/* Accessibility helper: works for both Bootstrap 4 and 5 */
+/* Accessibility helper */
 .visually-hidden,
 .sr-only {
     position: absolute !important;
@@ -69,15 +78,31 @@ html {
 }
 
 /* ----------------------------
-   Base Layout
+   Base Layout + Sticky Footer
 ---------------------------- */
 body {
     background-color: var(--neutral-light);
     color: var(--text-dark);
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    padding-top: 160px;
-    /* fixed header + delivery banner (desktop default; mobile override below) */
+
+    /* Offset content below fixed header+banner */
+    padding-top: var(--fixed-stack-h);
+
+    /* Sticky footer */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content wrapper should flex to push footer down */
+main.site-main {
+    flex: 1 0 auto;
+}
+
+/* If a page’s first container adds extra top margin, zero it safely */
+.site-main>.container:first-child {
+    margin-top: 0;
 }
 
 .container {
@@ -90,21 +115,27 @@ body {
    Delivery Banner
 ---------------------------- */
 .delivery-banner {
-    background-color: var(--primary-color) !important;
-    color: #fff;
+    background-color: var(--primary-color, #044762);
+    color: #f8f8f8;
+    /* text colour */
+    width: 100% !important;
     margin-top: 0;
     padding: .25rem 0;
-    border-top: 1px solid rgba(255, 255, 255, .15);
-    border-bottom: 1px solid rgba(0, 0, 0, .08);
+    border-top: 5px solid #a68f51;
+    /* gold-ish top border */
+    border-bottom: 7px solid #a68f51;
+    /* gold-ish bottom border */
 }
 
 .delivery-banner small {
     font-weight: 600;
     letter-spacing: .3px;
+    color: inherit;
+    /* keep text using the banner’s colour */
 }
 
 /* ----------------------------
-   Header (top row)
+   Header (flush, fixed)
 ---------------------------- */
 header {
     background-color: #fff;
@@ -113,6 +144,13 @@ header {
     box-shadow: 0 4px 10px rgba(0, 0, 0, .04);
 }
 
+/* Make the whole header flush edge-to-edge */
+header.container-fluid.fixed-top {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Top mobile row min-height token */
 #topnav {
     min-height: var(--navbar-min-h);
 }
@@ -126,7 +164,6 @@ header {
 }
 
 .navbar::after {
-    /* thin gold underline */
     content: "";
     position: absolute;
     left: 0;
@@ -137,25 +174,51 @@ header {
     opacity: .8;
 }
 
-/* === Grid navbar layout ===
-   [ LEFT MENU ]  [ CENTER LOGO ]  [ RIGHT ICONS ]
--------------------------------------------------- */
-.navbar-grid {
-    display: grid;
-    /* size columns by content, center the whole bar */
-    grid-template-columns: max-content auto max-content;
-    align-items: center;
-    min-height: var(--nav-row-min-h);
+/* ===== PURE FLEX NAVBAR (no grid) ===== */
+@media (min-width: 992px) {
 
-    /* center the grid on the page */
-    max-width: 1200px;
-    /* adjust 1140–1280 to taste */
-    margin: 0 auto;
-    padding: 0 16px;
-    column-gap: 2.5rem;
+    /* Make the collapse a 3-part flex row: [left menu] [center logo] [right icons] */
+    #main-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* center the whole row */
+        gap: 2rem;
+        /* spacing between groups */
+        min-height: var(--nav-row-min-h);
+        width: 100%;
+    }
+
+    /* Left and right wings share leftover space equally */
+    #main-nav .main-menu,
+    #main-nav .header-icons {
+        display: flex;
+        align-items: center;
+        flex: 1 1 0;
+    }
+
+    /* Left menu hugs the logo; right icons start immediately after logo */
+    #main-nav .main-menu {
+        justify-content: flex-end;
+    }
+
+    #main-nav .header-icons {
+        justify-content: center;
+        gap: 2.75rem;
+    }
+
+    /* Center logo stays fixed in the middle */
+    .nav-center-logo {
+        display: inline-flex !important;
+        align-items: center;
+        flex: 0 0 auto;
+        /* don't grow or shrink */
+        margin: 0 1.5rem;
+        /* adjust to pull menu closer/further */
+    }
 }
 
-/* Left menu */
+/* Left menu base styles (work for both mobile + desktop) */
 .navbar-nav {
     display: flex;
     gap: 1.75rem;
@@ -168,16 +231,33 @@ header {
     margin: 0;
     padding: 0;
     align-items: center;
-    justify-content: flex-end;
 }
 
+/* Use site font in the navbar (override any display font) */
+.navbar .nav-link,
+.navbar .dropdown-item {
+    font-family: inherit;
+}
+
+/* inherit Poppins from body */
+
+/* Neutralize 'logo-font' only inside navbar; elsewhere keep it */
+.navbar .logo-font {
+    font-family: inherit !important;
+    font-size: inherit;
+    color: inherit;
+    text-transform: uppercase;
+}
+
+/* Nav links */
 .nav-link {
     color: var(--primary-color) !important;
     text-transform: uppercase;
     letter-spacing: .03em;
     padding: .5rem 1rem;
     font-size: 1rem;
-    font-weight: 800;
+    font-weight: 600;
+    /* lighter than 800 to match body font */
     text-align: center;
     position: relative;
 }
@@ -187,7 +267,6 @@ header {
 }
 
 .nav-link::after {
-    /* gold hover underline */
     content: "";
     position: absolute;
     left: 0;
@@ -211,23 +290,15 @@ header {
     border-radius: 4px;
 }
 
-/* Center logo (grid, not absolute) */
-.nav-center-logo {
-    justify-self: center;
-    align-items: center;
-}
-
+/* Center logo image */
 .nav-center-logo-img {
     height: 104px;
-    /* adjust 96–112px to taste */
     width: auto;
     display: block;
 }
 
 /* Right icons */
 .header-icons {
-    justify-self: end;
-    /* pushes icons to the right edge of the bar */
     display: flex;
     gap: .75rem;
     align-items: center;
@@ -285,7 +356,7 @@ header {
     image-rendering: auto;
 }
 
-/* Optional display font */
+/* Optional display font (kept for non-navbar uses) */
 .logo-font {
     font-family: 'Bangers', cursive;
     font-size: 2rem;
@@ -579,47 +650,41 @@ header {
 }
 
 /* ====================================================
-   Responsive layout (all media queries grouped here)
+   Responsive layout (media queries)
    ==================================================== */
 
 /* Desktop+ adjustments */
-@media (min-width:992px) {
-
-    /* taller desktop logo */
+@media (min-width: 992px) {
     .logo-img {
         height: var(--brand-logo-h-desk);
     }
 
-    /* body offset for fixed header + banner */
-    body {
-        padding-top: 160px;
-    }
-
-    /* optional helpers */
-    .fixed-top-desktop-only {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1030;
-    }
-
-    .header-container {
-        margin-top: 180px;
-    }
+    /* taller desktop logo */
 }
 
 /* XL container width */
-@media (min-width:1200px) {
+@media (min-width: 1200px) {
     .container {
         max-width: 85%;
     }
 }
 
 /* Mobile / tablet adjustments */
-@media (max-width:991.98px) {
+@media (max-width: 991.98px) {
 
-    /* Hide the desktop grid’s center logo & right icons; mobile top row handles branding + search */
+    /* Use your measured mobile totals: row ≈ 134px + banner ≈ 47px */
+    :root {
+        --navbar-min-h: 0px;
+        /* no separate top row on mobile */
+        --nav-row-min-h: 134px;
+        /* mobile nav row */
+        --banner-h: 47px;
+        /* mobile banner */
+        --fixed-stack-h: 182px;
+        /* total mobile offset */
+    }
+
+    /* Hide desktop-only pieces */
     .nav-center-logo,
     .header-icons {
         display: none !important;
@@ -631,8 +696,5 @@ header {
         padding: .75rem 1rem;
     }
 
-    /* smaller body offset for shorter mobile header */
-    body {
-        padding-top: 120px;
-    }
+    /* On mobile, collapse is vertical so spacing is natural */
 }

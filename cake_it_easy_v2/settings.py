@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- Security / Hosts ---
 SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-me')
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+DEBUG = str(os.environ.get("DEBUG", "false")).lower() == "true"
 
 # Comma-separated, e.g. "localhost,127.0.0.1,cake-it-easy-xxxx.herokuapp.com"
 ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'crispy_forms',
     'crispy_bootstrap5',
 
@@ -68,6 +69,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'cake_it_easy_v2.urls'
+
+WSGI_APPLICATION = 'cake_it_easy_v2.wsgi.application'
+
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
@@ -92,8 +96,6 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'cake_it_easy_v2.wsgi.application'
 
 # -----------------------------------------------------
 # Database (External Postgres via DATABASE_URL, else local sqlite)
@@ -162,6 +164,7 @@ cloudinary.config(
 
 # --- Email ---
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@cakeiteasy.local")
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
 
 # --- Stripe ---
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
