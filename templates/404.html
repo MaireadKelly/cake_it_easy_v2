@@ -1,11 +1,29 @@
 {% extends "base.html" %}
+{% block extra_title %} — 404{% endblock %}
+
 {% block content %}
-<div class="container my-5 text-center">
-  <h1 class="display-5 mb-3">Oops — page not found (404)</h1>
-  <p class="lead">The page you were looking for doesn’t exist or has moved.</p>
-  <div class="mt-4">
-    <a href="{% url 'product_list' %}" class="btn btn-primary mr-2">Browse products</a>
-    <a href="{% url 'about' %}" class="btn btn-outline-secondary">About us</a>
+<section class="container py-5 text-center">
+  <div class="display-4 fw-bold mb-2">Crumbs! 404</div>
+  <p class="lead mb-4">We whisked and whisked… but this page didn’t rise. 🍰</p>
+
+  <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center mb-4">
+    <a href="{% url 'home' %}" class="btn btn-primary">
+      <i class="fa-solid fa-house me-2"></i> Back Home
+    </a>
+    <a href="{% url 'product_cakes' %}" class="btn btn-outline-primary">
+      <i class="fa-solid fa-store me-2"></i> Shop Cakes
+    </a>
   </div>
-</div>
+
+  <form class="row g-2 justify-content-center" method="get" action="{% url 'product_list' %}">
+    <div class="col-10 col-sm-6 col-md-4">
+      <input type="search" class="form-control" name="q" placeholder="Search cakes & accessories…" />
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+  </form>
+
+  <small class="text-muted d-block mt-4">Error code: 404 — Page not found</small>
+</section>
 {% endblock %}
