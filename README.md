@@ -1,217 +1,130 @@
-## Project: Cake It Easy
+# README.md
 
-A Django-based e‑commerce site for ordering custom occasion cakes, inspired by the Code Institute **Boutique Ado** walkthrough and adapted for my use case. Features include product browsing with categories/filters, a custom cake order flow, basket & checkout with Stripe Payment Intents + webhooks, and user profiles for order history.
+## Project Overview
+**Cake It Easy v2.0** is a boutique e‑commerce site for artisan cakes. Users can browse products, add to bag, pay with **Stripe PaymentIntent** (Elements + webhooks), manage their profile, and view **order history**. A **Custom Cake** flow lets customers submit bespoke requests with a “**Needed for**” date.
 
-**Live Site:** https://DEPLOYED_APP_URL  
-**Repository:** https://github.com/MaireadKelly/cake_it_easy_v2
+**Live Site:** _ADD_URL_  
+**Repository:** _ADD_URL_
 
 ---
 
 ## Table of Contents
-- [UX](#ux)
-  - [User Goals](#user-goals)
-  - [Business Goals](#business-goals)
-  - [Target Audience](#target-audience)
-  - [User Stories](#user-stories)
-  - [Wireframes](#wireframes)
-  - [Design](#design)
-- [Agile](#agile)
-- [Features](#features)
+- [Key Features](#key-features)
 - [Information Architecture](#information-architecture)
 - [Data Model](#data-model)
+- [UX & Design](#ux--design)
 - [Security](#security)
-- [Technologies](#technologies)
-- [Testing](#testing)
+- [Testing (Summary)](#testing-summary)
 - [Deployment](#deployment)
+- [Running Locally](#running-locally)
 - [Credits](#credits)
-- [License](#license)
 
 ---
 
-## UX
-
-### User Goals
-- Quickly find and purchase cakes and accessories.
-- Configure a **Custom Cake** (flavour, filling, size, inscription, date needed).
-- Pay securely and receive email confirmation.
-- Review past orders via profile.
-
-### Business Goals
-- Accept online payments and manage orders.
-- Promote seasonal products and upsell accessories.
-- Collect non-sensitive analytics (page visits, conversion).
-
-### Target Audience
-- Individuals/companies ordering celebration cakes in Ireland.
-
-### User Stories
-(Tracked as GitHub Issues & Project board.)  
-See: `docs/readme/user-stories-overview.png` (board snapshot).
-
-### Wireframes
-Exported from Visily.  
-Screenshots placed in `docs/readme/`:
-- `wireframe-home-desktop.png`
-- `wireframe-product-list-desktop.png`
-- `wireframe-product-detail-desktop.png`
-- `wireframe-basket-desktop.png`
-- `wireframe-checkout-desktop.png`
-- `wireframe-profile-desktop.png`
-- `wireframe-custom-cake-desktop.png`
-- `wireframe-mobile-composite.png`
-
-### Design
-- **Colour palette:** Dark Blue `#044762`, Gold `#a68f51`, Dark Grey `#555253`, Light BG.
-- **Typography:** Bootstrap base + (TODO: add chosen Google Fonts).
-- **Imagery:** Product photos via Cloudinary; credits in [Credits](#credits).
-- **Branding:** Simple wordmark logo; favicon included.
-
-Screenshots (put into `docs/readme/`):
-- `ui-home-hero.png`
-- `ui-header-nav.png`
-- `ui-product-cards.png`
-- `ui-custom-cake-form.png`
-- `ui-checkout-elements.png`
-
----
-
-## Agile
-- **Method:** MoSCoW + Kanban board on GitHub Projects.  
-- Epics & stories link: https://github.com/MaireadKelly/cake_it_easy_v2/projects (or specific board URL).
-- Evidence screenshots (in `docs/readme/`):
-  - `agile-board-sprint-snapshot.png`
-  - `agile-issue-example.png`
-  - `agile-issue-closure.png`
-
----
-
-## Features
-
-### Implemented
-- Product catalogue with categories, sorting, search, and filtering.
-- Product detail pages with add‑to‑basket.
-- Basket (bag) with update/remove and toast messages.
-- Checkout with Stripe Payment Intents, webhooks, and email confirmation.
-- Custom Cake builder form with validation and date‑needed.
-- User Accounts: register/login/logout via Allauth.
-- Profiles with default delivery info and order history.
-- Admin management (create/update products & categories).
-- Responsive Bootstrap layout; accessible forms and buttons.
-
-### Future Enhancements
-- Guest checkout.
-- Accessories (candles, toppers) bundle offers.
-- Product reviews/ratings.
-
-Screenshots (place in `docs/readme/`):
-- `feature-search-results.png`
-- `feature-sort-filter.png`
-- `feature-basket-toast.png`
-- `feature-profile-orders.png`
-- `feature-webhook-log.png`
+## Key Features
+- **Products**: List, detail, search/filters.
+- **Shopping Bag**: Add/adjust/remove; delivery threshold & free‑shipping messaging.
+- **Checkout**: Stripe Elements → PaymentIntent confirmation; webhook marks orders **paid** securely.
+- **Profiles**: Save default delivery details; **My Orders** & **Order Detail** (owner/staff only).
+- **Custom Cake**: Create / edit / delete requests; includes **Needed for (date)** with future‑date validation.
+- **RBAC**: Product management links/routes restricted to **staff**.
+- **Auth (allauth)**: Login, signup, reset, logout — styled card layout; cancel buttons.
+- **SEO/404**: Meta description + branded 404 page (with `DEBUG=False`).
+- **Social mockups**: Facebook/Instagram cover & 3–4 posts (see Marketing section/screenshots).
 
 ---
 
 ## Information Architecture
-- **Apps:** `home`, `products`, `basket`, `checkout`, `profiles`, `custom_cake`.
-- **Static/Media:** `static/` for CSS/JS; images via Cloudinary; `media/` for dev.
-- **Templates:** Base template + app‑specific templates.
-
-Repository structure snapshot (put image in `docs/readme/` as `repo-tree.png`).
+- **Public**: Home, Products (grid, detail), Custom Cakes (list/detail), About.
+- **Bag/Checkout**: Bag, Checkout, Success.
+- **Account**: Login/Signup/Reset/Logout, Profile, My Orders, Order Detail.
+- **Admin**: Django admin for staff; staff‑only product CRUD views.
 
 ---
 
 ## Data Model
+**Core models**
+- **Category** (name, friendly_name)
+- **Product** (category→Category, name, price, rating, image, etc.)
+- **Order** (user→User optional, contact/address fields, `stripe_pid`, `paid` bool, totals)
+- **OrderLineItem** (order→Order, product→Product, quantity, line total)
+- **UserProfile** (user→User OneToOne, default delivery fields)
+- **CustomCake** (user→User FK, name, inscription, description, flavour/filling/size, image, **needed_date**, created_on)
 
-High-level ERD (place in `docs/readme/erd.png`).
+_Insert ERD image here_
 
-**Core models:**
-- `Category(id, name, friendly_name, parent?)`
-- `Product(id, category, name, description, price, image, ... )`
-- `Order(id, user, contact fields, totals, stripe_pid, original_bag, date)`
-- `OrderLineItem(id, order, product, quantity, lineitem_total, options...)`
-- `UserProfile(user OneToOne, default_* fields)`
-- `CustomCakeOrder(id, user?, flavour, filling, size, colour, inscription, date_needed, ... )`
+---
+
+## UX & Design
+- **Brand**: Primary `#044762`, Accent `#a68f51`, neutral light backgrounds; Poppins font.
+- **Layout**: Fixed header with safe offset; **sticky footer** (flex layout); grid navbar (left menu / center logo / right icons).
+- **Accessibility**: Focus outlines on links/controls; semantic headings; visible form labels.
+- **Marketing assets**: Social mockups (cover + 3 posts) in `static/mockups/` and embedded in docs.
 
 ---
 
 ## Security
-- Environment variables via `.env` (never committed).
-- DEBUG = False in production.
-- CSRF enabled; secure cookies on Heroku; SSL via `SECURE_SSL_REDIRECT`.
-- Stripe keys and webhook secret stored in config vars.
-- Allowed Hosts set to deployed hostname.
+- **Stripe**: Client confirms PI; server verifies webhook signature and flips `paid=True` by `stripe_pid`.
+- **Permissions**: Staff‑only decorators on product CRUD; template guards hide admin controls from non‑staff; success & order detail restricted to owner/staff.
+- **Config**: Secrets in env; `DEBUG=False` in production; `ALLOWED_HOSTS` set; HTTPS enforced by platform.
 
 ---
 
-## Technologies
-- **Backend:** Python, Django, Gunicorn.
-- **Frontend:** HTML, CSS (Bootstrap 5), JavaScript.
-- **Payments:** Stripe (Elements, Payment Intents, Webhooks).
-- **DB:** Postgres (Neon/Heroku Postgres) in production; SQLite for local dev.
-- **Media:** Cloudinary.
-- **Deployment:** Heroku.
-- **Dev:** Git/GitHub, VS Code, djlint/djhtml, PEP8CI linter.
+## Testing (Summary)
+See **TESTING.md** for full manual matrix and evidence.
+- **Automated**: Minimal unit tests
+  - Bag flow (render + add/adjust/remove) — pass
+  - Products RBAC (non‑staff blocked from CRUD) — pass
+  - Custom Cake (create/update/delete flows) — pass
+- **Manual**: End‑to‑end checkout (test card 4242…), webhook delivery, profile save, order history, auth pages, 404, and link integrity.
 
----
-
-## Testing
-See full write‑up in [`TESTING.md`](./TESTING.md).  
-Quick links to reports in `docs/testing/`.
+_Evidence screenshots folder_: `docs/screens/`  
+_Key images_: Bag→Checkout→Success (order #), Stripe Events (delivered), Admin order `paid=True`, Profile save, My Orders & Order Detail, Custom Cake CRUD + date validation, Auth pages, 404 page.
 
 ---
 
 ## Deployment
-
-### Local Development
-1. Clone repo: `git clone https://github.com/MaireadKelly/cake_it_easy_v2`
-2. Create & activate venv, install deps: `pip install -r requirements.txt`
-3. Create `.env` (example below) and set **DJANGO_SETTINGS_MODULE** if needed.
-4. Run migrations & load fixtures (optional):
-   ```bash
-   python manage.py migrate
-   python manage.py loaddata categories.json products.json  # if present
-   python manage.py createsuperuser
-   python manage.py runserver
-   ```
-
-**`.env` template:**
-```bash
-SECRET_KEY=YOUR_SECRET_KEY
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-DATABASE_URL=sqlite:///db.sqlite3
-CLOUDINARY_URL=cloudinary://...  # dev only
-STRIPE_PUBLIC_KEY=pk_test_...
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_WH_SECRET=whsec_...
-EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+**Environment variables**
+```
+SECRET_KEY
+DEBUG=false
+ALLOWED_HOSTS=<your-domain>,127.0.0.1,localhost
+DATABASE_URL=<if using Postgres>
+CLOUDINARY_URL=<if using Cloudinary>
+STRIPE_PUBLIC_KEY
+STRIPE_SECRET_KEY
+STRIPE_WEBHOOK_SECRET
+STRIPE_CURRENCY=eur
 ```
 
-### Heroku Deployment
-1. Create Heroku app and Postgres; set **Config Vars** from `.env`.
-2. Set `DISABLE_COLLECTSTATIC=1` during initial deploy if needed, then remove.
-3. Add buildpacks (Python). Push to Heroku.
-4. Run `python manage.py migrate` and create a superuser.
-5. Ensure `ALLOWED_HOSTS` includes app domain and `DEBUG=False`.
-6. Set up Stripe webhook endpoint → copy **Signing Secret** to `STRIPE_WH_SECRET`.
+**Stripe webhook**
+- Endpoint: `/checkout/wh/`
+- Events: `payment_intent.succeeded` (test mode for demo)
 
-Screenshots:
-- `deploy-heroku-config-vars.png`
-- `deploy-stripe-webhook-endpoint.png`
-- `deploy-dynos.png`
+**Static/Media**
+- `collectstatic` in CI/CD or pre‑deploy. Media via Cloudinary (optional).
+
+---
+
+## Running Locally
+```bash
+git clone <repo>
+cd cake_it_easy_v2
+python -m venv .venv
+# Windows: .venv\Scripts\activate   # macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env  # or set env vars
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
 
 ---
 
 ## Credits
-- **Walkthrough Base:** Code Institute – Boutique Ado.
-- **Inspiration:** https://ohehirs.ie/ (structure & UX).
-- **Images:** Product images via Cloudinary (see `docs/readme/image-credits.md`).
-- **Libraries:** See [Technologies](#technologies).
-- **Acknowledgements:** Built with guidance from tutors and an AI assistant for boilerplate.
+- Base walk‑through: Code Institute **Boutique Ado**
+- Icons: Font Awesome (CDN)
+- Hosting: _your platform_
+- Mockups: Canva
 
 ---
-
-## License
-This project is for educational purposes.
-```

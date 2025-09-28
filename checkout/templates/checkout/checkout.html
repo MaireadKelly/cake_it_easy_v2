@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <div class="container my-5">
@@ -44,7 +45,7 @@
 
         <form id="payment-form" method="post" novalidate>
           {% csrf_token %}
-          {{ order_form.as_p }}
+          {{ order_form|crispy }}
 
           <!-- Save my details -->
           <div class="form-check my-2">

@@ -1,58 +1,71 @@
-<!-- mobile-top-header.html -->
-<li class="list-inline-item">
-    <a class="test-brand nav-link d-block d-lg-none" href="#" id="mobile-search" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <div class="text-center">
-            <div><i class="fas fa-search fa-lg"></i></div>
-            <p class="my-0">Find Cakes</p>
-        </div>
-    </a>
-    <div class="dropdown-menu border-0 w-100 p-3 rounded-0 my-0" aria-labelledby="mobile-search">
-        <form class="form" method="GET" action="{% url 'product_list' %}">
-            <div class="input-group w-100">
-                <input class="form-control border border-black rounded-0" type="text" name="q" placeholder="Search cakes and more...">
-                <div class="input-group-append">
-                    <button class="form-control btn btn-dark border border-black rounded-0" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</li>
+{# MOBILE quick actions row (search, account, bag) #}
 
+<!-- Search -->
 <li class="list-inline-item dropdown">
-    <a class="test-brand nav-link d-block d-lg-none" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <div class="text-center">
-            <div><i class="fas fa-user fa-lg"></i></div>
-            <p class="my-0">My Account</p>
-        </div>
-    </a>
-    <div class="dropdown-menu border-0" aria-labelledby="user-options">
-        {% if request.user.is_authenticated %}
-            {% if request.user.is_superuser %}
-                <a href="/admin/" class="dropdown-item">Product Management</a>
-            {% endif %}
-            <a href="{% url 'my_orders' %}" class="dropdown-item">My Orders</a>
-            <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
-        {% else %}
-            <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
-            <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
-        {% endif %}
+  <a class="test-brand nav-link d-block d-lg-none"
+     href="#"
+     id="mobile-search"
+     data-bs-toggle="dropdown"
+     aria-expanded="false"
+     aria-haspopup="true">
+    <div class="text-center">
+      <div><i class="fas fa-search fa-lg"></i></div>
+      <p class="my-0">Find Cakes</p>
     </div>
+  </a>
+  <div class="dropdown-menu border-0 w-100 p-3 rounded-0 my-0" aria-labelledby="mobile-search">
+    <form class="form" method="get" action="{% url 'product_list' %}">
+      <div class="input-group w-100">
+        <input class="form-control border border-dark rounded-0"
+               type="text" name="q"
+               placeholder="Search cakes and more...">
+        <button class="btn btn-dark border border-dark rounded-0" type="submit">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </form>
+  </div>
 </li>
 
-<!-- Bag (mobile) -->
+<!-- Account -->
+<li class="list-inline-item dropdown">
+  <a class="test-brand nav-link d-block d-lg-none"
+     href="#"
+     id="user-options"
+     data-bs-toggle="dropdown"
+     aria-expanded="false"
+     aria-haspopup="true">
+    <div class="text-center">
+      <div><i class="fas fa-user fa-lg"></i></div>
+      <p class="my-0">My Account</p>
+    </div>
+  </a>
+  <div class="dropdown-menu border-0" aria-labelledby="user-options">
+    {% if request.user.is_authenticated %}
+      {% if request.user.is_superuser %}
+        <a href="/admin/" class="dropdown-item">Product Management</a>
+      {% endif %}
+      <a href="{% url 'my_orders' %}" class="dropdown-item">My Orders</a>
+      <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
+    {% else %}
+      <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
+      <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
+    {% endif %}
+  </div>
+</li>
+
+<!-- Bag -->
 <li class="list-inline-item">
-    <a class="{% if bag_total and bag_total > 0 %}text-highlight font-weight-bold{% else %}test-brand{% endif %} nav-link d-block d-lg-none"
-        href="{% url 'view_bag' %}">
-        <div class="text-center">
-            <div>
-                <i class="fas fa-birthday-cake fa-lg"></i>
-                {% if bag_count and bag_count > 0 %}
-                    <span class="badge bg-warning text-dark">{{ bag_count }}</span>
-                {% endif %}
-            </div>
-            <p class="my-0">€{{ bag_total|default:0|floatformat:2 }}</p>
-        </div>
-    </a>
+  <a class="{% if bag_total and bag_total > 0 %}text-highlight fw-bold{% else %}test-brand{% endif %} nav-link d-block d-lg-none"
+     href="{% url 'view_bag' %}">
+    <div class="text-center">
+      <div>
+        <i class="fas fa-birthday-cake fa-lg"></i>
+        {% if bag_count and bag_count > 0 %}
+          <span class="badge bg-warning text-dark">{{ bag_count }}</span>
+        {% endif %}
+      </div>
+      <p class="my-0">€{{ bag_total|default:0|floatformat:2 }}</p>
+    </div>
+  </a>
 </li>

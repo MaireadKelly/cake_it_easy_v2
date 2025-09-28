@@ -14,6 +14,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Bangers&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">
@@ -66,8 +69,8 @@
       </div>
 
       <!-- Navbar row: DESKTOP (and mobile collapsed) -->
-      <div class="row bg-white">
-        <nav class="navbar navbar-expand-lg navbar-light w-100" aria-label="Main navigation">
+      <div class="row bg-white border-bottom">
+        <nav class="navbar navbar-expand-lg navbar-light w-100" role="navigation" aria-label="Main navigation">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
                   aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -77,14 +80,12 @@
       </div>
 
       <!-- Free Delivery Banner -->
-      <div class="delivery-banner text-center bg-brand text-white">
-        <h4 class="my-1">Free delivery on orders over €50!</h4>
-      </div>
+      {% include "includes/free-shipping-banner.html" %}
     </header>
 
     <!-- Messages -->
     {% if messages %}
-      <div class="container my-2">
+      <div class="container my-2" role="status" aria-live="polite">
         {% for message in messages %}
           <div class="alert alert-{{ message.tags|default:'info' }} mb-2">{{ message }}</div>
         {% endfor %}
@@ -139,9 +140,9 @@
       <script>
         (function () {
           try {
-            var el = document.getElementById('newsletterModal');
-            var code = "{{ request.GET.code|default:'WELCOME10'|escapejs }}";
-            var codeEl = document.getElementById('newsletter-code');
+            const el = document.getElementById('newsletterModal');
+            const code = "{{ request.GET.code|default:'WELCOME10'|escapejs }}";
+            const codeEl = document.getElementById('newsletter-code');
             if (codeEl) codeEl.textContent = code;
             if (window.bootstrap && window.bootstrap.Modal) {
               new bootstrap.Modal(el).show();

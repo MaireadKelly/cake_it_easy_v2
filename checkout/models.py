@@ -14,7 +14,6 @@ class Order(models.Model):
     town_or_city = models.CharField(max_length=40, blank=True)
     street_address1 = models.CharField(max_length=80, blank=True)
     street_address2 = models.CharField(max_length=80, blank=True)
-
     order_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     stripe_pid = models.CharField(max_length=254, blank=True)
     original_bag = models.TextField(blank=True)
