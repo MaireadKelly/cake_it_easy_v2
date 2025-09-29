@@ -16,57 +16,70 @@
     <div class="col-md-6">
       <h1 class="mb-1">{{ product.name }}</h1>
 
-      <!-- Per-cupcake price (unit) -->
-      <p id="unit-price" class="text-muted mb-1">€{{ product.price|floatformat:2 }} per cupcake</p>
+      {# --- CUPCAKES: per-cupcake + pack selection --- #}
+      {% if product.category and product.category.name|lower == "cupcakes" %}
+        <p id="unit-price" class="text-muted mb-1">€{{ product.price|floatformat:2 }} per cupcake</p>
+        <p class="lead mb-3"><span id="selected-pack-price">Select a box size</span></p>
+        {% if product.category %}
+          <p class="text-muted small mb-2">
+            Category: {{ product.category.friendly_name|default:product.category.name }}
+          </p>
+        {% endif %}
+        {% if product.description %}
+          <p class="mb-3">{{ product.description }}</p>
+        {% endif %}
+        <p class="small text-muted">Sold in boxes of 4, 6, 12, 18 (and more if configured).</p>
 
-      <!-- Selected pack total (updates when dropdown changes) -->
-      <p class="lead mb-3">
-        <span id="selected-pack-price">Select a box size</span>
-      </p>
+        <form action="{% url 'add_to_bag' product.id %}" method="post" class="mt-3">
+          {% csrf_token %}
 
-      {% if product.category %}
-        <p class="text-muted small mb-2">
-          Category: {{ product.category.friendly_name|default:product.category.name }}
-        </p>
+          <label for="option_id" class="form-label">Box size</label>
+          <select id="option_id" name="option_id" class="form-select w-auto mb-2" required>
+            {% for opt in product.options.all %}
+              {% with pack_total=opt.pack_price %}
+                <option
+                  value="{{ opt.id }}"
+                  data-qty="{{ opt.quantity }}"
+                  data-pack-price="{{ pack_total }}"
+                  {% if opt.is_default %}selected{% endif %}
+                >
+                  {{ opt.label }} — €{{ pack_total|floatformat:2 }}
+                </option>
+              {% endwith %}
+            {% empty %}
+              <option value="" hidden disabled selected>No box sizes available</option>
+            {% endfor %}
+          </select>
+
+          <label for="qty" class="form-label">Quantity (boxes)</label>
+          <input id="qty" type="number" name="quantity" min="1" step="1" value="1" class="form-control w-auto">
+
+          <button type="submit" class="btn btn-success mt-3"
+                  {% if product.options.all|length == 0 %}disabled{% endif %}>
+            Add to Bag
+          </button>
+        </form>
+
+      {# --- NON-CUPCAKES: simple price + quantity --- #}
+      {% else %}
+        {% if product.category %}
+          <p class="text-muted small mb-2">
+            Category: {{ product.category.friendly_name|default:product.category.name }}
+          </p>
+        {% endif %}
+        {% if product.description %}
+          <p class="mb-3">{{ product.description }}</p>
+        {% endif %}
+
+        <p class="lead mb-3">€{{ product.price|floatformat:2 }}</p>
+
+        <form action="{% url 'add_to_bag' product.id %}" method="post" class="mt-3">
+          {% csrf_token %}
+          <label for="qty" class="form-label">Quantity</label>
+          <input id="qty" type="number" name="quantity" min="1" step="1" value="1" class="form-control w-auto">
+          <button type="submit" class="btn btn-success mt-3">Add to Bag</button>
+        </form>
       {% endif %}
-
-      {% if product.description %}
-        <p class="mb-3">{{ product.description }}</p>
-      {% endif %}
-      <p class="small text-muted">Sold in boxes of 4, 6, 12, 18 (and more if configured).</p>
-
-      <!-- Add to Bag -->
-      <form action="{% url 'add_to_bag' product.id %}" method="post" class="mt-3">
-        {% csrf_token %}
-
-        <label for="option_id" class="form-label">Box size</label>
-        <select id="option_id" name="option_id" class="form-select w-auto mb-2" required>
-          {% for opt in product.options.all %}
-            {% with pack_total=opt.pack_price %}
-              <option
-                value="{{ opt.id }}"
-                data-qty="{{ opt.quantity }}"
-                data-pack-price="{{ pack_total }}"
-                {% if opt.is_default %}selected{% endif %}
-              >
-                {{ opt.label }} — €{{ pack_total|floatformat:2 }}
-              </option>
-            {% endwith %}
-          {% empty %}
-            <!-- No options configured: keep a single hidden option so form remains valid -->
-            <option value="" hidden disabled selected>No box sizes available</option>
-          {% endfor %}
-        </select>
-
-        <label for="qty" class="form-label">Quantity (boxes)</label>
-        <input id="qty" type="number" name="quantity" min="1" step="1"
-               value="1" class="form-control w-auto">
-
-        <button type="submit" class="btn btn-success mt-3"
-                {% if product.options.all|length == 0 %}disabled{% endif %}>
-          Add to Bag
-        </button>
-      </form>
 
       {% if request.user.is_staff %}
       <div class="mt-3">
@@ -78,6 +91,7 @@
   </div>
 </div>
 
+{# Safe: script exits if select/out are missing (non-cupcakes) #}
 <script>
   (function() {
     const select = document.getElementById('option_id');
@@ -88,11 +102,9 @@
       const opt = select.options[select.selectedIndex];
       const price = opt && opt.getAttribute('data-pack-price');
       const qty = opt && opt.getAttribute('data-qty');
-      if (price && qty) {
-        out.textContent = `€${parseFloat(price).toFixed(2)} per box (${qty} cupcakes)`;
-      } else {
-        out.textContent = 'Select a box size';
-      }
+      out.textContent = (price && qty)
+        ? `€${parseFloat(price).toFixed(2)} per box (${qty} cupcakes)`
+        : 'Select a box size';
     }
 
     select.addEventListener('change', render);

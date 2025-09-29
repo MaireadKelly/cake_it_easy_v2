@@ -11,6 +11,7 @@
     <div class="col-md-6 mb-4">
       <div class="card card-body">
         <h5 class="mb-3">Your Order</h5>
+        {% with items|default:bag_items as items %}
         {% if items %}
           <ul class="list-unstyled">
             {% for i in items %}
@@ -22,10 +23,12 @@
                 </span>
                 <span>€{{ i.line_total|floatformat:2 }}</span>
               </li>
+              {% if i.unit_price %}
               <li class="d-flex justify-content-between small text-muted">
                 <span>Unit price</span>
                 <span>€{{ i.unit_price|floatformat:2 }}</span>
               </li>
+              {% endif %}
             {% endfor %}
           </ul>
           <hr>
@@ -43,6 +46,7 @@
         {% else %}
           <p>Your bag is empty.</p>
         {% endif %}
+        {% endwith %}
       </div>
     </div>
 
@@ -108,6 +112,7 @@
 
       const clientSecret = document.getElementById('id_client_secret').value;
 
+      // Keep paymentIntent for status-aware handling
       const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: { card }
       });
@@ -119,8 +124,14 @@
         return;
       }
 
-      // Submit the form to create the Order server-side with the PI id stored
-      form.submit();
+      // Optional explicit status check (safe defaults if you want to be strict)
+      if (paymentIntent && (paymentIntent.status === 'succeeded' || paymentIntent.status === 'requires_capture')) {
+        form.submit();
+      } else {
+        const displayError = document.getElementById('card-errors');
+        displayError.textContent = 'Payment not completed. Please try again.';
+        if (payBtn) payBtn.disabled = false;
+      }
     });
   </script>
 {% endif %}

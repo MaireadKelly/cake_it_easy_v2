@@ -110,7 +110,7 @@
               </small>
             {% endif %}
 
-            {# "From €…" badge for cupcakes with options #}
+            {# "From €…" badge for cupcakes with options (guarded by presence of min pack price) #}
             {% with start_price=product.min_pack_price start_size=product.min_pack_size %}
               {% if start_price %}
                 <span class="badge rounded-pill bg-light text-dark border mt-1 align-self-start">
@@ -119,10 +119,20 @@
               {% endif %}
             {% endwith %}
 
+            {# Price line: append "per cupcake" only for Cupcakes #}
             <div class="mt-auto d-flex justify-content-between align-items-center pt-2">
-              <strong>&euro;{{ product.price|floatformat:2 }} <span class="text-muted small">per cupcake</span></strong>
+              {% with cat=product.category %}
+                {% with cs=cat.slug|default:""|lower cn=cat.name|default:""|lower %}
+                  {% if cs == "cupcakes" or cn == "cupcakes" %}
+                    <strong>€{{ product.price|floatformat:2 }} <span class="text-muted small">per cupcake</span></strong>
+                  {% else %}
+                    <strong>€{{ product.price|floatformat:2 }}</strong>
+                  {% endif %}
+                {% endwith %}
+              {% endwith %}
               <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm">View</a>
             </div>
+
           </div>
         </div>
       </div>
