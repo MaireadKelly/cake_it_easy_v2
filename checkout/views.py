@@ -81,10 +81,12 @@ def checkout(request):
         return redirect("product_list")
 
     bag_ctx = bag_contents(request)
-    total = bag_ctx.get("total", subtotal)
+    total = bag_ctx.get("total", subtotal)                 # pre-discount subtotal
     bag_total = bag_ctx.get("bag_total", total)
     delivery = bag_ctx.get("delivery", Decimal("0.00"))
     grand_total = bag_ctx.get("grand_total", total + delivery)
+    discount_amount = bag_ctx.get("discount_amount") or Decimal("0.00")
+    discount_code = bag_ctx.get("discount_code") or ""
 
     if request.method == "POST":
         order_form = OrderForm(request.POST)
@@ -97,6 +99,8 @@ def checkout(request):
             order.stripe_pid = pid
             order.original_bag = json.dumps(request.session.get("bag", {}))
             order.order_total = grand_total
+            order.discount_amount = discount_amount
+            order.discount_code = discount_code
             order.save()
 
             for i in items:
@@ -119,7 +123,11 @@ def checkout(request):
                 profile.default_street_address2 = cd.get("street_address2")
                 profile.save()
 
+            # Clear bag & discount after success
             request.session["bag"] = {}
+            request.session.pop("discount", None)
+            request.session.modified = True
+
             messages.success(request, "Order placed successfully.")
             return redirect("checkout_success", order_id=order.id)
         else:
@@ -147,11 +155,13 @@ def checkout(request):
     if STRIPE_PUBLIC_KEY and STRIPE_SECRET_KEY and grand_total > 0:
         try:
             intent = stripe.PaymentIntent.create(
-                amount=int(grand_total * 100),
+                amount=int(grand_total * 100),  # discounted amount
                 currency=STRIPE_CURRENCY,
                 automatic_payment_methods={"enabled": True},
                 metadata={
                     "bag": json.dumps(request.session.get("bag", {})),
+                    "discount_code": discount_code,
+                    "discount_amount": str(discount_amount),
                     "username": request.user.username,
                 },
             )
@@ -165,6 +175,8 @@ def checkout(request):
         "bag_total": bag_total,
         "delivery": delivery,
         "grand_total": grand_total,
+        "discount_amount": discount_amount,
+        "discount_code": discount_code,
         "stripe_public_key": STRIPE_PUBLIC_KEY,
         "client_secret": client_secret,
         "order_form": order_form,

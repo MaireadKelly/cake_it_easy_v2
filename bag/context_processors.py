@@ -9,7 +9,6 @@ def _is_cupcake(product: Product) -> bool:
     cat = getattr(product, "category", None)
     if not cat:
         return False
-    # Match by slug if present, else by name
     slug = getattr(cat, "slug", "") or ""
     name = getattr(cat, "name", "") or ""
     return slug.lower() == "cupcakes" or name.lower() == "cupcakes"
@@ -22,7 +21,6 @@ def _pack_price(product: Product, option: ProductOption | None) -> Decimal:
       - Everything else: product.price
     """
     if option:
-        # pack_price() expected to return numeric -> Decimal
         return Decimal(option.pack_price())
     return Decimal(product.price or 0)
 
@@ -36,10 +34,9 @@ def bag_contents(request):
     bag = request.session.get("bag", {})
     items = []
     product_count = 0
-    total = Decimal("0.00")
+    subtotal = Decimal("0.00")
 
     for key, quantity in bag.items():
-        # Parse key safely
         try:
             pid_str, opt_str = (str(key).split("_", 1) + [None])[:2]
             pid = int(pid_str)
@@ -58,7 +55,7 @@ def bag_contents(request):
 
         unit_price = _pack_price(product, option)   # price per box for cupcakes; else product.price
         line_total = unit_price * qty
-        total += line_total
+        subtotal += line_total
         product_count += qty
 
         per_unit = None
@@ -68,31 +65,47 @@ def bag_contents(request):
         items.append({
             "key": key,
             "product": product,
-            "option": option,        # None unless cupcakes with valid option
+            "option": option,
             "quantity": qty,         # number of boxes if option present
             "unit_price": unit_price,
             "per_unit": per_unit,    # price per cupcake (Decimal) or None
             "line_total": line_total,
         })
 
-    if product_count == 0 or total >= FREE_DELIVERY_THRESHOLD:
+    # Delivery
+    if product_count == 0 or subtotal >= FREE_DELIVERY_THRESHOLD:
         delivery = Decimal("0.00")
         free_delta = Decimal("0.00")
     else:
         delivery = STANDARD_DELIVERY
-        free_delta = FREE_DELIVERY_THRESHOLD - total
+        free_delta = FREE_DELIVERY_THRESHOLD - subtotal
 
-    grand_total = total + delivery
+    # --- Discount from session ---
+    disc = request.session.get('discount') or {}
+    try:
+        discount_amount = Decimal(str(disc.get('amount', '0') or '0'))
+    except Exception:
+        discount_amount = Decimal('0.00')
+    discount_code = disc.get('code') or ''
 
-    # Expose both keys so templates using either continue to work
+    if discount_amount < 0:
+        discount_amount = Decimal('0.00')
+    if discount_amount > subtotal:
+        discount_amount = subtotal
+
+    total_after_discount = subtotal - discount_amount
+    grand_total = total_after_discount + delivery
+
     return {
-        "items": items,              # <-- new alias
-        "bag_items": items,          # existing key
+        "items": items,              # alias
+        "bag_items": items,
         "product_count": product_count,
-        "total": total,
-        "bag_total": total,
+        "total": subtotal,           # pre-discount subtotal
+        "bag_total": subtotal,
         "delivery": delivery,
         "free_delta": free_delta,
+        "discount_amount": discount_amount,
+        "discount_code": discount_code,
         "grand_total": grand_total,
     }
 

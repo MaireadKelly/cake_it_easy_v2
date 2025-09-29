@@ -20,7 +20,15 @@ class Order(models.Model):
     town_or_city = models.CharField(max_length=40, blank=True)
     street_address1 = models.CharField(max_length=80, blank=True)
     street_address2 = models.CharField(max_length=80, blank=True)
-    order_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    # Order totals
+    order_total = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
+
+    # NEW: discount
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    discount_code = models.CharField(max_length=40, blank=True)
+
+    # Stripe / meta
     stripe_pid = models.CharField(max_length=254, blank=True)
     original_bag = models.TextField(blank=True)
     paid = models.BooleanField(default=False)
@@ -33,19 +41,18 @@ class Order(models.Model):
 class OrderLineItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='lineitems')
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    # NEW: which option (e.g., Box of 6/12). Nullable for products without options.
+    # which option (e.g., Box of 6/12). Nullable for products without options.
     option = models.ForeignKey(
         ProductOption, null=True, blank=True, on_delete=models.SET_NULL
     )
     quantity = models.IntegerField(default=1)
-    # NEW: unit price captured at time of order
+    # unit pack price captured at time of order
     lineitem_price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     lineitem_total = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
 
     def save(self, *args, **kwargs):
         unit = self.lineitem_price
         if not unit or unit <= 0:
-            # Prefer option price; fallback to product base price
             if self.option and hasattr(self.option, 'price') and self.option.price:
                 unit = self.option.price
             else:
