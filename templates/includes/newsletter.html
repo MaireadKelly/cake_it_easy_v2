@@ -1,17 +1,41 @@
-<div id="newsletter" class="card border-0">
-  <div class="card-body p-0">
-    <h6 class="mb-1">Sign up & get <strong>10% off</strong> your first order</h6>
-    <p class="small text-muted mb-2">We send occasional offers and flavour drops.</p>
+{% load static %}
 
-    <form method="post" action="{% url 'newsletter_subscribe' %}" class="form-inline">
+<div id="newsletterInline" class="card my-3">
+  <div class="card-body">
+    <h5 class="card-title mb-2">Join our newsletter</h5>
+    <p id="nl-hint" class="text-muted mb-3">Be the first to get offers and new bakes.</p>
+
+    <!-- Signup form (inline) -->
+    <form id="nl-form" method="post" action="{% url 'newsletter_subscribe' %}">
       {% csrf_token %}
-      <input type="hidden" name="next" value="{{ request.get_full_path }}">
-      <div class="input-group input-group-sm w-100">
-        <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
-        <div class="input-group-append">
-          <button class="btn btn-primary" type="submit">Subscribe</button>
-        </div>
+      <div class="input-group">
+        <input
+          id="nl-email"
+          name="email"
+          type="email"
+          class="form-control"
+          placeholder="you@example.com"
+          required
+        />
+        <button class="btn btn-primary" type="submit">Subscribe</button>
       </div>
+      {% if form.errors.email %}
+        <div class="text-danger small mt-2">{{ form.errors.email }}</div>
+      {% endif %}
     </form>
+
+    <!-- Success panel (hidden by default) -->
+    <div id="nl-success" class="d-none mt-3">
+      <div class="alert alert-success mb-2">
+        Welcome aboard! Your code:
+        <code id="nl-code">••••••</code>
+      </div>
+      <button id="nl-copy" type="button" class="btn btn-outline-secondary btn-sm">Copy</button>
+      <span id="nl-copied" class="small ms-2 d-none">Copied</span>
+    </div>
   </div>
 </div>
+
+<!-- Load script exactly once per page; if you also include the modal partial on this page,
+     keep just ONE of these <script> tags. Prefer putting it once in base.html. -->
+<script defer src="{% static 'newsletter/newsletter.js' %}"></script>

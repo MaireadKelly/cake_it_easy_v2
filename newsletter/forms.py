@@ -1,17 +1,17 @@
 from django import forms
 
-from .models import NewsletterSubscriber
 
-
-class NewsletterSignupForm(forms.ModelForm):
-    class Meta:
-        model = NewsletterSubscriber
-        fields = ["email"]
-        widgets = {
-            "email": forms.EmailInput(attrs={
+class NewsletterSubscriptionForm(forms.Form):
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
                 "class": "form-control",
                 "placeholder": "your@email.com",
                 "required": "required",
-                "aria-label": "Email address"
-            })
-        }
+                "aria-label": "Email address",
+            }
+        ),
+    )
+    # Optional hidden field so templates (e.g., modal) can tag the origin
+    source = forms.CharField(required=False, max_length=50, widget=forms.HiddenInput)

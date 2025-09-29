@@ -27,10 +27,30 @@
         {% include "includes/newsletter.html" %}
         <p class="small text-muted mb-1">Email: hello@example.com</p>
         <p class="small text-muted mb-3">Phone: +353 1 234 5678</p>
-        <div>
-          <a class="text-dark mr-3" href="https://www.instagram.com" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a class="text-dark mr-3" href="https://www.facebook.com" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-          <a class="text-dark" href="https://x.com" aria-label="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <div class="social-links">
+          <a class="text-dark mr-3"
+            href="https://www.instagram.com/yourpage"
+            target="_blank" rel="noopener noreferrer"
+            aria-label="Instagram (opens in new tab)">
+            <i class="fab fa-instagram" aria-hidden="true"></i>
+            <span class="visually-hidden">(opens in new tab)</span>
+          </a>
+
+          <a class="text-dark mr-3"
+            href="https://www.facebook.com/yourpage"
+            target="_blank" rel="noopener noreferrer"
+            aria-label="Facebook (opens in new tab)">
+            <i class="fab fa-facebook" aria-hidden="true"></i>
+            <span class="visually-hidden">(opens in new tab)</span>
+          </a>
+
+          <a class="text-dark"
+            href="https://x.com/yourpage"
+            target="_blank" rel="noopener noreferrer"
+            aria-label="Twitter/X (opens in new tab)">
+            <i class="fab fa-twitter" aria-hidden="true"></i>
+            <span class="visually-hidden">(opens in new tab)</span>
+          </a>
         </div>
       </div>
     </div>

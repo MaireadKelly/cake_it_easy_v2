@@ -79,52 +79,10 @@
 
     {% include "includes/footer.html" %}
 
-    {# Newsletter Modal (site-wide) #}
-    <div class="modal fade" id="newsletterModal" tabindex="-1" aria-labelledby="newsletterModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content shadow">
-          <div class="modal-header">
-            <h5 class="modal-title" id="newsletterModalLabel">Get 10% off your first order</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form method="post" action="{% url 'newsletter_subscribe' %}">
-            {% csrf_token %}
-            <div class="modal-body">
-              <p class="mb-3">Subscribe to our newsletter for recipes, offers, and early access to seasonal cakes.</p>
-              <div class="mb-3">
-                <label for="id_email" class="form-label">Email address</label>
-                <input id="id_email" name="email" type="email" class="form-control" placeholder="you@example.com" required>
-                <!-- honeypot -->
-                <input type="text" name="company" class="d-none" tabindex="-1" autocomplete="off">
-              </div>
-              <small class="text-muted">Your 10% code is <strong id="newsletter-code">WELCOME10</strong>. You can unsubscribe anytime.</small>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Not now</button>
-              <button type="submit" class="btn btn-primary">Subscribe</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+    {% include "includes/newsletter_modal.html" %}
 
     {% block postloadjs %}
-      {{ block.super }}
-      {% if request.GET.nl %}
-      <script>
-        (function () {
-          try {
-            const el = document.getElementById('newsletterModal');
-            const code = "{{ request.GET.code|default:'WELCOME10'|escapejs }}";
-            const codeEl = document.getElementById('newsletter-code');
-            if (codeEl) codeEl.textContent = code;
-            if (window.bootstrap && window.bootstrap.Modal) {
-              new bootstrap.Modal(el).show();
-            }
-          } catch (e) {}
-        })();
-      </script>
-      {% endif %}
+    <script defer src="{% static 'newsletter/newsletter.js' %}"></script>
     {% endblock %}
   </body>
 </html>
