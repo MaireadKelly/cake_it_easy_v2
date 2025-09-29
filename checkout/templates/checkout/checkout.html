@@ -35,6 +35,13 @@
           <p class="mb-1">Subtotal:
             <strong>€{{ bag_total|default:total|floatformat:2 }}</strong>
           </p>
+          {# NEW: Discount line if a code is applied #}
+            {% if discount_amount and discount_amount > 0 %}
+            <p class="mb-1 text-success">Discount ({{ discount_code }}):
+              <strong>- €{{ discount_amount|floatformat:2 }}</strong>
+            </p>
+            {% endif %}
+
           <p class="mb-1">Delivery:
             <strong>
               {% if delivery == 0 %}Free{% else %}€{{ delivery|floatformat:2 }}{% endif %}

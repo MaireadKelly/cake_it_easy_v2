@@ -84,6 +84,22 @@ Examples:
   - ARIA labels on nav and footer links.
 
 ---
+### Discount Codes
+
+A discount code system has been implemented to support simple promotions.
+
+- **WELCOME10** → Applies a **10% discount** to the subtotal (before delivery).  
+- Discount is stored in the user’s session and persists while browsing.  
+- A **Discount line** appears in the Bag and Checkout summaries, clearly showing the code and amount.  
+- Discounts are passed through to Stripe so the customer is only charged the **discounted grand total**.  
+- Orders store both the `discount_code` and `discount_amount` for reporting/admin review.  
+
+**Usage:**
+1. Add items to the Bag.  
+2. Enter `WELCOME10` in the discount code field.  
+3. Press **Apply** → success toast appears, Bag updates totals.  
+4. Proceed to Checkout → summary shows discounted grand total.  
+5. On payment success, the applied discount is cleared from the session.  
 
 ## Future Features
 - Loyalty scheme (points per purchase).
