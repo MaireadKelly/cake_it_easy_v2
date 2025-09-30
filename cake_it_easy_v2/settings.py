@@ -22,27 +22,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- Security / Hosts ---
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-me")
-DEBUG = env_bool("DEBUG", False)  # set DEBUG=False on Heroku
-# settings.py (temporary for Am I Responsive)
-X_FRAME_OPTIONS = "ALLOWALL"   # default is "DENY"
+DEBUG = env_bool("DEBUG", False)
 
-# Explicit hosts for Heroku + local
+# Allow common dev hosts + Heroku/Render by default.
+# You can append your custom domain(s) via env var: ALLOWED_HOSTS="example.com,www.example.com"
+_default_hosts = ["localhost", "127.0.0.1", ".herokuapp.com", ".onrender.com"]
 ALLOWED_HOSTS = [
-    "cake-it-easy-7700e2082546.herokuapp.com",
-    "localhost",
-    "127.0.0.1",
-    ".herokuapp.com",
+    h.strip() for h in os.getenv("ALLOWED_HOSTS", ",".join(_default_hosts)).split(",") if h.strip()
 ]
 
-# CSRF requires scheme; include your exact Heroku URL
-CSRF_TRUSTED_ORIGINS = [
-    "https://cake-it-easy-7700e2082546.herokuapp.com",
+# CSRF requires scheme; include common clouds. Add your custom domain(s) via:
+# CSRF_TRUSTED_ORIGINS="https://example.com,https://www.example.com"
+_default_csrf = [
     "https://localhost",
     "https://127.0.0.1",
     "https://*.herokuapp.com",
+    "https://*.onrender.com",
+]
+CSRF_TRUSTED_ORIGINS = [
+    o.strip()
+    for o in os.getenv("CSRF_TRUSTED_ORIGINS", ",".join(_default_csrf)).split(",")
+    if o.strip()
 ]
 
-# Behind Heroku router (proxy): honor X-Forwarded-Proto/Host so Django knows it's HTTPS
+# Behind Heroku/Render proxy: respect X-Forwarded-Proto/Host for HTTPS + canonical host
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
 
@@ -78,7 +81,7 @@ INSTALLED_APPS = [
 # --- Middleware (security + whitenoise first) ---
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # must be right after SecurityMiddleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -208,6 +211,7 @@ SESSION_COOKIE_SECURE = not DEBUG
 SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_HSTS_PRELOAD = not DEBUG
+# (Optional) add:
 # SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 
