@@ -8,42 +8,44 @@ import dj_database_url
 from dotenv import load_dotenv
 
 # --- Load environment variables ---
-
 load_dotenv()
 
 
-# --- Helper functions ---
-
-
-def get_bool(value: str, default: bool = False) -> bool:
-    return str(os.getenv(value, str(default))).lower() == "true"
+# --- Helpers ---
+def env_bool(key: str, default: bool = False) -> bool:
+    return str(os.getenv(key, str(default))).lower() == "true"
 
 
 # --- Base paths ---
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 # --- Security / Hosts ---
-
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-me")
-DEBUG = get_bool("DEBUG", False)
+DEBUG = env_bool("DEBUG", False)  # set DEBUG=False on Heroku
 
+# Explicit hosts for Heroku + local
 ALLOWED_HOSTS = [
-    h.strip()
-    for h in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
-    if h.strip()
+    "cake-it-easy-7700e2082546.herokuapp.com",
+    "localhost",
+    "127.0.0.1",
+    ".herokuapp.com",
 ]
 
+# CSRF requires scheme; include your exact Heroku URL
 CSRF_TRUSTED_ORIGINS = [
-    o.strip()
-    for o in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-    if o.strip()
+    "https://cake-it-easy-7700e2082546.herokuapp.com",
+    "https://localhost",
+    "https://127.0.0.1",
+    "https://*.herokuapp.com",
 ]
 
+# Behind Heroku router (proxy): honor X-Forwarded-Proto/Host so Django knows it's HTTPS
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+
 
 # --- Applications ---
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -70,11 +72,11 @@ INSTALLED_APPS = [
     "newsletter",
 ]
 
-# --- Middleware ---
 
+# --- Middleware (security + whitenoise first) ---
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # must be right after SecurityMiddleware
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -84,18 +86,18 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# --- URL Configuration ---
 
+# --- URL / WSGI ---
 ROOT_URLCONF = "cake_it_easy_v2.urls"
 WSGI_APPLICATION = "cake_it_easy_v2.wsgi.application"
 
-# --- Crispy Forms ---
 
+# --- Crispy Forms ---
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# --- Templates ---
 
+# --- Templates ---
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -117,73 +119,52 @@ TEMPLATES = [
     },
 ]
 
-# --- Database ---
 
+# --- Database ---
 if os.getenv("DATABASE_URL"):
     DATABASES = {
         "default": dj_database_url.parse(
             os.getenv("DATABASE_URL"),
             conn_max_age=600,
             ssl_require=True,
-        ),
+        )
     }
 else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
-        },
+        }
     }
-# --- Authentication ---
 
+
+# --- Authentication ---
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
-
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = "none"
 LOGIN_REDIRECT_URL = "/"
 
-# --- Password validation ---
 
+# --- Password validation ---
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "UserAttributeSimilarityValidator"
-        ),
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "MinimumLengthValidator"
-        ),
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "CommonPasswordValidator"
-        ),
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "NumericPasswordValidator"
-        ),
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
-# --- Internationalization ---
-
+# --- I18N ---
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# --- Static & Media Files ---
 
+# --- Static & Media ---
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
@@ -205,54 +186,40 @@ cloudinary.config(
     api_secret=os.getenv("CLOUDINARY_API_SECRET"),
 )
 
-# --- Email ---
 
-DEFAULT_FROM_EMAIL = os.getenv(
-    "DEFAULT_FROM_EMAIL", "noreply@cakeiteasy.local"
-)
-EMAIL_BACKEND = os.getenv(
-    "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
-)
+# --- Email ---
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@cakeiteasy.local")
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+
 
 # --- Stripe ---
-
 STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_CURRENCY = os.getenv("STRIPE_CURRENCY", "eur")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 
-# --- Security Settings ---
 
+# --- Security (production) ---
 SECURE_SSL_REDIRECT = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_HSTS_PRELOAD = not DEBUG
+# SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
-# --- Default Primary Key Field ---
 
+# --- Defaults ---
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# --- Logging ---
 
+# --- Logging ---
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-        },
-    },
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
     "loggers": {
-        "django": {
-            "handlers": ["console"],
-            "level": "INFO",
-        },
-        "django.request": {
-            "handlers": ["console"],
-            "level": "ERROR",
-            "propagate": False,
-        },
+        "django": {"handlers": ["console"], "level": "INFO"},
+        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False},
     },
 }
