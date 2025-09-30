@@ -23,6 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # --- Security / Hosts ---
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-me")
 DEBUG = env_bool("DEBUG", False)  # set DEBUG=False on Heroku
+# settings.py (temporary for Am I Responsive)
+X_FRAME_OPTIONS = "ALLOWALL"   # default is "DENY"
 
 # Explicit hosts for Heroku + local
 ALLOWED_HOSTS = [
