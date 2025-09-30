@@ -102,14 +102,25 @@ _Evidence_: Drop relevant screenshots per row into `docs/testing/html/` or `docs
 
 ---
 
-### JavaScript (ESLint)
-- **Tools:** ESLint online demo (https://eslint.org/demo) or local ESLint.
-- **Scripts:**
+### Lighthouse (Performance / Accessibility / Best Practices / SEO)
 
-  - Main script (if present): ![static/js/main.js](docs/testing/js/val_static_js_main.png)
-  - (Optional) Additional JS: ![static/js/bag.js](docs/testing/js/val_static_js_bag.png)
+We ran Lighthouse in **Chrome DevTools** for both **Desktop** and **Mobile** on key pages.
 
-> If no custom JS is used, state **N/A – no custom JavaScript**.
+**How to reproduce**
+1. Open page in Chrome → `F12` → **Lighthouse** tab.
+2. Categories: Performance, Accessibility, Best Practices, SEO.
+3. Run once for **Mobile**, then switch to **Desktop** and run again.
+4. Save reports as screenshots (below).
+
+**Results (screenshots)**
+
+| Page | Desktop | Mobile |
+|---|---|---|
+| Home | ![Lighthouse Home Desktop](docs/testing/lighthouse_home_desk.png) | ![Lighthouse Home Mobile](docs/testing/lighthouse_home_moblile.png) |
+| Products list | ![Lighthouse Products List Desktop](docs/testing/lighthouse_product_list_desk.png) | ![Lighthouse Products List Mobile](docs/testing/lighthouse_product_list_mobile.png) |
+
+> If you rename files later (e.g., fix `moblile` → `mobile`), update the paths above accordingly.
+
 
 ---
 

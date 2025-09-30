@@ -75,14 +75,7 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 - **Responsiveness:** Bootstrap 5 grid; mobile nav + stacking forms; no horizontal scroll.
 
 ### Data Model / ERD
-
-- See `` (exported from dbdiagram/mermaid). Core entities:
-  - `Category` → `Product` → `ProductOption`
-  - `Order` → `OrderLineItem`
-  - `NewsletterSubscriber`
-  - `CustomCake`
-  - `UserProfile`
-
+![erd](docs/readme/erd.png)
 ---
 
 ## Features
@@ -210,7 +203,7 @@ All testing steps and expected outcomes are documented in [**TESTING.md**](TESTI
 ![Mobile bag](docs/readme/30_mobile_bag.png)
 
 ## I. Marketing
-![Facebook page/post mockup](docs/readme/FB_01_page_cover_about.png)
+![Am I Responsive – Cake It Easy](docs/readme/am_i_responsive.png)
 ![Newsletter form](docs/readme/newsletter_form.png)
 ![Newsletter success](docs/readme/newsletter_success.png)
 ![Newsletter already subscribed](docs/readme/newsletter_duplicate.png)
@@ -270,8 +263,16 @@ python manage.py runserver
 ## Marketing & SEO Evidence
 
 - **Newsletter:** form/success/duplicate (see screenshots under I.)
-- **Facebook:** branded post mockup showing box‑size pricing (`FB_01_page_cover_about.png`).
-- **SEO:** meta description, `robots.txt`, `sitemap.xml`, custom 404.
+- **Facebook:** branded post mockup showing box‑size pricing ![Facebook cover + pinned post – WELCOME10](docs/readme/fb_01_page_cover_about.png)
+-### SEO Evidence – robots.txt & sitemap.xml
+
+Live endpoints:
+- https://cake-it-easy-7700e2082546.herokuapp.com/robots.txt
+- https://cake-it-easy-7700e2082546.herokuapp.com/sitemap.xml
+
+Evidence screenshots:
+![robots.txt](docs/readme/28_robots.png)
+![sitemap.xml](docs/readme/28_sitemap.png)
 
 ---
 
