@@ -14,7 +14,7 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 
 ## Live Project
 
-- **Live Site:** [https://your-deployed-domain.com](https://your-deployed-domain.com)
+- **Live Site:** [https://your-deployed-domain.com](https://cake-it-easy-7700e2082546.herokuapp.com/)
 - **Repository:** [https://github.com/MaireadKelly/cake\_it\_easy\_v2](https://github.com/MaireadKelly/cake_it_easy_v2)
 - **Project Board (Agile):** [https://github.com/users/MaireadKelly/projects/10](https://github.com/users/MaireadKelly/projects/10)
 
@@ -63,7 +63,13 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 
 ## Design
 
-- **Wireframes:** `/docs/wireframes/` (Home, Products, Product Detail, Bag, Profile). Placeholders are included for each page.
+- **Wireframes** (created in Balsamiq, stored in `docs/readme/`):
+  ![Home](docs/readme/wireframe_home.png)
+  ![Products List](docs/readme/wireframe_products_list.png)
+  ![Product Detail](docs/readme/wireframe_product_detail.png)
+  ![Shopping Bag](docs/readme/wireframe_bag.png)
+  ![Custom Cake Form](docs/readme/wireframe_custom_cake.png)
+
 - **Typography:** Poppins, Roboto Condensed (Google Fonts).
 - **Colour Palette:** Light bakery palette with strong CTA accents (see `static/css/base.css`).
 - **Responsiveness:** Bootstrap 5 grid; mobile nav + stacking forms; no horizontal scroll.

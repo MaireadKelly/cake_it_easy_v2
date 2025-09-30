@@ -63,7 +63,7 @@ _Evidence_: Drop relevant screenshots per row into `docs/testing/html/` or `docs
 - **Tools:** `pycodestyle` (79-char line length), assisted by `ruff format` (line-wrapping) where needed.
 - **Whole-project report:**
   
-  ![pycodestyle clean run](docs/testing/py/val_py_console_transcript.txt)
+![pycodestyle clean run](docs/testing/py/val_py_console_transcript.txt)
 
 - **Representative files:**
   
