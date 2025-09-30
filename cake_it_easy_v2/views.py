@@ -24,7 +24,7 @@ def sitemap_xml(request):
         "product_cakes",
         "product_accessories",
         "product_offers",
-        "my_orders",      # auth required; still okay to list
+        "my_orders",  # auth required; still okay to list
         "about",
         "custom_cake_list",
     ]
@@ -44,6 +44,7 @@ def sitemap_xml(request):
         body += ["  <url>", f"    <loc>{u}</loc>", "  </url>"]
     body += ["</urlset>"]
     return HttpResponse("\n".join(body), content_type="application/xml")
+
 
 def custom_404(request, exception):
     """Render templates/404.html when DEBUG=False."""

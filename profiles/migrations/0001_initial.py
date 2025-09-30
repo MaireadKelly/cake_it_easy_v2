@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,16 +14,37 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='UserProfile',
+            name="UserProfile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('default_phone_number', models.CharField(blank=True, max_length=32)),
-                ('default_country', models.CharField(blank=True, max_length=40)),
-                ('default_postcode', models.CharField(blank=True, max_length=20)),
-                ('default_town_or_city', models.CharField(blank=True, max_length=40)),
-                ('default_street_address1', models.CharField(blank=True, max_length=80)),
-                ('default_street_address2', models.CharField(blank=True, max_length=80)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='profile', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("default_phone_number", models.CharField(blank=True, max_length=32)),
+                ("default_country", models.CharField(blank=True, max_length=40)),
+                ("default_postcode", models.CharField(blank=True, max_length=20)),
+                ("default_town_or_city", models.CharField(blank=True, max_length=40)),
+                (
+                    "default_street_address1",
+                    models.CharField(blank=True, max_length=80),
+                ),
+                (
+                    "default_street_address2",
+                    models.CharField(blank=True, max_length=80),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="profile",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

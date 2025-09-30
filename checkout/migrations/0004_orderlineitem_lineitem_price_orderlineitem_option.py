@@ -6,21 +6,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('checkout', '0003_alter_order_country'),
-        ('products', '0007_productoption'),
+        ("checkout", "0003_alter_order_country"),
+        ("products", "0007_productoption"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='orderlineitem',
-            name='lineitem_price',
-            field=models.DecimalField(decimal_places=2, default=Decimal('0.00'), max_digits=10),
+            model_name="orderlineitem",
+            name="lineitem_price",
+            field=models.DecimalField(
+                decimal_places=2, default=Decimal("0.00"), max_digits=10
+            ),
         ),
         migrations.AddField(
-            model_name='orderlineitem',
-            name='option',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='products.productoption'),
+            model_name="orderlineitem",
+            name="option",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="products.productoption",
+            ),
         ),
     ]

@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,17 +14,64 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='CustomCake',
+            name="CustomCake",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('occasion', models.CharField(choices=[('birthday', 'Birthday'), ('wedding', 'Wedding'), ('christening', 'Christening'), ('gender_reveal', 'Gender Reveal'), ('other', 'Other')], max_length=20)),
-                ('flavor', models.CharField(choices=[('chocolate', 'Chocolate'), ('vanilla', 'Vanilla'), ('red_velvet', 'Red Velvet'), ('carrot', 'Carrot')], max_length=20)),
-                ('size', models.CharField(choices=[('6', '6 inch'), ('8', '8 inch'), ('10', '10 inch')], max_length=10)),
-                ('inscription', models.CharField(blank=True, max_length=100)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='custom_cakes/')),
-                ('created_on', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='custom_cakes', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "occasion",
+                    models.CharField(
+                        choices=[
+                            ("birthday", "Birthday"),
+                            ("wedding", "Wedding"),
+                            ("christening", "Christening"),
+                            ("gender_reveal", "Gender Reveal"),
+                            ("other", "Other"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "flavor",
+                    models.CharField(
+                        choices=[
+                            ("chocolate", "Chocolate"),
+                            ("vanilla", "Vanilla"),
+                            ("red_velvet", "Red Velvet"),
+                            ("carrot", "Carrot"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "size",
+                    models.CharField(
+                        choices=[("6", "6 inch"), ("8", "8 inch"), ("10", "10 inch")],
+                        max_length=10,
+                    ),
+                ),
+                ("inscription", models.CharField(blank=True, max_length=100)),
+                (
+                    "image",
+                    models.ImageField(blank=True, null=True, upload_to="custom_cakes/"),
+                ),
+                ("created_on", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="custom_cakes",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('custom_cake', '0005_alter_customcake_filling_alter_customcake_flavor'),
+        ("custom_cake", "0005_alter_customcake_filling_alter_customcake_flavor"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customcake',
-            name='needed_date',
-            field=models.DateField(blank=True, help_text='Date you need the cake for (optional).', null=True),
+            model_name="customcake",
+            name="needed_date",
+            field=models.DateField(
+                blank=True,
+                help_text="Date you need the cake for (optional).",
+                null=True,
+            ),
         ),
     ]

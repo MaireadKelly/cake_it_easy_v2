@@ -14,4 +14,7 @@ class NewsletterSubscriptionForm(forms.Form):
         ),
     )
     # Optional hidden field so templates (e.g., modal) can tag the origin
-    source = forms.CharField(required=False, max_length=50, widget=forms.HiddenInput)
+
+    source = forms.CharField(
+        required=False, max_length=50, widget=forms.HiddenInput
+    )

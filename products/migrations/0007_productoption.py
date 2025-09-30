@@ -5,25 +5,39 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('products', '0006_category_slug'),
+        ("products", "0006_category_slug"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ProductOption',
+            name="ProductOption",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('label', models.CharField(max_length=50)),
-                ('quantity', models.PositiveIntegerField(default=6)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=6)),
-                ('is_default', models.BooleanField(default=False)),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='options', to='products.product')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("label", models.CharField(max_length=50)),
+                ("quantity", models.PositiveIntegerField(default=6)),
+                ("price", models.DecimalField(decimal_places=2, max_digits=6)),
+                ("is_default", models.BooleanField(default=False)),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="options",
+                        to="products.product",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['quantity'],
-                'unique_together': {('product', 'quantity')},
+                "ordering": ["quantity"],
+                "unique_together": {("product", "quantity")},
             },
         ),
     ]

@@ -8,10 +8,12 @@ class StripeWH_Handler:
         self.request = request
 
     def handle_event(self, event):
-        return HttpResponse(content=f"Unhandled event {event['type']}", status=200)
+        return HttpResponse(
+            content=f"Unhandled event {event['type']}", status=200
+        )
 
     def handle_payment_intent_succeeded(self, event):
-        pid = event['data']['object']['id']
+        pid = event["data"]["object"]["id"]
         try:
             Order.objects.get(stripe_pid=pid)
         except Order.DoesNotExist:

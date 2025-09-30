@@ -6,20 +6,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('custom_cake', '0002_customcake_description_alter_customcake_flavor'),
+        ("custom_cake", "0002_customcake_description_alter_customcake_flavor"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='customcake',
-            options={'ordering': ['-created_on']},
+            name="customcake",
+            options={"ordering": ["-created_on"]},
         ),
         migrations.AlterField(
-            model_name='customcake',
-            name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='custom_cakes', to=settings.AUTH_USER_MODEL),
+            model_name="customcake",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="custom_cakes",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('checkout', '0001_initial'),
+        ("checkout", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='order',
-            old_name='date',
-            new_name='created_on',
+            model_name="order",
+            old_name="date",
+            new_name="created_on",
         ),
         migrations.AddField(
-            model_name='order',
-            name='paid',
+            model_name="order",
+            name="paid",
             field=models.BooleanField(default=False),
         ),
     ]

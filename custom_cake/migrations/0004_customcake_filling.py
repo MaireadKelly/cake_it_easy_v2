@@ -4,15 +4,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('custom_cake', '0003_alter_customcake_options_alter_customcake_user'),
+        ("custom_cake", "0003_alter_customcake_options_alter_customcake_user"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customcake',
-            name='filling',
-            field=models.CharField(choices=[('buttercream', 'Buttercream'), ('chocolate_ganache', 'Chocolate Ganache'), ('raspberry_jam', 'Raspberry Jam'), ('lemon_curd', 'Lemon Curd'), ('cream_cheese', 'Cream Cheese'), ('other', 'Other')], default='buttercream', max_length=32),
+            model_name="customcake",
+            name="filling",
+            field=models.CharField(
+                choices=[
+                    ("buttercream", "Buttercream"),
+                    ("chocolate_ganache", "Chocolate Ganache"),
+                    ("raspberry_jam", "Raspberry Jam"),
+                    ("lemon_curd", "Lemon Curd"),
+                    ("cream_cheese", "Cream Cheese"),
+                    ("other", "Other"),
+                ],
+                default="buttercream",
+                max_length=32,
+            ),
         ),
     ]

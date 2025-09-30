@@ -4,20 +4,38 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('custom_cake', '0004_customcake_filling'),
+        ("custom_cake", "0004_customcake_filling"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='customcake',
-            name='filling',
-            field=models.CharField(choices=[('buttercream', 'Buttercream'), ('chocolate_ganache', 'Chocolate Ganache'), ('raspberry_jam', 'Raspberry Jam'), ('lemon_curd', 'Lemon Curd'), ('cream_cheese', 'Cream Cheese'), ('other', 'Other')], max_length=32),
+            model_name="customcake",
+            name="filling",
+            field=models.CharField(
+                choices=[
+                    ("buttercream", "Buttercream"),
+                    ("chocolate_ganache", "Chocolate Ganache"),
+                    ("raspberry_jam", "Raspberry Jam"),
+                    ("lemon_curd", "Lemon Curd"),
+                    ("cream_cheese", "Cream Cheese"),
+                    ("other", "Other"),
+                ],
+                max_length=32,
+            ),
         ),
         migrations.AlterField(
-            model_name='customcake',
-            name='flavor',
-            field=models.CharField(choices=[('chocolate', 'Chocolate'), ('vanilla', 'Vanilla'), ('red_velvet', 'Red Velvet'), ('carrot', 'Carrot')], max_length=20, verbose_name='flavour'),
+            model_name="customcake",
+            name="flavor",
+            field=models.CharField(
+                choices=[
+                    ("chocolate", "Chocolate"),
+                    ("vanilla", "Vanilla"),
+                    ("red_velvet", "Red Velvet"),
+                    ("carrot", "Carrot"),
+                ],
+                max_length=20,
+                verbose_name="flavour",
+            ),
         ),
     ]

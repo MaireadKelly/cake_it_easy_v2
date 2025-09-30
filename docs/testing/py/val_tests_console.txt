@@ -1,0 +1,51 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20250930051852
+Username: MAIREAD_KELLY\maire
+RunAs User: MAIREAD_KELLY\maire
+Configuration Name: 
+Machine: MAIREAD_KELLY (Microsoft Windows NT 10.0.26100.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -noexit -command try { . "c:\Users\maire\AppData\Local\Programs\Microsoft VS Code\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}
+Process ID: 28536
+PSVersion: 5.1.26100.6584
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.6584
+BuildVersion: 10.0.26100.6584
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is .\docs\testing\py\val_tests_console.txt
+
+
+  Applying custom_cake.0006_customcake_needed_date... OK
+  Applying newsletter.0001_initial... OK
+  Applying newsletter.0002_newslettersubscriber_source... OK
+  Applying products.0008_alter_productoption_price... OK
+  Applying profiles.0001_initial... OK
+  Applying profiles.0002_userprofile_default_name... OK
+  Applying sessions.0001_initial... OK
+  Applying sites.0001_initial... OK
+  Applying sites.0002_alter_domain_unique... OK
+  Applying socialaccount.0001_initial... OK
+  Applying socialaccount.0002_token_max_lengths... OK
+  Applying socialaccount.0003_extra_data_default_dict... OK
+  Applying socialaccount.0004_app_provider_id_settings... OK
+  Applying socialaccount.0005_socialtoken_nullable_app... OK
+  Applying socialaccount.0006_alter_socialaccount_extra_data... OK
+System check identified no issues (0 silenced).
+test_create_custom_cake (custom_cake.tests.CustomCakeViewsTests.test_create_custom_cake) ... ok
+test_create_invalid_shows_error_message (custom_cake.tests.CustomCakeViewsTests.test_create_invalid_shows_error_message) ... ok
+test_delete_custom_cake (custom_cake.tests.CustomCakeViewsTests.test_delete_custom_cake) ... ok
+test_update_custom_cake (custom_cake.tests.CustomCakeViewsTests.test_update_custom_cake) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 12.701s
+
+OK
+Preserving test database for alias 'default' ('test_pluck_bask_crazy_817867')...
+**********************
+Windows PowerShell transcript end
+End time: 20250930051929
+**********************

@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('products', '0005_alter_product_image'),
+        ("products", "0005_alter_product_image"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='category',
-            name='slug',
+            model_name="category",
+            name="slug",
             field=models.SlugField(blank=True, max_length=60, unique=True),
         ),
     ]
