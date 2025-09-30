@@ -133,16 +133,12 @@ _Evidence (optional)_: `docs/testing/html/val_responsive_checks.png`
 
 ---
 
-## Known Issues / Out‑of‑Scope
-- Newsletter/stub pages may be linked to About or removed to avoid 404s.  
-- Advanced product filters and marketing integrations are **out of scope**.
+Known Issues / Out of Scope
 
----
+Future features not implemented: loyalty scheme, reviews/ratings.
 
-## Evidence Index (Examples)
-- Python clean run: `docs/testing/py/val_py_project_clean.png`
-- Python reps: `docs/testing/py/val_cake_it_easy_v2_settings.png`, `val_products_models.png`, `val_products_views.png`, `val_custom_cake_models.png`, `val_custom_cake_views.png`, `val_checkout_models.png`, `val_custom_cake_tests.png`
-- HTML: `docs/testing/html/val_templates_base.png`, `val_templates_products_product_list.png`, `val_templates_products_product_detail.png`, `val_templates_checkout_checkout.png`, `val_templates_404.png`
-- CSS: `docs/testing/css/val_static_css_base.png`
-- JS: `docs/testing/js/val_static_js_main.png`
+Newsletter: modal works, but limited to email capture + static code.
 
+Marketing: only Facebook mockup provided, no full campaign pages.
+
+No multi-currency support (future).

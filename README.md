@@ -5,6 +5,13 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 - **Cupcake box‑size pricing** (4/6/12/18) with transparent per‑cupcake price
 - **Custom Cake Orders** (bespoke requests)
 - **Discount codes** (e.g., `WELCOME10`)
+- Evidence screenshots:
+
+  ![Discount applied in Bag](docs/readme/discount_apply.png)
+
+  ![Discount line in Bag totals](docs/readme/discount_line_bag.png)
+
+  ![Discount shown at Checkout](docs/readme/discount_checkout.png)
 - **Newsletter signup** modal with success flow
 - **SEO** polish (meta, robots, sitemap, rel)
 
@@ -137,8 +144,12 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 
 - `<title>` + `<meta name="description">` per page.
 - External links use `rel="noopener noreferrer"`; decorative icons marked `aria-hidden`.
-- Custom **404** page.
-- **robots.txt** and **sitemap.xml** live endpoints.
+- Custom **404**
+![alt text](docs/readme/404.png)
+- **robots.txt**
+![alt text](docs/readme/28_robots.png.png) 
+**sitemap.xml** 
+![alt text](docs/readme/28_sitemap.png.png)
 
 ---
 
@@ -248,8 +259,9 @@ python manage.py runserver
 
 - Customers can submit a bespoke cake request via a form capturing **flavour, filling, icing, dietary notes, message**, and optional image.
 - Requests are linked to the logged‑in user and visible to staff via admin.
-- Evidence screenshots: `docs/readme/custom_cake_form.png`, `docs/readme/custom_cake_list.png`.
-
+- Evidence screenshots: 
+![alt text](docs/readme/custom_cake_form.png) 
+![alt text](docs/readme/custom_cake_list.png)
 ---
 
 ## Known Issues / Fixes
