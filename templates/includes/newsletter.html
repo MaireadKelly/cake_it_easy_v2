@@ -1,41 +1,23 @@
 {% load static %}
 
-<div id="newsletterInline" class="card my-3">
+<div class="card mb-4">
   <div class="card-body">
-    <h5 class="card-title mb-2">Join our newsletter</h5>
-    <p id="nl-hint" class="text-muted mb-3">Be the first to get offers and new bakes.</p>
+    <h5 class="card-title mb-3">Join our newsletter</h5>
+    <p class="card-text text-muted mb-3">
+      Get exclusive offers, early access to new bakes, and a special welcome discount.
+    </p>
 
-    <!-- Signup form (inline) -->
-    <form id="nl-form" method="post" action="{% url 'newsletter_subscribe' %}">
-      {% csrf_token %}
-      <div class="input-group">
-        <input
-          id="nl-email"
-          name="email"
-          type="email"
-          class="form-control"
-          placeholder="you@example.com"
-          required
-        />
-        <button class="btn btn-primary" type="submit">Subscribe</button>
-      </div>
-      {% if form.errors.email %}
-        <div class="text-danger small mt-2">{{ form.errors.email }}</div>
-      {% endif %}
-    </form>
+    <!-- This button just opens the global newsletter modal -->
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#newsletterModal">
+      Sign up & get 10% off
+    </button>
 
-    <!-- Success panel (hidden by default) -->
-    <div id="nl-success" class="d-none mt-3">
-      <div class="alert alert-success mb-2">
-        Welcome aboard! Your code:
-        <code id="nl-code">••••••</code>
-      </div>
-      <button id="nl-copy" type="button" class="btn btn-outline-secondary btn-sm">Copy</button>
-      <span id="nl-copied" class="small ms-2 d-none">Copied</span>
-    </div>
+    <p class="mt-3 mb-0 small text-muted">
+      We only send occasional updates. You can unsubscribe at any time.
+    </p>
   </div>
 </div>
-
-<!-- Load script exactly once per page; if you also include the modal partial on this page,
-     keep just ONE of these <script> tags. Prefer putting it once in base.html. -->
-<script defer src="{% static 'newsletter/newsletter.js' %}"></script>
