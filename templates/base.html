@@ -96,11 +96,13 @@
     </main>
 
     {% include "includes/footer.html" %}
-    {# Removed newsletter modal include to avoid duplicate IDs from nl-* elements #}
-    {# {% include "includes/newsletter_modal.html" %} #}
+
+    {# Global newsletter modal – used by hero "Get 10% off" and other triggers #}
+    {% include "includes/newsletter_modal.html" %}
 
     {% block postloadjs %}
     <script defer src="{% static 'newsletter/newsletter.js' %}"></script>
     {% endblock %}
+
   </body>
 </html>

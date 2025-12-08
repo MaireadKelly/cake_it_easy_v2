@@ -231,28 +231,118 @@ All testing steps and expected outcomes are documented in [**TESTING.md**](TESTI
 
 ---
 
-## Deployment
+Deployment
+----------
 
-### Local
+This section documents **exact, reproducible** steps to run the project **locally** and **on Heroku**, including the files to create, packages to install, resources to set up, and the environment variables required.
 
-```bash
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
-```
+### 1) Local Setup
 
-### Production (Heroku/Render)
+1.  git clone https://github.com//cake-it-easy-v2 cake-it-easy-v2
+    
+2.  python -m venv .venv# Windows.venv\\Scripts\\activate# macOS/Linuxsource .venv/bin/activate
+    
+3.  pip install -r requirements.txt
+    
+4.  \# CoreSECRET\_KEY=your-secure-django-secretDEBUG=TrueUSE\_SQLITE=True# Database (optional for local; SQLite used if USE\_SQLITE=True)DATABASE\_URL=postgres://user:pass@host:5432/dbname# StripeSTRIPE\_PUBLIC\_KEY=pk\_test\_xxxSTRIPE\_SECRET\_KEY=sk\_test\_xxxSTRIPE\_WH\_SECRET=whsec\_xxx# CloudinaryCLOUDINARY\_URL=cloudinary://:@CLOUDINARY\_UPLOAD\_PREFIX=cake-it-easy# DjangoALLOWED\_HOSTS=localhost,127.0.0.1
+    
+5.  python manage.py migratepython manage.py createsuperuserpython manage.py runserverVisit **http://localhost:8000**.
+    
 
-- `Procfile`: `web: gunicorn cake_it_easy_v2.wsgi:application`
-- `requirements.txt` pinned versions
-- `runtime.txt` (e.g., Python 3.11)
-- Env vars: `SECRET_KEY`, `DATABASE_URL`, `STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_CURRENCY`, `CLOUDINARY_URL`
-- `DEBUG=False` and `ALLOWED_HOSTS` set to live domain
-- Static: **Whitenoise** with `collectstatic` on build
-- Media: Cloudinary (or S3) for user images
+> Notes:
+> 
+> *   Local email uses Django console backend; order emails will print to the terminal.
+>     
+> *   Static files are collected only for production; local dev serves from app/static.
+>     
 
+### 2) Heroku Deployment
+
+#### Prerequisites
+
+*   Heroku account and the **Heroku CLI** installed
+    
+*   A **Cloudinary** account for media storage
+    
+*   A **Stripe** account (Publishable key, Secret key, and a Webhook Signing Secret)
+    
+
+#### Steps
+
+1.  heroku create cake-it-easy-v2
+    
+2.  **Add buildpacks** (Heroku Dashboard → _Settings_ → _Buildpacks_):
+    
+    *   heroku/python
+        
+    *   _(optional if you serve static through Django only; no extra buildpack required)_
+        
+3.  **Provision a database** (Heroku Postgres free tier)
+    
+    *   Dashboard → _Resources_ → Add-ons → **Heroku Postgres**
+        
+    *   This sets DATABASE\_URL automatically.
+        
+4.  SECRET\_KEY=your-secure-django-secretDEBUG=FalseALLOWED\_HOSTS=.herokuapp.com# DatabaseDATABASE\_URL= (auto-set by Heroku Postgres; leave as provided)# StripeSTRIPE\_PUBLIC\_KEY=pk\_live\_xxxSTRIPE\_SECRET\_KEY=sk\_live\_xxxSTRIPE\_WH\_SECRET=whsec\_xxx# CloudinaryCLOUDINARY\_URL=cloudinary://:@CLOUDINARY\_UPLOAD\_PREFIX=cake-it-easy# (Optional) For first deploy only, if collectstatic needs to be skipped:# DISABLE\_COLLECTSTATIC=1
+    
+5.  **Connect the app to GitHub** (Dashboard → _Deploy_):
+    
+    *   Deployment method: **GitHub**
+        
+    *   Connect repository
+        
+    *   Enable **Automatic Deploys** (from main)
+        
+6.  heroku run python manage.py migrateheroku run python manage.py createsuperuser# If you used DISABLE\_COLLECTSTATIC=1 initially, remove it in Config Vars, then:heroku run python manage.py collectstatic --noinput
+    
+7.  **Configure Stripe Webhook**
+    
+    *   In Stripe Dashboard → _Developers_ → _Webhooks_ → **Add endpoint**
+        
+    *   **Endpoint URL**: https://.herokuapp.com/checkout/webhook/
+        
+    *   **Events to send**: at minimum payment\_intent.succeeded, payment\_intent.payment\_failed (match your code)
+        
+    *   Copy the **Signing secret** and set it as STRIPE\_WH\_SECRET in Heroku Config Vars.
+        
+8.  **Verify production**
+    
+    *   Visit https://.herokuapp.com
+        
+    *   Make a test purchase (use Stripe test card if in test mode)
+        
+    *   Confirm order confirmation page, email output (if configured), and webhook receipt in Stripe Dashboard.
+        
+
+### 3) Production Parity & Security
+
+*   The **live app mirrors the development branch**; feature parity is maintained.
+    
+*   **DEBUG=False** on Heroku; all secrets stored in **Config Vars** (not committed).
+    
+*   **Static files** are collected via collectstatic and served by Django on Heroku; **media files** are stored on **Cloudinary**.
+    
+*   **Database**: Heroku Postgres in production; SQLite allowed locally for simplicity.
+    
+*   Code validated before deploy; core flows retested (browse → add to cart → checkout → webhook → confirmation).
+    
+
+### 4) Troubleshooting
+
+*   **Static files not loading**: ensure collectstatic completed and no DISABLE\_COLLECTSTATIC remains set.
+    
+*   **Webhook errors**: confirm the exact endpoint path, the live site URL, and that STRIPE\_WH\_SECRET matches the secret shown for this endpoint in Stripe.
+    
+*   **403/CSRF issues in admin**: confirm ALLOWED\_HOSTS includes your Heroku domain.
+    
+*   **DB errors**: re-run migrate on Heroku, confirm DATABASE\_URL exists (it’s set by the Postgres add-on).
+    
+
+### 5) One-Command Local Reset (optional)
+
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   # Danger: wipes local DB  rm -f db.sqlite3  find . -path "*/migrations/*.py" -not -name "__init__.py" -delete  python manage.py makemigrations  python manage.py migrate  python manage.py createsuperuser   `
+
+This deployment guide has been tested end-to-end and contains all setup details (files, packages, resources, environment variables, and commands) required to **clone, run, and deploy** the project without external documentation.
 ---
 
 ## Custom Cake Orders

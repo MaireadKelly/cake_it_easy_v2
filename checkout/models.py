@@ -13,6 +13,16 @@ except ImportError:
 
 
 class Order(models.Model):
+    """
+    Order model for Cake It Easy.
+
+    Differences from the Boutique Ado walkthrough:
+    - Uses `user` FK instead of `user_profile`.
+    - Stores `order_total` and `discount_amount` separately.
+    - `grand_total` is provided as a @property for compatibility
+      with templates / webhook logic that expect a single total.
+    """
+
     # User and contact info
     user = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.SET_NULL
@@ -27,6 +37,8 @@ class Order(models.Model):
     town_or_city = models.CharField(max_length=40, blank=True)
     street_address1 = models.CharField(max_length=80, blank=True)
     street_address2 = models.CharField(max_length=80, blank=True)
+    # NEW: county, to align with shipping_details.address.state and profile
+    county = models.CharField(max_length=80, blank=True)
 
     # Order totals
     order_total = models.DecimalField(
@@ -44,18 +56,40 @@ class Order(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        # You can later add a nicer order_number if you want;
+        # for now, ID is enough and avoids extra work.
         return f"Order {self.id}"
+
+    @property
+    def grand_total(self):
+        """
+        Convenience property to mirror Boutique Ado's `grand_total`.
+        Returns the final amount after any discount.
+
+        This lets webhook code that expects `grand_total` remain simple,
+        while your actual data model keeps order_total + discount_amount.
+        """
+        return (self.order_total or Decimal("0.00")) - (
+            self.discount_amount or Decimal("0.00")
+        )
 
 
 class OrderLineItem(models.Model):
+    """
+    Line items for each order.
+    Supports optional ProductOption (e.g. box sizes / variants)
+    and automatically calculates lineitem_total from quantity
+    and either the option price or base product price.
+    """
+
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
-        related_name="lineitems"
+        related_name="lineitems",
     )
     product = models.ForeignKey(
         Product,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
 
     # Product option (nullable if not used)
@@ -63,7 +97,7 @@ class OrderLineItem(models.Model):
         ProductOption,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
     )
 
     quantity = models.IntegerField(default=1)
@@ -72,16 +106,23 @@ class OrderLineItem(models.Model):
     lineitem_price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        default=Decimal("0.00")
+        default=Decimal("0.00"),
     )
     lineitem_total = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        editable=False
+        editable=False,
     )
 
     def save(self, *args, **kwargs):
+        """
+        Ensure lineitem_price is set from:
+        - ProductOption.price if present
+        - else Product.price
+        Then multiply by quantity to get lineitem_total.
+        """
         unit = self.lineitem_price
+
         if not unit or unit <= 0:
             if (
                 self.option
