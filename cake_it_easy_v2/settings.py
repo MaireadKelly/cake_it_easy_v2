@@ -71,7 +71,7 @@ INSTALLED_APPS = [
     "home",
     "products",
     "bag",
-    "checkout",
+    "checkout.apps.CheckoutConfig",
     "profiles",
     "custom_cake",
     "newsletter",

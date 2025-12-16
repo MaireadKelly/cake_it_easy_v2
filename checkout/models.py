@@ -37,7 +37,6 @@ class Order(models.Model):
     town_or_city = models.CharField(max_length=40, blank=True)
     street_address1 = models.CharField(max_length=80, blank=True)
     street_address2 = models.CharField(max_length=80, blank=True)
-    # NEW: county, to align with shipping_details.address.state and profile
     county = models.CharField(max_length=80, blank=True)
 
     # Order totals
@@ -55,23 +54,33 @@ class Order(models.Model):
     paid = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        # You can later add a nicer order_number if you want;
-        # for now, ID is enough and avoids extra work.
-        return f"Order {self.id}"
-
     @property
     def grand_total(self):
         """
         Convenience property to mirror Boutique Ado's `grand_total`.
         Returns the final amount after any discount.
-
-        This lets webhook code that expects `grand_total` remain simple,
-        while your actual data model keeps order_total + discount_amount.
         """
         return (self.order_total or Decimal("0.00")) - (
             self.discount_amount or Decimal("0.00")
         )
+
+    def update_total(self):
+        """
+        Recalculate the order_total from related line items.
+
+        Discount logic is intentionally separate and stored in
+        discount_amount to keep totals explicit and auditable.
+        """
+        self.order_total = (
+            self.lineitems.aggregate(
+                total=models.Sum("lineitem_total")
+            )["total"] or Decimal("0.00")
+        )
+        self.save(update_fields=["order_total"])
+
+    def __str__(self):
+        return f"Order {self.id}"
+
 
 
 class OrderLineItem(models.Model):
