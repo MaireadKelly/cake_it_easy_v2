@@ -24,18 +24,19 @@
 
   {# --- Add Deposit to Bag --- #}
   {% if deposit_product %}
-    <form method="post" action="{% url 'add_to_bag' deposit_product.id %}" class="mb-3">
+    <form method="post" action="{% url 'add_to_bag' deposit_product.id %}" class="mb-2">
       {% csrf_token %}
       <input type="hidden" name="redirect_url" value="{% url 'custom_cake_detail' cake.pk %}">
       <input type="hidden" name="quantity" value="1">
-      {# Optional: keep a reference to this custom cake in session; bag view will ignore unknown keys harmlessly #}
-      <input type="hidden" name="custom_cake_id" value="{{ cake.id }}">
       <button class="btn btn-primary">
         Add Deposit to Bag (€{{ deposit_product.price|floatformat:2 }})
       </button>
     </form>
     <p class="text-muted small">
-      This deposit reserves your date and covers design time. Final balance is invoiced after we confirm your design.
+      
+      A single deposit is charged per order to begin a custom cake request. This reserves your date and covers design time.
+
+      The final balance is confirmed after we agree the design.
     </p>
   {% endif %}
 
