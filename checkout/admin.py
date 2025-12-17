@@ -18,55 +18,70 @@ def mark_paid(modeladmin, request, queryset):
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderLineItemInline]
 
-    # columns in list view
-
-    list_display = ("id", "created_on", "user", "email", "order_total", "paid")
+    # Columns in list view (quick fulfilment overview)
+    list_display = (
+        "id",
+        "created_on",
+        "full_name",
+        "email",
+        "town_or_city",
+        "postcode",
+        "order_total",
+        "discount_amount",
+        "paid",
+    )
     list_filter = ("paid", "created_on")
-    search_fields = ("id", "email", "full_name", "stripe_pid")
+    search_fields = ("id", "email", "full_name", "stripe_pid", "postcode")
     ordering = ("-created_on",)
 
-    # read-only/calculated fields
-
+    # Read-only / system fields
     readonly_fields = (
         "order_total",
+        "discount_amount",
         "stripe_pid",
         "original_bag",
         "created_on",
     )
 
-    # bulk action
-
+    # Bulk actions
     actions = [mark_paid]
 
-    # tidy edit form layout
-
+    # Tidy edit form layout
     fieldsets = (
         (
             "Customer",
             {"fields": ("user", "full_name", "email", "phone_number")},
         ),
         (
-            "Address",
+            "Delivery Address",
             {
                 "fields": (
-                    "country",
-                    "postcode",
-                    "town_or_city",
                     "street_address1",
                     "street_address2",
+                    "town_or_city",
+                    "county",
+                    "postcode",
+                    "country",
                 )
             },
         ),
         (
-            "Order",
+            "Discount",
+            {"fields": ("discount_code", "discount_amount")},
+        ),
+        (
+            "Payment / Stripe",
             {
                 "fields": (
-                    "order_total",
                     "paid",
                     "stripe_pid",
                     "original_bag",
                     "created_on",
                 )
             },
+        ),
+        (
+            "Totals",
+            {"fields": ("order_total",)},
         ),
     )
