@@ -8,20 +8,12 @@ from products.models import Product, ProductOption
 # -----------------------------------------------------------------------------
 # Deposit identity
 # -----------------------------------------------------------------------------
-# Best practice: identify the deposit product by SKU (stable, not user-facing).
-# Set this to match the SKU shown in Django Admin for "Custom Cake Deposit".
-DEPOSIT_SKU = "CUST-DEP"  
-
-# Fallback (works if SKU not set). Keep exact admin name.
+DEPOSIT_SKU = "CUST-DEP"  # matches your Admin SKU
 DEPOSIT_NAME_FALLBACK = "Custom Cake Deposit"
 
 
 def _is_deposit_product(product: Product) -> bool:
-    """
-    Return True if this product is the single-quantity deposit item.
-
-    Uses SKU first (recommended). Falls back to name if SKU not set.
-    """
+    """Return True if this product is the single-quantity deposit item."""
     sku = (getattr(product, "sku", "") or "").strip()
     name = (getattr(product, "name", "") or "").strip()
     return (sku and sku == DEPOSIT_SKU) or (name == DEPOSIT_NAME_FALLBACK)
@@ -69,20 +61,14 @@ def add_to_bag(request, product_id):
     if is_cupcake:
         posted_opt = request.POST.get("option_id") or request.POST.get("box_size")
         if posted_opt:
-            option = ProductOption.objects.filter(
-                pk=posted_opt, product=product
-            ).first()
+            option = ProductOption.objects.filter(pk=posted_opt, product=product).first()
 
     # Key includes option only for valid cupcake option
     key = f"{product_id}_{option.id}" if option else str(product_id)
 
-    # -------------------------------------------------------------------------
     # Deposit rule: allow only one deposit in the bag
-    # -------------------------------------------------------------------------
     if _is_deposit_product(product):
-        # Force quantity = 1 always
         if key in bag:
-            # Already added — do not add again
             bag[key] = 1
             request.session.modified = True
             messages.info(
@@ -101,10 +87,7 @@ def add_to_bag(request, product_id):
     request.session.modified = True
 
     if option:
-        messages.success(
-            request,
-            f"Added {qty} × {product.name} ({option.label}) to your bag.",
-        )
+        messages.success(request, f"Added {qty} × {product.name} ({option.label}) to your bag.")
     else:
         messages.success(request, f"Added {qty} × {product.name} to your bag.")
 
@@ -134,9 +117,7 @@ def adjust_bag(request, product_id):
     key = str(product_id)
     option = None
     if option_id:
-        option = ProductOption.objects.filter(
-            pk=option_id, product=product
-        ).first()
+        option = ProductOption.objects.filter(pk=option_id, product=product).first()
         if option:
             key = f"{product_id}_{option.id}"
 
@@ -150,10 +131,7 @@ def adjust_bag(request, product_id):
 
         bag[key] = 1
         request.session.modified = True
-        messages.info(
-            request,
-            f"{product.name} quantity is limited to 1.",
-        )
+        messages.info(request, f"{product.name} quantity is limited to 1.")
         return redirect("view_bag")
 
     # Normal behaviour
@@ -176,6 +154,9 @@ def adjust_bag(request, product_id):
 
 def remove_from_bag(request, product_id):
     """Remove a product/option entirely from the bag."""
+    if request.method != "POST":
+        return redirect("view_bag")
+
     product = get_object_or_404(Product, pk=product_id)
     option_id = request.POST.get("option_id")
 
@@ -184,9 +165,7 @@ def remove_from_bag(request, product_id):
 
     option = None
     if option_id:
-        option = ProductOption.objects.filter(
-            pk=option_id, product=product
-        ).first()
+        option = ProductOption.objects.filter(pk=option_id, product=product).first()
         if option:
             key = f"{product_id}_{option.id}"
 
@@ -207,6 +186,11 @@ def apply_discount(request):
     """
     Accepts POST with 'code'. MVP supports:
       WELCOME10 -> 10% off subtotal (before delivery).
+
+    IMPORTANT RULE (PP5 polish):
+    - Logged-in users can use WELCOME10 only once ever.
+      We enforce this by checking existing Orders with discount_code='WELCOME10'.
+
     Stores {'code': CODE, 'amount': Decimal} in session['discount'].
     """
     if request.method != "POST":
@@ -216,6 +200,23 @@ def apply_discount(request):
     if not code:
         messages.error(request, "Please enter a discount code.")
         return redirect("view_bag")
+
+    # --- One-time discount check (per authenticated user) ---
+    if code == "WELCOME10" and request.user.is_authenticated:
+        # Import locally to avoid tight coupling at module import time
+        from checkout.models import Order
+
+        already_used = Order.objects.filter(
+            user=request.user,
+            discount_code__iexact="WELCOME10",
+        ).exists()
+
+        if already_used:
+            messages.error(
+                request,
+                "WELCOME10 has already been used on your account. Please use a different code.",
+            )
+            return redirect("view_bag")
 
     # Compute against current subtotal via context processor
     from .context_processors import bag_contents
@@ -235,9 +236,7 @@ def apply_discount(request):
 
     request.session["discount"] = {"code": code, "amount": str(amount)}
     request.session.modified = True
-    messages.success(
-        request, f"Discount code '{code}' applied: -€{amount:.2f}"
-    )
+    messages.success(request, f"Discount code '{code}' applied: -€{amount:.2f}")
     return redirect("view_bag")
 
 
