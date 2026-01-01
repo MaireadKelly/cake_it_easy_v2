@@ -51,15 +51,18 @@ def _session_items(request):
             quantity = int(qty)
         except (TypeError, ValueError):
             continue
+
         product = Product.objects.filter(pk=pid).first()
         if not product:
             continue
+
         option = None
         if opt_id and ProductOption:
             option = ProductOption.objects.filter(
                 pk=opt_id,
                 product_id=pid
             ).first()
+
         unit_price = _pack_price(product, option)
         line_total = unit_price * quantity
 
@@ -75,6 +78,7 @@ def _session_items(request):
         )
 
         subtotal += line_total
+
     return items, subtotal
 
 
@@ -85,13 +89,20 @@ def checkout(request):
         messages.info(request, "Your bag is empty.")
         return redirect("product_list")
 
+    # Use bag context as the single source of truth (includes dynamic discount)
     bag_ctx = bag_contents(request)
-    total = bag_ctx.get("total", subtotal)
-    bag_total = bag_ctx.get("bag_total", total)
+
+    subtotal = bag_ctx.get("total", subtotal)  # pre-discount subtotal
     delivery = bag_ctx.get("delivery", Decimal("0.00"))
-    grand_total = bag_ctx.get("grand_total", total + delivery)
     discount_amount = bag_ctx.get("discount_amount") or Decimal("0.00")
     discount_code = bag_ctx.get("discount_code") or ""
+
+    # IMPORTANT: store pre-discount total on the Order model
+    # so Order.grand_total property works correctly.
+    pre_discount_total = subtotal + delivery
+    grand_total = pre_discount_total - discount_amount
+    if grand_total < 0:
+        grand_total = Decimal("0.00")
 
     if request.method == "POST":
         order_form = OrderForm(request.POST)
@@ -109,9 +120,12 @@ def checkout(request):
             order.original_bag = json.dumps(
                 request.session.get("bag", {})
             )
-            order.order_total = grand_total
+
+            # Store totals correctly
+            order.order_total = pre_discount_total
             order.discount_amount = discount_amount
             order.discount_code = discount_code
+
             order.save()
 
             for i in items:
@@ -197,8 +211,7 @@ def checkout(request):
 
     context = {
         "items": items,
-        "total": total,
-        "bag_total": bag_total,
+        "total": subtotal,
         "delivery": delivery,
         "grand_total": grand_total,
         "discount_amount": discount_amount,

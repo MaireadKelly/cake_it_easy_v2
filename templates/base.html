@@ -80,14 +80,74 @@
       {% include "includes/free-shipping-banner.html" %}
     </header>
 
-    {# Messages #}
-    {% if messages %}
-    <div class="container my-2" role="status" aria-live="polite">
-      {% for message in messages %}
-      <div class="alert alert-{{ message.tags|default:'info' }} mb-2">{{ message }}</div>
-      {% endfor %}
-    </div>
-    {% endif %}
+{# Toast Messages (Bootstrap) #}
+{% if messages %}
+  <div class="toast-container toast-center p-3" style="z-index: 1080;">
+    {% for message in messages %}
+
+      {% if message.tags == "error" %}
+        {% with header_class="text-bg-danger" %}
+          <div class="toast" role="status" aria-live="polite" aria-atomic="true"
+               data-bs-autohide="true" data-bs-delay="4500">
+            <div class="toast-header {{ header_class }}">
+              <strong class="me-auto">Cake It Easy</strong>
+              <small>Now</small>
+              <button type="button" class="btn-close btn-close-white ms-2 mb-1"
+                      data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">{{ message }}</div>
+          </div>
+        {% endwith %}
+
+      {% elif message.tags == "warning" %}
+        {% with header_class="text-bg-warning" %}
+          <div class="toast" role="status" aria-live="polite" aria-atomic="true"
+               data-bs-autohide="true" data-bs-delay="4500">
+            <div class="toast-header {{ header_class }}">
+              <strong class="me-auto">Cake It Easy</strong>
+              <small>Now</small>
+              <button type="button" class="btn-close btn-close-white ms-2 mb-1"
+                      data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">{{ message }}</div>
+          </div>
+        {% endwith %}
+
+      {% elif message.tags == "success" %}
+        {% with header_class="text-bg-success" %}
+          <div class="toast" role="status" aria-live="polite" aria-atomic="true"
+               data-bs-autohide="true" data-bs-delay="4500">
+            <div class="toast-header {{ header_class }}">
+              <strong class="me-auto">Cake It Easy</strong>
+              <small>Now</small>
+              <button type="button" class="btn-close btn-close-white ms-2 mb-1"
+                      data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">{{ message }}</div>
+          </div>
+        {% endwith %}
+
+      {% else %}
+        {% with header_class="text-bg-info" %}
+          <div class="toast" role="status" aria-live="polite" aria-atomic="true"
+               data-bs-autohide="true" data-bs-delay="4500">
+            <div class="toast-header {{ header_class }}">
+              <strong class="me-auto">Cake It Easy</strong>
+              <small>Now</small>
+              <button type="button" class="btn-close btn-close-white ms-2 mb-1"
+                      data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">{{ message }}</div>
+          </div>
+        {% endwith %}
+      {% endif %}
+
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+
 
     {# Main content #}
     <main class="site-main">
@@ -101,6 +161,17 @@
     {% include "includes/newsletter_modal.html" %}
 
     {% block postloadjs %}
+    <script>
+      // Auto-show any Bootstrap toasts rendered by Django messages
+      document.addEventListener("DOMContentLoaded", function () {
+        var toastEls = document.querySelectorAll(".toast");
+        toastEls.forEach(function (toastEl) {
+          var t = new bootstrap.Toast(toastEl);
+          t.show();
+        });
+      });
+    </script>
+
     <script defer src="{% static 'newsletter/newsletter.js' %}"></script>
     {% endblock %}
 

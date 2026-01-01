@@ -54,6 +54,13 @@ Example: `products/views.py` → `docs/testing/py/val_products_views.png`.
 | Footer | Sticky footer | Short page (e.g., logout) | Footer sticks to bottom |
 
 _Evidence_: Drop relevant screenshots per row into `docs/testing/html/` or `docs/testing/py/` as appropriate and embed inline beneath the table if desired.
+**Custom Cake Deposit – Quantity Restriction**
+
+- Attempted to add the custom cake deposit to the basket multiple times.
+- Expected result: deposit remains limited to a quantity of one.
+- Actual result: deposit quantity is capped at one and a user message is displayed.
+
+This behaviour is intentional to prevent duplicate deposits within a single order.
 
 ---
 

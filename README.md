@@ -1,4 +1,27 @@
+
 # Cake It Easy v2.0
+
+## 📍 Table of Contents
+- [Overview](#overview)
+- [Live Project](#live-project)
+- [Business Goals](#business-goals)
+- [User Goals](#user-goals)
+- [Agile Methodology](#agile-methodology)
+- [Design](#design)
+- [Features](#features)
+- [Future Features](#future-features)
+- [Testing](#testing)
+- [Validation](#validation)
+- [Deployment](#deployment)
+- [Custom Cake Orders](#custom-cake-orders)
+- [Known Issues / Fixes](#known-issues--fixes)
+- [Marketing & SEO Evidence](#marketing--seo-evidence)
+- [Business Model & UX Rationale](#business-model--ux-rationale)
+- [Credits](#credits)
+- [Licence](#licence)
+
+---
+
 
 Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcakes, and accessories. It builds on the Code Institute **Boutique Ado** walkthrough and adds:
 
@@ -11,12 +34,13 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 
   ![Discount line in Bag totals](docs/readme/discount_line_bag.png)
 
-  ![Discount shown at Checkout](docs/readme/discount_checkout.png)
+  ![Discount shown at Checkout summary before paymnent](docs/readme/discount_checkout.png)
 - **Newsletter signup** modal with success flow
 - **SEO** polish (meta, robots, sitemap, rel)
 
 > This README aligns to the assessor feedback and PP5 criteria. See **TESTING.md** for the step‑by‑step test evidence.
 
+[Back to top](#table-of-contents)
 ---
 
 ## Live Project
@@ -25,6 +49,8 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 - **Repository:** [https://github.com/MaireadKelly/cake\_it\_easy\_v2](https://github.com/MaireadKelly/cake_it_easy_v2)
 - **Project Board (Agile):** [https://github.com/users/MaireadKelly/projects/10](https://github.com/users/MaireadKelly/projects/10)
 
+
+[Back to top](#table-of-contents)
 ---
 
 ## Business Goals
@@ -35,6 +61,12 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 - Support admin efficiency with inline product options.
 - Drive engagement via newsletter and social content.
 
+
+[Back to top](#table-of-contents)
+
+---
+
+
 ## User Goals
 
 - Browse and search products quickly.
@@ -43,6 +75,7 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 - Checkout securely with Stripe.
 - Save details and view previous orders.
 
+[Back to top](#table-of-contents)
 ---
 
 ## Agile Methodology
@@ -55,6 +88,9 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
   - **Could**: Custom Cake Orders
 - Each User Story is tracked as a card with acceptance criteria; closed cards map to commits/deploys.
 
+[Back to top](#table-of-contents)
+---
+
 ### User Stories (samples)
 
 - As a shopper I can filter cupcakes so I see only relevant items.
@@ -66,6 +102,7 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 
 > Full list and status are available on the project board.
 
+[Back to top](#table-of-contents)
 ---
 
 ## Design
@@ -83,6 +120,9 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 
 ### Data Model / ERD
 ![erd](docs/readme/erd.png)
+
+[Back to top](#table-of-contents)
+
 ---
 
 ## Features
@@ -106,6 +146,7 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 
 ### Checkout (Stripe)
 
+Checkout architecture note: This project is based on Boutique Ado but uses a simplified flow where the Order is created in the checkout view after successful Stripe PaymentIntent confirmation, and the webhook is used to verify the event and mark the order as paid. Discounts are stored separately (discount_amount) and the final total is calculated via a grand_total property for clarity and maintainability.
 - Stripe PaymentIntent uses the **discounted** grand total.
 - On success, order is created; bag/discount cleared; success page shown.
 - Webhooks ready for robust fulfilment (test mode used).
@@ -126,9 +167,9 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 - Stripe charges the **discounted** amount.
 - Order records include `discount_code` and `discount_amount`.
 - Evidence screenshots:
-  - `docs/readme/discount_apply.png`
-  - `docs/readme/discount_line_bag.png`
-  - `docs/readme/discount_checkout.png`
+  - `docs/readme/discount_apply.png`![](docs/readme/discount_apply.png)
+  - `docs/readme/discount_line_bag.png`![](docs/readme/discount_line_bag.png)
+  - `docs/readme/discount_checkout.png`![](docs/readme/discount_checkout.png)
 
 ### Newsletter (Marketing)
 
@@ -147,9 +188,12 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 - Custom **404**
 ![alt text](docs/readme/404.png)
 - **robots.txt**
-![alt text](docs/readme/28_robots.png.png) 
+![alt text](docs/readme/28_robots.png) 
 **sitemap.xml** 
-![alt text](docs/readme/28_sitemap.png.png)
+![alt text](docs/readme/28_sitemap.png)
+
+
+[Back to top](#table-of-contents)
 
 ---
 
@@ -165,7 +209,7 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 
 All testing steps and expected outcomes are documented in [**TESTING.md**](TESTING.md). Screenshot evidence captured on the **deployed site**.
 
-### Screenshot Index (placeholders)
+### Screenshot Index
 
 ## A. Navigation & Layout
 ![Home (nav + footer)](docs/readme/01_home_nav_footer.png)
@@ -174,13 +218,13 @@ All testing steps and expected outcomes are documented in [**TESTING.md**](TESTI
 
 ## B. Auth
 ![Register form](docs/readme/04_register_form.png)
-![Register feedback](docs/readme/05_register_feedback.png)
-![Login success](docs/readme/06_login_success.png)
-![Logout success](docs/readme/07_logout_success.png)
+![Register feedback](docs/readme/04_register_feedback.png)
+![Login success](docs/readme/05_login_success.png)
+![Logout success](docs/readme/06_logout_success.png)
 
 ## C. Discovery
 ![Search results](docs/readme/08_search_results.png)
-![Sort price low→high](docs/readme/09_sort_price_low_high.png)
+![Sort price low→high](docs/readme/08_sort.png)
 ![Cupcakes badge](docs/readme/10_cupcakes_badge.png)
 
 ## D. Product Detail
@@ -207,7 +251,7 @@ All testing steps and expected outcomes are documented in [**TESTING.md**](TESTI
 ![Admin discounted bundle](docs/readme/25_admin_discounted_bundle.png)
 
 ## H. SEO / Responsive
-![404 page](docs/readme/26_404_page.png)
+![404 page](docs/readme/404.png)
 ![Meta title & description](docs/readme/27_meta_title_description.png)
 ![Robots & sitemap](docs/readme/28_robots_sitemap.png)
 ![Mobile product detail](docs/readme/29_mobile_product_detail.png)
@@ -234,74 +278,94 @@ All testing steps and expected outcomes are documented in [**TESTING.md**](TESTI
 Deployment
 ----------
 
-This section documents **exact, reproducible** steps to run the project **locally** and **on Heroku**, including the files to create, packages to install, resources to set up, and the environment variables required.
+1. **Clone the repository**
+```bash
+git clone https://github.com/MaireadKelly/cake_it_easy_v2.git
+cd cake_it_easy_v2
+```
 
-### 1) Local Setup
+2. **Create and activate a virtual environment**
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+```
 
-1.  git clone https://github.com//cake-it-easy-v2 cake-it-easy-v2
-    
-2.  python -m venv .venv# Windows.venv\\Scripts\\activate# macOS/Linuxsource .venv/bin/activate
-    
-3.  pip install -r requirements.txt
-    
-4.  \# CoreSECRET\_KEY=your-secure-django-secretDEBUG=TrueUSE\_SQLITE=True# Database (optional for local; SQLite used if USE\_SQLITE=True)DATABASE\_URL=postgres://user:pass@host:5432/dbname# StripeSTRIPE\_PUBLIC\_KEY=pk\_test\_xxxSTRIPE\_SECRET\_KEY=sk\_test\_xxxSTRIPE\_WH\_SECRET=whsec\_xxx# CloudinaryCLOUDINARY\_URL=cloudinary://:@CLOUDINARY\_UPLOAD\_PREFIX=cake-it-easy# DjangoALLOWED\_HOSTS=localhost,127.0.0.1
-    
-5.  python manage.py migratepython manage.py createsuperuserpython manage.py runserverVisit **http://localhost:8000**.
-    
+3. **Install required packages**
+```bash
+pip install -r requirements.txt
+```
 
-> Notes:
-> 
-> *   Local email uses Django console backend; order emails will print to the terminal.
->     
-> *   Static files are collected only for production; local dev serves from app/static.
->     
+4. **Create environment variables**
 
-### 2) Heroku Deployment
+Create a `.env` file in the project root:
+```text
+SECRET_KEY=your-django-secret-key
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
 
-#### Prerequisites
+# Stripe
+STRIPE_PUBLIC_KEY=pk_test_xxx
+STRIPE_SECRET_KEY=sk_test_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
 
-*   Heroku account and the **Heroku CLI** installed
-    
-*   A **Cloudinary** account for media storage
-    
-*   A **Stripe** account (Publishable key, Secret key, and a Webhook Signing Secret)
-    
+# Cloudinary
+CLOUDINARY_URL=cloudinary://<key>:<secret>@<cloud_name>
+```
 
-#### Steps
+5. **Apply migrations and run the server**
+```bash
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
 
-1.  heroku create cake-it-easy-v2
-    
-2.  **Add buildpacks** (Heroku Dashboard → _Settings_ → _Buildpacks_):
-    
-    *   heroku/python
-        
-    *   _(optional if you serve static through Django only; no extra buildpack required)_
-        
-3.  **Provision a database** (Heroku Postgres free tier)
-    
-    *   Dashboard → _Resources_ → Add-ons → **Heroku Postgres**
-        
-    *   This sets DATABASE\_URL automatically.
-        
-4.  SECRET\_KEY=your-secure-django-secretDEBUG=FalseALLOWED\_HOSTS=.herokuapp.com# DatabaseDATABASE\_URL= (auto-set by Heroku Postgres; leave as provided)# StripeSTRIPE\_PUBLIC\_KEY=pk\_live\_xxxSTRIPE\_SECRET\_KEY=sk\_live\_xxxSTRIPE\_WH\_SECRET=whsec\_xxx# CloudinaryCLOUDINARY\_URL=cloudinary://:@CLOUDINARY\_UPLOAD\_PREFIX=cake-it-easy# (Optional) For first deploy only, if collectstatic needs to be skipped:# DISABLE\_COLLECTSTATIC=1
-    
-5.  **Connect the app to GitHub** (Dashboard → _Deploy_):
-    
-    *   Deployment method: **GitHub**
-        
-    *   Connect repository
-        
-    *   Enable **Automatic Deploys** (from main)
-        
-6.  heroku run python manage.py migrateheroku run python manage.py createsuperuser# If you used DISABLE\_COLLECTSTATIC=1 initially, remove it in Config Vars, then:heroku run python manage.py collectstatic --noinput
+Visit: `http://127.0.0.1:8000`
+
+---
+
+### Heroku Deployment
+
+1. **Create Heroku app**
+- Heroku Dashboard → New → Create new app
+
+2. **Add buildpack**
+- Settings → Buildpacks → `heroku/python`
+
+3. **Provision database**
+- Resources → Add-ons → Heroku Postgres (free tier)
+
+4. **Set Config Vars**
+```text
+SECRET_KEY=your-django-secret-key
+DEBUG=False
+ALLOWED_HOSTS=.herokuapp.com
+DATABASE_URL=(auto set by Heroku Postgres)
+
+STRIPE_PUBLIC_KEY=pk_live_xxx
+STRIPE_SECRET_KEY=sk_live_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
+
+CLOUDINARY_URL=cloudinary://<key>:<secret>@<cloud_name>
+CLOUDINARY_UPLOAD_PREFIX=cake-it-easy
+```
+
+5. **Deploy from GitHub**
+- Deploy → GitHub → Connect repository
+- Enable automatic deploys
+- Deploy branch
+
+6. **Run migrations on Heroku**
+```bash
+heroku run python manage.py migrate
+heroku run python manage.py createsuperuser
+```
     
 7.  **Configure Stripe Webhook**
     
     *   In Stripe Dashboard → _Developers_ → _Webhooks_ → **Add endpoint**
         
-    *   **Endpoint URL**: https://.herokuapp.com/checkout/webhook/
-        
-    *   **Events to send**: at minimum payment\_intent.succeeded, payment\_intent.payment\_failed (match your code)
+- Endpoint URL: `https://<your-app>.herokuapp.com/checkout/wh/`
+- Events: `payment_intent.succeeded`, `payment_intent.payment_failed`
         
     *   Copy the **Signing secret** and set it as STRIPE\_WH\_SECRET in Heroku Config Vars.
         
@@ -365,7 +429,7 @@ This deployment guide has been tested end-to-end and contains all setup details 
 ## Marketing & SEO Evidence
 
 - **Newsletter:** form/success/duplicate (see screenshots under I.)
-- **Facebook:** branded post mockup showing box‑size pricing ![Facebook cover + pinned post – WELCOME10](docs/readme/fb_01_page_cover_about.png)
+- **Facebook:** branded post mockup![Facebook cover + pinned post – WELCOME10](docs/readme/fb_01_page_cover_about.png)
 -### SEO Evidence – robots.txt & sitemap.xml
 
 Live endpoints:
