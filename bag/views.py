@@ -234,10 +234,12 @@ def apply_discount(request):
         request.session.modified = True
         return redirect("view_bag")
 
-    request.session["discount"] = {"code": code, "amount": str(amount)}
+    # Store only the code; discount amount is recalculated dynamically in bag context
+    request.session["discount"] = {"code": code}
     request.session.modified = True
-    messages.success(request, f"Discount code '{code}' applied: -€{amount:.2f}")
+    messages.success(request, f"Discount code '{code}' applied.")
     return redirect("view_bag")
+
 
 
 def remove_discount(request):

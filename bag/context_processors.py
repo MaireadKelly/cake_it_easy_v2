@@ -30,6 +30,11 @@ def bag_contents(request):
     session['bag'] keys:
       "<product_id>"                 -> simple product
       "<product_id>_<option_id>"     -> ONLY cupcakes (box option)
+
+    Discount handling:
+      - session['discount'] stores ONLY {"code": "..."}
+      - discount_amount is recalculated every request so it stays in sync
+        when bag contents change (e.g. on mobile add-to-bag).
     """
     bag = request.session.get("bag", {})
     items = []
@@ -44,19 +49,16 @@ def bag_contents(request):
             qty = int(quantity)
         except (TypeError, ValueError):
             continue
-        product = (
-            Product.objects.select_related("category").filter(pk=pid).first()
-        )
+
+        product = Product.objects.select_related("category").filter(pk=pid).first()
         if not product:
             continue
+
         option = None
         if opt_id and _is_cupcake(product):
-            option = ProductOption.objects.filter(
-                pk=opt_id, product_id=pid
-            ).first()
-        unit_price = _pack_price(
-            product, option
-        )  # price per box for cupcakes; else product.price
+            option = ProductOption.objects.filter(pk=opt_id, product_id=pid).first()
+
+        unit_price = _pack_price(product, option)
         line_total = unit_price * qty
         subtotal += line_total
         product_count += qty
@@ -64,6 +66,7 @@ def bag_contents(request):
         per_unit = None
         if option and getattr(option, "quantity", None):
             per_unit = unit_price / Decimal(option.quantity)
+
         items.append(
             {
                 "key": key,
@@ -75,27 +78,33 @@ def bag_contents(request):
                 "line_total": line_total,
             }
         )
-    # Delivery
 
+    # ------------------
+    # Delivery
+    # ------------------
     if product_count == 0 or subtotal >= FREE_DELIVERY_THRESHOLD:
         delivery = Decimal("0.00")
         free_delta = Decimal("0.00")
     else:
         delivery = STANDARD_DELIVERY
         free_delta = FREE_DELIVERY_THRESHOLD - subtotal
-    # --- Discount from session ---
 
+    # ------------------
+    # Discount (recalculate dynamically each request)
+    # ------------------
     disc = request.session.get("discount") or {}
-    try:
-        discount_amount = Decimal(str(disc.get("amount", "0") or "0"))
-    except Exception:
-        discount_amount = Decimal("0.00")
-    discount_code = disc.get("code") or ""
+    discount_code = (disc.get("code") or "").strip().upper()
 
+    discount_amount = Decimal("0.00")
+    if discount_code == "WELCOME10":
+        discount_amount = (subtotal * Decimal("0.10")).quantize(Decimal("0.01"))
+
+    # Safety clamps
     if discount_amount < 0:
         discount_amount = Decimal("0.00")
     if discount_amount > subtotal:
         discount_amount = subtotal
+
     total_after_discount = subtotal - discount_amount
     grand_total = total_after_discount + delivery
 
