@@ -6,8 +6,29 @@
         <div class="card card-body shadow-sm">
           <h1 class="mb-2">Thanks! 🎉</h1>
           <p>Your order <strong>#{{ order.id }}</strong> has been received.</p>
-          <p>We’ve emailed a confirmation to {{ order.email }}.</p>
-          <div class="mt-2">
+          <p class="mb-3">We’ve emailed a confirmation to <strong>{{ order.email }}</strong>.</p>
+
+          <hr>
+
+          <p class="mb-1">
+            <strong>Order total (before discount):</strong>
+            €{{ order.order_total|floatformat:2 }}
+          </p>
+
+          {% if order.discount_amount and order.discount_amount > 0 %}
+            <p class="mb-1 text-success">
+              <strong>Discount{% if order.discount_code %} ({{ order.discount_code }}){% endif %}:</strong>
+              -€{{ order.discount_amount|floatformat:2 }}
+            </p>
+          {% endif %}
+
+          <p class="lead mb-0">
+            <strong>Grand total:</strong>
+            €{{ order.grand_total|floatformat:2 }}
+          </p>
+
+          <div class="mt-4 d-flex gap-2">
+            <a class="btn btn-outline-primary" href="{% url 'order_detail' order.id %}">View order details</a>
             <a class="btn btn-primary" href="{% url 'product_list' %}">Continue shopping</a>
           </div>
         </div>

@@ -5,33 +5,67 @@
 
   <div class="card card-body">
     <p class="mb-2"><strong>Status:</strong>
-      {% if order.paid %}<span class="badge badge-success">Paid</span>
-      {% else %}<span class="badge badge-warning">Unpaid</span>{% endif %}
+      {% if order.paid %}
+        <span class="badge bg-success">Paid</span>
+      {% else %}
+        <span class="badge bg-warning text-dark">Unpaid</span>
+      {% endif %}
     </p>
+
     <p class="mb-2"><strong>Date:</strong> {{ order.created_on|date:"Y-m-d H:i" }}</p>
+
     {% if order.stripe_pid %}
       <p class="mb-2"><strong>Stripe PID:</strong> {{ order.stripe_pid }}</p>
     {% endif %}
 
     <hr>
     <h5 class="mb-3">Items</h5>
+
     <table class="table table-sm">
       <thead>
-        <tr><th>Product</th><th class="text-center">Qty</th><th class="text-right">Line total</th></tr>
+        <tr>
+          <th>Product</th>
+          <th class="text-center">Qty</th>
+          <th class="text-end">Line total</th>
+        </tr>
       </thead>
+
       <tbody>
         {% for li in order.lineitems.all %}
           <tr>
-            <td>{{ li.product.name }}</td>
+            <td>
+              {{ li.product.name }}
+              {% if li.option %}
+                <span class="text-muted">({{ li.option.label }})</span>
+              {% endif %}
+            </td>
             <td class="text-center">{{ li.quantity }}</td>
-            <td class="text-right">€{{ li.lineitem_total|floatformat:2 }}</td>
+            <td class="text-end">€{{ li.lineitem_total|floatformat:2 }}</td>
           </tr>
         {% endfor %}
       </tbody>
+
       <tfoot>
+        {# order_total is the PRE-discount total (and includes delivery if you designed it that way) #}
         <tr>
-          <td colspan="2" class="text-right"><strong>Order total</strong></td>
-          <td class="text-right"><strong>€{{ order.order_total|floatformat:2 }}</strong></td>
+          <td colspan="2" class="text-end"><strong>Order total (before discount)</strong></td>
+          <td class="text-end"><strong>€{{ order.order_total|floatformat:2 }}</strong></td>
+        </tr>
+
+        {% if order.discount_amount and order.discount_amount > 0 %}
+          <tr>
+            <td colspan="2" class="text-end text-success">
+              <strong>Discount{% if order.discount_code %} ({{ order.discount_code }}){% endif %}</strong>
+            </td>
+            <td class="text-end text-success">
+              <strong>-€{{ order.discount_amount|floatformat:2 }}</strong>
+            </td>
+          </tr>
+        {% endif %}
+
+        <tr>
+          <td colspan="2" class="text-end"><strong>Grand total</strong></td>
+          <td class="text-end"><strong>€{{ order.grand_total|floatformat:2 }}</strong></td>
         </tr>
       </tfoot>
     </table>
