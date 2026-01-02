@@ -845,3 +845,50 @@ header.container-fluid.fixed-top {
         z-index: 1030;
     }
 }
+
+
+/* =========================
+   Footer – Social & Polish
+   ========================= */
+
+.footer-heading {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1rem;
+}
+
+.footer-social-links {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--neutral-light);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.footer-social-link:hover,
+.footer-social-link:focus {
+    background-color: var(--primary-color);
+    color: #fff;
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.footer-social-link:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+}
