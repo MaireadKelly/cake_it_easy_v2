@@ -846,49 +846,95 @@ header.container-fluid.fixed-top {
     }
 }
 
-
 /* =========================
-   Footer – Social & Polish
+   Footer – Final Polished Version
    ========================= */
 
-.footer-heading {
-    font-weight: 600;
-    color: var(--primary-color);
-    font-size: 1rem;
+.site-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e5e5e5;
+    font-size: 0.95rem;
 }
 
+/* Headings */
+.site-footer .footer-heading {
+    font-weight: 600;
+    color: #212529;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Footer text links (Shop, Contact, etc.) */
+.site-footer a {
+    color: #212529;
+    text-decoration: none;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.site-footer a:hover,
+.site-footer a:focus {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+/* Footer links list */
+.site-footer .footer-links li {
+    margin-bottom: 0.4rem;
+}
+
+/* Social icons */
 .footer-social-links {
     list-style: none;
-    display: flex;
-    gap: 1rem;
     padding: 0;
     margin: 0;
+    display: flex;
+    gap: 0.75rem;
 }
 
-.footer-social-link {
+.footer-social-links li {
     display: inline-flex;
+}
+
+.footer-social-links a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f1f3f5;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background-color: var(--neutral-light);
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    color: var(--primary-color);
-    font-size: 1.25rem;
-    text-decoration: none;
-    transition: all 0.2s ease;
+    color: #212529;
+    font-size: 1.2rem;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }
 
-.footer-social-link:hover,
-.footer-social-link:focus {
-    background-color: var(--primary-color);
-    color: #fff;
+.footer-social-links a:hover,
+.footer-social-links a:focus {
+    background-color: var(--accent-color);
+    color: #ffffff;
     transform: translateY(-2px);
-    text-decoration: none;
 }
 
-.footer-social-link:focus-visible {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 3px;
+/* Footer small text */
+.site-footer small {
+    color: #6c757d;
+}
+
+/* =========================
+   Footer – Mobile Tweak
+   ========================= */
+
+@media (max-width: 767px) {
+    .site-footer {
+        text-align: center;
+    }
+
+    .footer-social-links {
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
+    .site-footer .col-md-4 {
+        margin-bottom: 1.25rem;
+    }
 }
