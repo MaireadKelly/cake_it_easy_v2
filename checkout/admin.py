@@ -10,7 +10,7 @@ class OrderLineItemInline(admin.TabularInline):
 
 
 @admin.action(description="Mark selected orders as paid")
-def mark_paid(modeladmin, request, queryset):
+def mark_paid(_modeladmin, _request, queryset):
     queryset.update(paid=True)
 
 
