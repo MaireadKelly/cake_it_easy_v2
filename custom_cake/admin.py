@@ -1,76 +1,46 @@
 from django.contrib import admin
-from django.utils.html import format_html
-
 from .models import CustomCake
 
 
 @admin.register(CustomCake)
 class CustomCakeAdmin(admin.ModelAdmin):
-    # List view columns
+    """
+    Admin config so staff can manage CustomCake requests efficiently.
+    Ensures the 'description' (notes) is visible and searchable.
+    """
+
+    # Show key info in the list view (includes a short description preview)
     list_display = (
-        "name",
-        "flavor",
-        "filling",
-        "size",
-        "created_on",
+        "id",
         "user",
-        "needed_date",
-        "image_preview",
-    )
-    list_display_links = ("name",)
-
-    # Filters and search
-    list_filter = (
+        "name",
         "occasion",
-        "flavor",
-        "filling",
-        "size",
         "needed_date",
+        "short_description",
         "created_on",
     )
-    search_fields = ("name", "description", "inscription", "user__username")
 
-    # Usability & performance
+    list_filter = ("occasion", "needed_date", "created_on")
+    search_fields = ("id", "user__username", "name", "description")
     ordering = ("-created_on",)
-    readonly_fields = ("created_on", "image_preview")
-    list_per_page = 25
-    save_on_top = True
-    date_hierarchy = "created_on"
-    autocomplete_fields = ["user"]
-    list_select_related = ("user",)
 
-    # Admin form layout
+    # Make timestamps read-only (edit form)
+    readonly_fields = ("created_on",)
+
     fieldsets = (
-        (
-            "Request",
-            {
-                "fields": (
-                    "user",
-                    "name",
-                    "description",
-                    "occasion",
-                    "flavor",
-                    "filling",
-                    "size",
-                    "inscription",
-                    "image",
-                )
-            },
-        ),
-        ("Meta", {"fields": ("created_on", "image_preview")}),
+        ("Customer", {"fields": ("user", "name")}),
+        ("Request Details", {"fields": ("occasion", "flavor", "filling", "size", "inscription", "needed_date")}),
+        ("Notes", {"fields": ("description",)}),
+        ("Media", {"fields": ("image",)}),
+        ("System", {"fields": ("created_on",)}),
     )
 
-    def image_preview(self, obj):
-        if getattr(obj, "image", None):
-            try:
-                url = obj.image.url
-                return format_html(
-                    '<img src="{}" width="60" height="60" '
-                    'style="object-fit:cover; border-radius:6px;" />',
-                    url,
-                )
-            except Exception:
-                return "—"
-        return "—"
-
-    image_preview.short_description = "Preview"
+    @admin.display(description="Notes")
+    def short_description(self, obj):
+        """
+        Preview the description in the list page without it taking over the table.
+        """
+        if not obj.description:
+            return ""
+        text = obj.description.strip()
+        return text[:60] + ("…" if len(text) > 60 else "")
