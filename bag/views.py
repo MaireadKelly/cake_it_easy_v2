@@ -212,7 +212,7 @@ def apply_discount(request):
         ).exists()
 
         if already_used:
-            messages.error(
+            messages.info(
                 request,
                 "WELCOME10 has already been used on your account. Please use a different code.",
             )
