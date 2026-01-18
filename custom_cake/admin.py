@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import CustomCake
+from django.utils.html import format_html
+
 
 
 @admin.register(CustomCake)
@@ -16,6 +18,8 @@ class CustomCakeAdmin(admin.ModelAdmin):
         "name",
         "occasion",
         "needed_date",
+        "image_preview",
+        "inscription",
         "short_description",
         "created_on",
     )
@@ -25,13 +29,13 @@ class CustomCakeAdmin(admin.ModelAdmin):
     ordering = ("-created_on",)
 
     # Make timestamps read-only (edit form)
-    readonly_fields = ("created_on",)
+    readonly_fields = ("created_on", "image_preview")
 
     fieldsets = (
         ("Customer", {"fields": ("user", "name")}),
         ("Request Details", {"fields": ("occasion", "flavor", "filling", "size", "inscription", "needed_date")}),
         ("Notes", {"fields": ("description",)}),
-        ("Media", {"fields": ("image",)}),
+        ("Media", {"fields": ("image", "image_preview")}),
         ("System", {"fields": ("created_on",)}),
     )
 
@@ -44,3 +48,16 @@ class CustomCakeAdmin(admin.ModelAdmin):
             return ""
         text = obj.description.strip()
         return text[:60] + ("…" if len(text) > 60 else "")
+    
+    @admin.display(description="Image Preview")
+    def image_preview(self, obj):
+        """
+        Display a small preview of the uploaded cake image in admin.
+        """
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="max-height: 100px; border-radius: 6px;" />',
+                obj.image.url
+            )
+        return "No image"
+
