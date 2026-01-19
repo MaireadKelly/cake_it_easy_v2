@@ -138,14 +138,22 @@ def remove_from_bag(request, product_id):
 
     return redirect("view_bag")
 
-
 # ---------- discount code endpoints ----------
+
+from decimal import Decimal
+from django.contrib import messages
+from django.shortcuts import redirect
+from checkout.models import Order
+
 
 def apply_discount(request):
     """
     Accepts POST with 'code'. MVP supports:
       WELCOME10 -> 10% off subtotal (before delivery).
+
     Stores {'code': CODE, 'amount': Decimal} in session['discount'].
+
+    WELCOME10 can only be used once per registered user.
     """
     if request.method != "POST":
         return redirect("view_bag")
@@ -154,6 +162,21 @@ def apply_discount(request):
     if not code:
         messages.error(request, "Please enter a discount code.")
         return redirect("view_bag")
+
+    # Enforce single-use per registered user
+    if code == "WELCOME10" and request.user.is_authenticated:
+        already_used = Order.objects.filter(
+            user=request.user,
+            discount_code="WELCOME10",
+            paid=True,
+        ).exists()
+
+        if already_used:
+            messages.info(
+                request,
+                "WELCOME10 has already been used on your account. Please use a different code.",
+            )
+            return redirect("view_bag")
 
     # Compute against current subtotal via context processor
     from .context_processors import bag_contents
