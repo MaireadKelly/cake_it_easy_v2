@@ -19,7 +19,7 @@
 - [Licence](#licence)
 
 
-Cake It Easy v2.0 is a full-stack Django e-commerce application that allows customers to easily browse, customise, and order cakes and cupcakes online.  It builds on the Code Institute **Boutique Ado** walkthrough project.
+Cake It Easy v2.0 is a full-stack Django e-commerce application that allows customers to easily browse, customise, and order cakes and cupcakes online.
 
 The site is designed to provide a smooth, user-focused shopping experience — from discovering products and selecting box sizes, to applying discount codes and completing secure checkout. It is built using the Code Institute Boutique Ado walkthrough as a foundation, with significant customisation and additional features introduced to meet the project’s functional, UX, and assessment requirements.
 
