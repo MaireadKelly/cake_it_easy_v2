@@ -19,15 +19,13 @@
 - [Licence](#licence)
 
 
-Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcakes, and accessories. It builds on the Code Institute **Boutique Ado** walkthrough and adds:
+Cake It Easy v2.0 is a full-stack Django e-commerce application that allows customers to easily browse, customise, and order cakes and cupcakes online.  It builds on the Code Institute **Boutique Ado** walkthrough project.
 
-- **Cupcake box‑size pricing** (4/6/10/12) with transparent per‑cupcake price
-- **Custom Cake Orders** (bespoke requests)
-- **Discount codes** (e.g., `WELCOME10`)
-- **Newsletter signup** modal with success flow
-- **SEO** polish (meta, robots, sitemap, rel)
+The site is designed to provide a smooth, user-focused shopping experience — from discovering products and selecting box sizes, to applying discount codes and completing secure checkout. It is built using the Code Institute Boutique Ado walkthrough as a foundation, with significant customisation and additional features introduced to meet the project’s functional, UX, and assessment requirements.
 
-> This README aligns to the assessor feedback and PP5 criteria. See [**TESTING.md**](TESTING.md) for the step‑by‑step test evidence.
+Key features include cupcake box-size pricing with clear per-item costs, bespoke custom cake order requests, promotional discount codes, and a newsletter signup flow. The project also incorporates SEO best practices, user authentication, and full CRUD functionality where appropriate.
+
+> This README documents the application structure, features, and development decisions in line with the PP5 assessment criteria. Full manual testing steps and evidence are provided in [**TESTING.md**](TESTING.md) for the step‑by‑step test evidence.
 
 [Back to Top](#top)
 
