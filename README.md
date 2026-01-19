@@ -119,7 +119,6 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 ### Products & Discovery
 
 - Product list, detail, search, sort, and category filters (Cakes/Accessories/Cupcakes).
-- Cupcake cards display **“From €…”** based on the cheapest configured box.
 ![Home (nav + footer)](docs/readme/01_home_nav_footer.png)
 ![Cakes listing](docs/readme/02_cakes_listing.png)
 ![Accessories listing](docs/readme/03_accessories_listing.png)
@@ -130,38 +129,43 @@ Cake It Easy v2.0 is a full‑stack e‑commerce site for ordering cakes, cupcak
 ### Cupcake Box‑Size Pricing
 
 - Product detail shows **€X.XX per cupcake**.
+![Product detail top](docs/readme/11_product_detail_top.png)
 - A **Box size** dropdown (4/6/10/12) appears above Quantity (boxes).
+![Box dropdown open](docs/readme/12_box_dropdown_open.png)
 - Pack price auto‑calculates from per‑cupcake × quantity (or uses an override price for bundles).
 - Bag line shows **(Box of N)** and **≈ € per cupcake**.
-![Product detail top](docs/readme/11_product_detail_top.png)
-![Box dropdown open](docs/readme/12_box_dropdown_open.png)
+- Cupcake cards display **“From €…”** based on the cheapest configured box.
 ![Dynamic pack price](docs/readme/13_dynamic_pack_price.png)
 
 ### Shopping Bag
 
 - Add, update, remove with toasts; free‑delivery threshold message.
-- **Discount codes** (see below) integrated into totals.
-- On smaller screens, the bag uses a horizontally scrollable table to ensure all pricing information remains accessible without overcrowding the layout.
 ![Add to bag toast](docs/readme/14_add_to_bag_toast.png)
-![Bag line item](docs/readme/15_bag_line.png)
-![Bag totals](docs/readme/16_bag_totals.png)
 ![Update quantity](docs/readme/17_bag_update_qty.png)
 ![Remove item](docs/readme/18_bag_remove_item.png)
+![free delivery](docs/readme/free_delivery_threshold.png)
+- **Discount codes** (see below) integrated into totals.
+- ![Discount applied](docs/readme/discount_apply.png)
+- **On smaller screens, the bag uses a horizontally scrollable table to ensure all pricing information remains accessible without overcrowding the layout.**
+
+![Bag line item](docs/readme/15_bag_line.png)
+![Bag totals](docs/readme/16_bag_totals.png)
+
 
 ### Checkout (Stripe)
 
 - Stripe PaymentIntent uses the **discounted** grand total.
 - On success, order is created; bag/discount cleared; success page shown.
-- Webhooks ready for robust fulfilment (test mode used).
-![Checkout summary](docs/readme/19_checkout_summary.png)
-![Payment card form](docs/readme/20_payment_card_form.png)
-![Checkout success page](docs/readme/22_checkout_success_page.png)
 ![Bag cleared](docs/readme/23_bag_cleared.png)
+- Webhooks ready for robust fulfilment (test mode used).
+
+![Checkout success page](docs/readme/22_checkout_success_page.png)
 
 
 ### Profiles
 
 - Saved default delivery details; order history.
+![Payment card form](docs/readme/20_payment_card_form.png)
 
 
 ### Order History & Order Details
@@ -178,7 +182,6 @@ For each order, users can:
 This allows customers to easily confirm past purchases and provides transparency around pricing and discounts.
 
 **Evidence:**
-- ![Order details view](docs/readme/order_details.png)
 ![Order detail](docs/readme/order_details.png)
 ![Order list](docs/readme/my_orders.png)
 
@@ -187,33 +190,35 @@ This allows customers to easily confirm past purchases and provides transparency
 
 ### Admin
 
-Administration is handled through the Django Admin panel. Access is restricted to staff/superusers.
+Administration is handled through the Django Admin panel. Access is restricted to staff/superusers. - 
+**Security / access control:**
+  - Admin panel access requires staff permissions.
+  - Sensitive settings (secret keys, API keys, webhook secrets) are not stored in the repo and are managed via environment variables / Heroku Config Vars.
 
 - **Product management (admin):**
   - Staff can add/edit/delete products and maintain catalogue content.
   - Product details (name, price, images, categories) are manageable via admin for quick updates.
 
 - **Order management (admin):**
-  - Orders are visible to staff for fulfilment, including customer contact and delivery details.
+  - Orders are visible to staff for fulfilment.
   - Order line items are shown inline on each order to make reviewing purchases quick.
+  ![admin order](docs/readme/admin_orders_list.png)
   - Staff can update payment/processing fields (e.g. mark orders as paid where applicable).
-    - Staff can set an order as **Paid/Unpaid** using the `paid` checkbox on the order record.
+  - Staff can set an order as **Paid/Unpaid** using the `paid` checkbox on the order record.
+    ![order not paid](docs/readme/admin_order_paid_unchecked.png)
+    ![order paid](docs/readme/admin_order_paid_checked.png)
+
   - Staff can also bulk-update multiple orders using the admin action **“Mark selected orders as paid”** from the orders list.
+  ![bulk payment update](docs/readme/admin_mark_paid.png)
 
 
 - **Custom Cake Requests (admin):**
   - Custom cake requests are visible to staff in admin for review and follow-up.
   - The **description/notes** field is displayed for staff (so requests can be actioned properly).
   - A small **image preview** is shown in the admin list view when an image is attached.
-
-- **Security / access control:**
-  - Admin panel access requires staff permissions.
-  - Sensitive settings (secret keys, API keys, webhook secrets) are not stored in the repo and are managed via environment variables / Heroku Config Vars.
-
-**Evidence screenshots:**
-- ![Admin: orders list](docs/readme/admin_orders_list.png)
 - ![Admin: custom cake requests list](docs/readme/admin_custom_cake_list.png)
 - ![Admin: custom cake detail showing description](docs/readme/admin_custom_cake_detail.png)
+
 
 [Back to Top](#top)
 
@@ -226,13 +231,12 @@ Administration is handled through the Django Admin panel. Access is restricted t
 - Each discount code can be **used only once per authenticated user**:
   - Once redeemed, the code is recorded against the user’s order.
   - Reuse of the same code by the same user is prevented on subsequent checkouts.
+  - ![Discount already used](docs/readme/discount_used.png)
 - Completed orders store both `discount_code` and `discount_amount` for admin visibility and auditing.
 
-- Evidence screenshots:
   - ![Discount applied](docs/readme/discount_apply.png)
   - ![Discount updated](docs/readme/discount_line_bag.png)
   - ![Discount checkout](docs/readme/discount_checkout.png)
-  - ![Discount already used](docs/readme/discount_used.png)
   - ![Discount checkout success](docs/readme/discount_checkout_success.png)
 
 ### Newsletter (Marketing)
@@ -257,8 +261,6 @@ Basic SEO best practices have been implemented to improve discoverability and in
 - A `sitemap.xml` file is available at `/sitemap.xml` and is referenced within `robots.txt`, listing public-facing URLs to assist search engine indexing.
 - A custom **404 error page** is implemented to provide a consistent user experience for invalid URLs.
 - Semantic HTML and descriptive link text are used throughout the site to support SEO and accessibility.
-
-**Evidence:**
 
 - ![404 page](docs/readme/26_404_page.png)
 - ![Meta title & description](docs/readme/27_meta_title_description.png)
