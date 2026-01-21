@@ -192,6 +192,8 @@ Key features include cupcake box-size pricing with clear per-item costs, bespoke
 
 ### Admin
 Administration is handled through the Django Admin panel. Access is restricted to staff/superusers.
+- When logged in as an Admin Shortcut to Django Admin Panel Shortcut 
+![Django admin shortcut](docs/readme/django_admin_shortcut.png)
 
 **Security / access control:**
 - Admin access requires staff permissions.
@@ -200,6 +202,7 @@ Administration is handled through the Django Admin panel. Access is restricted t
 **Product management:**
 - Staff can add/edit/delete products and maintain catalogue content.
 - Inline **ProductOption** editing supports cupcake pack sizes and pricing.
+
 
 **Order management:**
 - Orders are visible to staff for fulfilment.
