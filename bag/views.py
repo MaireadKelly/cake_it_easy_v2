@@ -1,8 +1,7 @@
 from decimal import Decimal
-
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
-
+from checkout.models import Order
 from products.models import Product, ProductOption
 
 
@@ -139,12 +138,6 @@ def remove_from_bag(request, product_id):
     return redirect("view_bag")
 
 # ---------- discount code endpoints ----------
-
-from decimal import Decimal
-from django.contrib import messages
-from django.shortcuts import redirect
-from checkout.models import Order
-
 
 def apply_discount(request):
     """

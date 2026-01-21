@@ -103,7 +103,7 @@ Key features include cupcake box-size pricing with clear per-item costs, bespoke
 - **Typography:** Poppins, Roboto Condensed (Google Fonts).
 - **Colour Palette:** Light bakery palette with strong CTA accents (see [static/css/base.css](static/css/base.css))
 .
-- **Responsiveness:** Bootstrap 5 grid; mobile nav + stacking forms; no horizontal scroll.
+- **Responsiveness:** Bootstrap 5 grid; mobile nav + stacking forms; bag table supports horizontal scroll on small screens to preserve pricing columns.
 
 ### Data Model / ERD
 ![erd](docs/readme/erd.png)
@@ -115,176 +115,136 @@ Key features include cupcake box-size pricing with clear per-item costs, bespoke
 ## Features
 
 ### Products & Discovery
+- Home Page
+  - ![Home (nav + footer)](docs/readme/01_home_nav_footer.png)
 
 - Product list, detail, search, sort, and category filters (Cakes/Accessories/Cupcakes).
-![Home (nav + footer)](docs/readme/01_home_nav_footer.png)
-![Cakes listing](docs/readme/02_cakes_listing.png)
-![Accessories listing](docs/readme/03_accessories_listing.png)
-![Search results](docs/readme/08_search_results.png)
-![Sort price low→high](docs/readme/09_sort_price_low_high.png)
-![Cupcakes badge](docs/readme/10_cupcakes_badge.png)
+  - ![Cakes listing](docs/readme/02_cakes_listing.png)
+  - ![Accessories listing](docs/readme/03_accessories_listing.png)
+  - ![Search results](docs/readme/08_search_results.png)
+  - ![Sort price low→high](docs/readme/09_sort_price_low_high.png)
+  - ![Cupcakes badge](docs/readme/10_cupcakes_badge.png)
 
-### Cupcake Box‑Size Pricing
-
+### Cupcake Box-Size Pricing
 - Product detail shows **€X.XX per cupcake**.
-![Product detail top](docs/readme/11_product_detail_top.png)
+  - ![Product detail top](docs/readme/11_product_detail_top.png)
+
 - A **Box size** dropdown (4/6/10/12) appears above Quantity (boxes).
-![Box dropdown open](docs/readme/12_box_dropdown_open.png)
-- Pack price auto‑calculates from per‑cupcake × quantity (or uses an override price for bundles).
+  - ![Box dropdown open](docs/readme/12_box_dropdown_open.png)
+
+- Pack price auto-calculates from per-cupcake × quantity (or uses an override price for bundles).
 - Bag line shows **(Box of N)** and **≈ € per cupcake**.
 - Cupcake cards display **“From €…”** based on the cheapest configured box.
-![Dynamic pack price](docs/readme/13_dynamic_pack_price.png)
+  - ![Dynamic pack price](docs/readme/13_dynamic_pack_price.png)
 
-### Shopping Bag
-
-- Add, update, remove with toasts; free‑delivery threshold message.
-![Add to bag toast](docs/readme/14_add_to_bag_toast.png)
-![Update quantity](docs/readme/17_bag_update_qty.png)
-![Remove item](docs/readme/18_bag_remove_item.png)
-![free delivery](docs/readme/free_delivery_threshold.png)
-- **Discount codes** (see below) integrated into totals.
-- ![Discount applied](docs/readme/discount_apply.png)
-- **On smaller screens, the bag uses a horizontally scrollable table to ensure all pricing information remains accessible without overcrowding the layout.**
-
-![Bag line item](docs/readme/15_bag_line.png)
-![Bag totals](docs/readme/16_bag_totals.png)
-
-
-### Checkout (Stripe)
-
-- Stripe PaymentIntent uses the **discounted** grand total.
-- On success, order is created; bag/discount cleared; success page shown.
-![Bag cleared](docs/readme/23_bag_cleared.png)
-- Webhooks ready for robust fulfilment (test mode used).
-
-![Checkout success page](docs/readme/22_checkout_success_page.png)
-
-
-### Profiles
-
-- Saved default delivery details; order history.
-![Payment card form](docs/readme/20_payment_card_form.png)
-
-
-### Order History & Order Details
-
-Registered users can view a full history of their previous orders from their profile page.
-
-For each order, users can:
-- View order status (Paid / Unpaid)
-- See the order date and Stripe payment reference
-- Review all purchased items with quantities and line totals
-- Clearly see any applied discount codes and savings
-- View the final grand total charged
-
-This allows customers to easily confirm past purchases and provides transparency around pricing and discounts.
+### Authentication
+- Users can register, log in, and log out securely.
+- Auth flows use Django’s built-in authentication with CSRF protection and server-side validation.
+- Feedback is provided via Bootstrap alerts (messages framework).
 
 **Evidence:**
-![Order detail](docs/readme/order_details.png)
-![Order list](docs/readme/my_orders.png)
+- ![Register form](docs/readme/04_register_form.png)
+- ![Register feedback](docs/readme/05_register_feedback.png)
+- ![Login success](docs/readme/06_login_success.png)
+- ![Logout confirm](docs/readme/06_logout_confirm.png)
+- ![Logout success](docs/readme/07_logout_success.png)
 
-[Back to Top](#top)
+### Custom Cake Orders
+- Customers can submit a bespoke cake request via a form capturing **flavour, filling, icing, dietary notes, message**, and optional image.
+- Requests are linked to the logged-in user and visible to staff via admin.
+  - ![custom cake form](docs/readme/custom_cake_form.png)
 
+- Custom cake orders use a fixed deposit product added to the bag.
+  - ![Custom cake deposit](docs/readme/custom_cake_deposit.png)
+
+- Multiple custom cake deposits may be added to support multiple bespoke orders in a single session.
+
+### Shopping Bag
+- Add, update, remove with toasts; free-delivery threshold message.
+  - ![Add to bag toast](docs/readme/14_add_to_bag_toast.png)
+  - ![Update quantity](docs/readme/17_bag_update_qty.png)
+  - ![Remove item](docs/readme/18_bag_remove_item.png)
+  - ![free delivery](docs/readme/free_delivery_threshold.png)
+
+- **Discount codes** (see below) integrated into totals.
+  - ![Discount applied](docs/readme/discount_apply.png)
+
+- On smaller screens, the bag uses a horizontally scrollable table to ensure pricing information remains accessible.
+  - ![Mobile bag left](docs/readme/mobile_bag_1.png)
+  - ![Mobile bag center](docs/readme/mobile_bag_2.png)
+  - ![Mobile bag right](docs/readme/mobile_bag_3.png)
+
+### Checkout (Stripe)
+- Stripe PaymentIntent uses the **discounted** grand total.
+- On success, order is created; bag/discount cleared; success page shown.
+  - ![Bag cleared](docs/readme/23_bag_cleared.png)
+
+- Webhooks ready for robust fulfilment (test mode used).
+  - ![Checkout success page](docs/readme/22_checkout_success_page.png)
+  - ![Payment card form](docs/readme/20_payment_card_form.png)
+
+### Profiles
+- Saved default delivery details; order history and detailed order view.
+  - ![Order list](docs/readme/my_orders.png)
+  - ![Order detail](docs/readme/order_details.png)
+
+> Note: Completed orders show any applied discount code and discount amount to provide pricing transparency.
 
 ### Admin
+Administration is handled through the Django Admin panel. Access is restricted to staff/superusers.
 
-Administration is handled through the Django Admin panel. Access is restricted to staff/superusers. - 
 **Security / access control:**
-  - Admin panel access requires staff permissions.
-  - Sensitive settings (secret keys, API keys, webhook secrets) are not stored in the repo and are managed via environment variables / Heroku Config Vars.
+- Admin access requires staff permissions.
+- Sensitive settings (secret keys, API keys, webhook secrets) are not stored in the repo and are managed via environment variables / Heroku Config Vars.
 
-- **Product management (admin):**
-  - Staff can add/edit/delete products and maintain catalogue content.
-  - Product details (name, price, images, categories) are manageable via admin for quick updates.
+**Product management:**
+- Staff can add/edit/delete products and maintain catalogue content.
+- Inline **ProductOption** editing supports cupcake pack sizes and pricing.
 
-- **Order management (admin):**
-  - Orders are visible to staff for fulfilment.
-  - Order line items are shown inline on each order to make reviewing purchases quick.
-  ![admin order](docs/readme/admin_orders_list.png)
-  - Staff can update payment/processing fields (e.g. mark orders as paid where applicable).
-  - Staff can set an order as **Paid/Unpaid** using the `paid` checkbox on the order record.
-    ![order not paid](docs/readme/admin_order_paid_unchecked.png)
-    ![order paid](docs/readme/admin_order_paid_checked.png)
+**Order management:**
+- Orders are visible to staff for fulfilment.
+- Order line items are shown inline on each order.
+  - ![admin order](docs/readme/admin_orders_list.png)
 
-  - Staff can also bulk-update multiple orders using the admin action **“Mark selected orders as paid”** from the orders list.
-  ![bulk payment update](docs/readme/admin_mark_paid.png)
+- Staff can mark an order as **Paid/Unpaid** using the `paid` checkbox.
+  - ![order not paid](docs/readme/admin_order_paid_unchecked.png)
+  - ![order paid](docs/readme/admin_order_paid_checked.png)
 
+- Staff can bulk-update multiple orders using **“Mark selected orders as paid”**.
+  - ![bulk payment update](docs/readme/admin_mark_paid.png)
 
-- **Custom Cake Requests (admin):**
-  - Custom cake requests are visible to staff in admin for review and follow-up.
-  - The **description/notes** field is displayed for staff (so requests can be actioned properly).
-  - A small **image preview** is shown in the admin list view when an image is attached.
-- ![Admin: custom cake requests list](docs/readme/admin_custom_cake_list.png)
-- ![Admin: custom cake detail showing description](docs/readme/admin_custom_cake_detail.png)
-
-
-[Back to Top](#top)
-
+**Custom Cake Requests (admin):**
+- Requests are visible for review and follow-up.
+- The **description/notes** field is displayed for staff.
+- A small **image preview** is shown when an image is attached.
+  - ![Admin: custom cake requests list](docs/readme/admin_custom_cake_list.png)
+  - ![Admin: custom cake detail showing description](docs/readme/admin_custom_cake_detail.png)
 
 ### Discount Codes
-
 - `WELCOME10` applies **10% off** the bag subtotal (before delivery).
-- The discount is **applied at bag level** and recalculated automatically if items are added or removed.
-- The discounted total is **passed through to Stripe**, ensuring customers are charged the correct reduced amount.
-- Each discount code can be **used only once per authenticated user**:
+- The discount is applied at bag level and recalculated automatically if items are added or removed.
+- The discounted total is passed through to Stripe, ensuring customers are charged the reduced amount.
+- Each discount code can be used only once per authenticated user:
   - Once redeemed, the code is recorded against the user’s order.
   - Reuse of the same code by the same user is prevented on subsequent checkouts.
   - ![Discount already used](docs/readme/discount_used.png)
-- Completed orders store both `discount_code` and `discount_amount` for admin visibility and auditing.
 
-  - ![Discount applied](docs/readme/discount_apply.png)
+- Completed orders store both `discount_code` and `discount_amount` for admin visibility and auditing.
   - ![Discount updated](docs/readme/discount_line_bag.png)
   - ![Discount checkout](docs/readme/discount_checkout.png)
   - ![Discount checkout success](docs/readme/discount_checkout_success.png)
 
 ### Newsletter (Marketing)
-
 - Modal popup with email capture.
 - Success view shows a welcome code (`WELCOME10`) with copy button.
 - Duplicate emails are handled with a friendly message.
-- Evidence screenshots:
-  - ![Newsletter form](docs/readme/newsletter_form.png)
-  - ![Newsletter success](docs/readme/newsletter_success.png)
-  - ![Newsletter duplicate](docs/readme/newsletter_duplicate.png)
-
-
-## H. SEO & Responsiveness
-
-### Search Engine Optimisation (SEO)
-
-Basic SEO best practices have been implemented to improve discoverability and indexing:
-
-- Page `<title>` and `<meta name="description">` tags are defined using Django template blocks and customised per page where appropriate.
-- A `robots.txt` file is available at `/robots.txt`, allowing search engines to crawl public pages while restricting access to non-public routes such as admin and account pages.
-- A `sitemap.xml` file is available at `/sitemap.xml` and is referenced within `robots.txt`, listing public-facing URLs to assist search engine indexing.
-- A custom **404 error page** is implemented to provide a consistent user experience for invalid URLs.
-- Semantic HTML and descriptive link text are used throughout the site to support SEO and accessibility.
-
-- ![404 page](docs/readme/26_404_page.png)
-- ![Meta title & description](docs/readme/27_meta_title_description.png)
-- ![Robots & sitemap](docs/readme/28_robots.png)
-- ![sitemap](docs/readme/28_sitemap.png)
-
-
----
-
-### Responsiveness
-
-The application has been designed with a **mobile-first approach** and is fully responsive across common screen sizes:
-
-- Layout adapts smoothly from mobile to tablet and desktop using **Bootstrap 5’s grid system**.
-- Navigation collapses into a mobile-friendly menu on smaller screens.
-- Product listings, product detail pages, bag, and checkout pages reflow correctly without loss of functionality.
-- Touch-friendly controls and readable typography are maintained on mobile devices.
 
 **Evidence:**
-
-![Am I Responsive – Cake It Easy](docs/readme/am_i_responsive.png)
-![Mobile product detail](docs/readme/29_mobile_product_detail.png)
-![Mobile bag](docs/readme/30_mobile_bag.png)
+- ![Newsletter form](docs/readme/newsletter_form.png)
+- ![Newsletter success](docs/readme/newsletter_success.png)
+- ![Newsletter duplicate](docs/readme/newsletter_duplicate.png)
 
 [Back to Top](#top)
-
 
 ---
 
@@ -301,47 +261,6 @@ The application has been designed with a **mobile-first approach** and is fully 
 ## Testing
 
 All testing steps and expected outcomes are documented in [**TESTING.md**](TESTING.md). Screenshot evidence captured on the **deployed site**.
-
-[Back to Top](#top)
-
----
-
-### Screenshot Index (placeholders)
-
-## A. Navigation & Layout
-
-
-## B. Auth
-![Register form](docs/readme/04_register_form.png)
-![Register feedback](docs/readme/05_register_feedback.png)
-![Login success](docs/readme/06_login_success.png)
-![Logout confirm](docs/readme/06_logout_confirm.png)
-![Logout success](docs/readme/07_logout_success.png)
-
-## C. Discovery
-
-
-## D. Product Detail
-
-
-## E. Bag
-
-
-## F. Checkout
-
-
-## G. Admin
-![Admin product options](docs/readme/24_admin_product_options.png)
-
-## H. SEO / Responsive
-
-
-
-## I. Marketing
-![Newsletter form](docs/readme/newsletter_form.png)
-![Newsletter success](docs/readme/newsletter_success.png)
-![Newsletter already subscribed](docs/readme/newsletter_duplicate.png)
-![Facebook cover](docs/readme/fb_01_page_cover_about.png)
 
 [Back to Top](#top)
 
@@ -368,6 +287,8 @@ This project was deployed using **Heroku** with a PostgreSQL database.
 - Heroku account
 - Stripe account (test keys)
 
+## Local Setup
+
 #### Steps
 
 1. **Clone the repository**
@@ -389,21 +310,47 @@ pip install -r requirements.txt
 
 4. **Create an environment file**
 
-Create a `.env` file for **local development only** and add the following variables:  
+Create a `.env` file on the root directory for **local development only** and add the following variables:  
 The following variables are for local development only and should not be committed to the repository!
 
 ```ini
-SECRET_KEY=dev-secret-change-me
+# Local development only (DO NOT commit this file)
+
 DEBUG=True
+SECRET_KEY=dev-secret-change-me
+
+# Local hosts (only required if your settings reference these env vars)
+ALLOWED_HOSTS=localhost,127.0.0.1
+CSRF_TRUSTED_ORIGINS=http://localhost,http://127.0.0.1
+
+# Database selection
+# Use SQLite locally for simplest setup:
+USE_SQLITE=True
+# If using Postgres locally, set USE_SQLITE=False and provide DATABASE_URL instead.
+# DATABASE_URL=your_database_url
+
+# Cloudinary (only required if you are uploading/serving media via Cloudinary locally)
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+
+# Stripe (required for checkout)
 STRIPE_PUBLIC_KEY=your_stripe_public_key
 STRIPE_SECRET_KEY=your_stripe_secret_key
-STRIPE_WH_SECRET=your_webhook_secret
-USE_SQLITE=True
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+STRIPE_CURRENCY=eur
+
+# Newsletter welcome discount code
+NEWSLETTER_WELCOME_CODE=WELCOME10
+
+
 ```
 
-Note:
-The deployed Heroku version uses Heroku Config Vars instead of a .env file.
-These values do not need to match — only the variable names must be the same.
+Note:  
+The deployed Heroku version uses Config Vars instead of a `.env` file.
+Additional variables for Postgres, Cloudinary, allowed hosts, and security
+are configured in production and are not required for local development.
+
 
 5. **Apply Migrations**
 ```bash
@@ -457,7 +404,7 @@ These values are not stored in the repository and must be set manually when depl
 | `CLOUDINARY_URL` | Full Cloudinary connection URL |
 | `STRIPE_PUBLIC_KEY` | Stripe publishable key |
 | `STRIPE_SECRET_KEY` | Stripe secret key |
-| `STRIPE_WH_SECRET` | Stripe webhook signing secret |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
 | `STRIPE_CURRENCY` | Currency used for payments (e.g. `eur`) |
 | `NEWSLETTER_WELCOME_CODE` | Discount code issued on newsletter signup |
 
@@ -515,8 +462,8 @@ The following configuration ensures the application runs securely and efficientl
 - **Procfile**  
   Located at the project root and used by Heroku to start the web server.
   The application is served using Gunicorn:
-```env
-web: gunicorn cake_it_easy_v2.wsgi:application
+```
+web: gunicorn cake_it_easy_v2.wsgi:application --log-file -
 ```
 
 
@@ -544,19 +491,6 @@ Sensitive configuration values (secret keys, API keys, webhook secrets) are mana
 
 ---
 
-## Custom Cake Orders
-
-- Customers can submit a bespoke cake request via a form capturing **flavour, filling, icing, dietary notes, message**, and optional image.
-- Requests are linked to the logged‑in user and visible to staff via admin.
-- Evidence screenshots: `docs/readme/custom_cake_form.png`, `docs/readme/custom_cake_list.png`.
-- Custom cake orders use a fixed deposit product added to the bag.  
-- Multiple custom cake deposits may be added to support multiple bespoke orders in a single session.
-
-
-[Back to Top](#top)
-
----
-
 ## Known Issues / Fixes
 
 - **Newsletter modal** previously showed code before submit → fixed by unifying modal IDs & JS.
@@ -567,25 +501,46 @@ Sensitive configuration values (secret keys, API keys, webhook secrets) are mana
 
 ---
 
-## Marketing & SEO Evidence
+## SEO & Responsiveness
 
-- **Newsletter:** form/success/duplicate (see screenshots under I.)
-- **Facebook:** branded post mockup showing box‑size pricing ![Facebook cover + pinned post – WELCOME10](docs/readme/fb_01_page_cover_about.png)
+### Search Engine Optimisation (SEO)
 
-### SEO Evidence – robots.txt & sitemap.xml
+Basic SEO best practices have been implemented to improve discoverability, accessibility, and indexing of the application:
 
-A robots.txt file is implemented to guide search engine crawlers.
-Admin and authentication routes are excluded from indexing, and a sitemap reference is provided to improve SEO.
+- Page `<title>` and `<meta name="description">` tags are defined using Django template blocks and customised per page where appropriate.
+- Semantic HTML elements and descriptive link text are used throughout the site to support accessibility and SEO.
+- A custom **404 error page** is implemented to provide a consistent user experience for invalid URLs.
+- A `robots.txt` file is available to guide search engine crawlers.
+- A `sitemap.xml` file is provided to assist with indexing of public-facing pages.
 
-Live endpoints:
+**Live endpoints:**
 - https://cake-it-easy-7700e2082546.herokuapp.com/robots.txt
 - https://cake-it-easy-7700e2082546.herokuapp.com/sitemap.xml
 
-Evidence screenshots:
-![robots.txt](docs/readme/28_robots.png)
-![sitemap.xml](docs/readme/28_sitemap.png)
+**Evidence:**
+- ![404 page](docs/readme/26_404_page.png)
+- ![Meta title & description](docs/readme/27_meta_title_description.png)
+- ![robots.txt](docs/readme/28_robots.png)
+- ![sitemap.xml](docs/readme/28_sitemap.png)
+
+---
+
+### Responsiveness
+
+The application follows a **mobile-first design approach** and is responsive across common screen sizes:
+
+- Layout adapts from mobile to tablet and desktop using **Bootstrap 5’s grid system**.
+- Navigation collapses into a mobile-friendly menu on smaller screens.
+- Product listings, product detail pages, shopping bag, and checkout remain fully functional on mobile devices.
+- On smaller screens, horizontally scrollable tables are used where necessary (e.g. the shopping bag) to ensure all pricing information remains accessible without overcrowding the layout.
+
+**Evidence:**
+- ![Am I Responsive – Cake It Easy](docs/readme/am_i_responsive.png)
+- ![Mobile product detail](docs/readme/29_mobile_product_detail.png)
+- ![Mobile bag](docs/readme/30_mobile_bag.png)
 
 [Back to Top](#top)
+
 
 ---
 
@@ -635,7 +590,11 @@ This approach balances usability, transparency, and commercial viability while r
 
 - **Accessories availability:** Accessories such as candles and balloons are offered via a dedicated Accessories category and prominent navigation, allowing customers to add complementary items to their order.
 
-
+![Newsletter form](docs/readme/newsletter_form.png)
+![Newsletter success](docs/readme/newsletter_success.png)
+![Newsletter already subscribed](docs/readme/newsletter_duplicate.png)
+![Facebook cover](docs/readme/fb_01_page_cover_about.png)
+- **Facebook:** branded post mockup![Facebook cover](docs/readme/fb_01_page_cover_about.png)
 [Back to Top](#top)
 
 ---

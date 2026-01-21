@@ -36,9 +36,11 @@ Example: `products/views.py` → `docs/testing/py/val_products_views.png`.
 | Products | Detail | Open a product | Add‑to‑bag visible; price shown |
 | Bag | Add item | From detail, add qty 1 | Toast + bag count updates |
 | Bag | Adjust qty/remove | On `/bag/` change qty/remove | Totals recalc; threshold messaging updates |
+| Discount reuse | Attempt to apply WELCOME10 after prior successful checkout | Discount blocked with user-facing message | Pass |
 | Checkout | Payment | Card `4242 4242 4242 4242` + valid form | Success page shows **order number** |
 | Webhook | Mark paid | Stripe Events shows delivered | Order flips to `paid=True` |
 | Profile | Save defaults | Update and submit | Success message; values persist |
+| Admin – Order management | Mark order as paid/unpaid | Order status updates correctly | Pass |
 | Orders | History | `/checkout/orders/` | Orders list shows recent order |
 | Orders | Detail (owner‑only) | Open `/checkout/orders/<id>/` | Owner/staff can view; others denied |
 | Custom Cake | Create valid | Minimal required fields | Redirect to detail; success message |
@@ -136,6 +138,16 @@ _Evidence (optional)_: `docs/testing/html/val_responsive_checks.png`
 ## Known Issues / Out‑of‑Scope
 - Newsletter/stub pages may be linked to About or removed to avoid 404s.  
 - Advanced product filters and marketing integrations are **out of scope**.
+### Known Issues
+
+| Issue | Impact | Status |
+|------|-------|--------|
+| Mobile bag table requires horizontal scrolling to view all columns | Minor UX issue on small screens; functionality unaffected | Documented for future improvement |
+
+**Notes:**  
+On mobile devices, the bag table layout can require horizontal scrolling to view all columns simultaneously. Core functionality (viewing items, updating quantities, applying discounts, and completing checkout) remains fully operational.  
+A future enhancement would replace the table layout with a card-based mobile design or selectively hide columns for small viewports.
+
 
 ---
 
