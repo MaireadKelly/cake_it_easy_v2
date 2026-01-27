@@ -1,83 +1,170 @@
 {% load static %}
 
 <div class="collapse navbar-collapse" id="main-nav">
+
   <!-- LEFT: main links -->
   <ul class="navbar-nav main-menu">
-    <li class="nav-item"><a class="logo-font nav-link text-brand" href="{% url 'product_cakes' %}">Cakes</a></li>
-    <li class="nav-item"><a class="logo-font nav-link text-brand" href="{% url 'product_accessories' %}">Accessories</a></li>
-    <li class="nav-item"><a class="logo-font nav-link text-brand" href="{% url 'custom_cake_create' %}">Design Your Own</a></li>
-    <li class="nav-item"><a class="logo-font nav-link text-brand" href="{% url 'about' %}">About</a></li>
+    <li class="nav-item">
+      <a class="logo-font nav-link text-brand" href="{% url 'product_cakes' %}">Cakes</a>
+    </li>
+    <li class="nav-item">
+      <a class="logo-font nav-link text-brand" href="{% url 'product_accessories' %}">Accessories</a>
+    </li>
+    <li class="nav-item">
+      <a class="logo-font nav-link text-brand" href="{% url 'custom_cake_create' %}">Design Your Own</a>
+    </li>
+    <li class="nav-item">
+      <a class="logo-font nav-link text-brand" href="{% url 'about' %}">About</a>
+    </li>
   </ul>
 
   <!-- CENTER: logo (desktop only) -->
-  <a href="{% url 'home' %}" class="nav-center-logo d-none d-lg-inline-flex align-items-center" aria-label="Home">
+  <a href="{% url 'home' %}"
+     class="nav-center-logo d-none d-lg-inline-flex align-items-center"
+     aria-label="Home">
     <img
       src="{% static 'images/logo@2x.png' %}"
       srcset="{% static 'images/logo@2x.png' %} 2x"
       alt="Cake It Easy"
-      width="280" height="96"
+      width="280"
+      height="96"
       class="nav-center-logo-img">
     <span class="visually-hidden">Cake It Easy — Home</span>
   </a>
 
-  <!-- RIGHT: icons (desktop) -->
+  <!-- RIGHT: icons + search (desktop) -->
   <ul class="navbar-nav header-icons d-none d-lg-flex align-items-center">
+
+    <!-- Bag -->
     <li class="nav-item">
       <a class="nav-link icon-link" href="{% url 'view_bag' %}" aria-label="Bag">
         <i class="fas fa-shopping-bag"></i>
         {% if bag_count and bag_count > 0 %}
           <span class="badge bg-primary ms-1">{{ bag_count }}</span>
         {% endif %}
-        <span class="bag-total">€{{ grand_total|default:0|floatformat:2 }}</span>
+        <span class="bag-total">
+          €{{ grand_total|default:0|floatformat:2 }}
+        </span>
       </a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link icon-link" href="{% url 'product_list' %}" aria-label="Search">
-        <i class="fas fa-search"></i>
-      </a>
-    </li>
+
+    <!-- Search -->
     <li class="nav-item dropdown">
-      <a class="nav-link icon-link dropdown-toggle" href="#" id="accountDropdown"
-         role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="My Account">
+      <a
+        class="nav-link dropdown-toggle"
+        href="#"
+        id="navbarSearchDropdown"
+        role="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        aria-label="Open search"
+      >
+        <i class="fas fa-search" aria-hidden="true"></i>
+      </a>
+
+      <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="navbarSearchDropdown" style="min-width: 280px;">
+        <form method="get" action="{% url 'product_list' %}" role="search" aria-label="Search products">
+          <div class="input-group input-group-sm">
+            <input
+              class="form-control"
+              type="text"
+              name="q"
+              value="{{ search_term|default:'' }}"
+              placeholder="Search…"
+              aria-label="Search products"
+            >
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+          </div>
+        </form>
+      </div>
+    </li>
+
+
+    <!-- Account dropdown -->
+    <li class="nav-item dropdown">
+      <a class="nav-link icon-link dropdown-toggle"
+         href="#"
+         id="accountDropdown"
+         role="button"
+         data-bs-toggle="dropdown"
+         aria-expanded="false"
+         aria-label="My Account">
         <i class="fas fa-user"></i>
       </a>
-      <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="accountDropdown">
+      <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm"
+          aria-labelledby="accountDropdown">
         {% if request.user.is_authenticated %}
-          {% if request.user.is_superuser %}<li><a href="/admin/" class="dropdown-item">Product Management</a></li>{% endif %}
-          <li><a href="{% url 'profile' %}" class="dropdown-item">My Profile</a></li>
-          <li><a href="{% url 'my_orders' %}" class="dropdown-item">My Orders</a></li>
+          {% if request.user.is_superuser %}
+            <li>
+              <a href="/admin/" class="dropdown-item">Product Management</a>
+            </li>
+          {% endif %}
+          <li>
+            <a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>
+          </li>
+          <li>
+            <a href="{% url 'my_orders' %}" class="dropdown-item">My Orders</a>
+          </li>
           <li><hr class="dropdown-divider"></li>
-          <li><a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a></li>
+          <li>
+            <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
+          </li>
         {% else %}
-          <li><a href="{% url 'account_signup' %}" class="dropdown-item">Register</a></li>
-          <li><a href="{% url 'account_login' %}" class="dropdown-item">Login</a></li>
+          <li>
+            <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
+          </li>
+          <li>
+            <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
+          </li>
         {% endif %}
       </ul>
     </li>
   </ul>
 
-  {# --- MOBILE-ONLY ACCOUNT DROPDOWN INSIDE COLLAPSE --- #}
+  <!-- MOBILE-ONLY ACCOUNT + BAG -->
   <ul class="navbar-nav d-lg-none w-100 mt-2 border-top pt-2">
     <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="mobileAccount"
-         role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <a class="nav-link dropdown-toggle"
+         href="#"
+         id="mobileAccount"
+         role="button"
+         data-bs-toggle="dropdown"
+         aria-expanded="false">
         My Account
       </a>
       <ul class="dropdown-menu" aria-labelledby="mobileAccount">
         {% if request.user.is_authenticated %}
-          {% if request.user.is_superuser %}<li><a class="dropdown-item" href="/admin/">Product Management</a></li>{% endif %}
-          <li><a class="dropdown-item" href="{% url 'profile' %}">My Profile</a></li>
-          <li><a class="dropdown-item" href="{% url 'my_orders' %}">My Orders</a></li>
+          {% if request.user.is_superuser %}
+            <li>
+              <a class="dropdown-item" href="/admin/">Product Management</a>
+            </li>
+          {% endif %}
+          <li>
+            <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'my_orders' %}">My Orders</a>
+          </li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a></li>
+          <li>
+            <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+          </li>
         {% else %}
-          <li><a class="dropdown-item" href="{% url 'account_signup' %}">Register</a></li>
-          <li><a class="dropdown-item" href="{% url 'account_login' %}">Login</a></li>
+          <li>
+            <a class="dropdown-item" href="{% url 'account_signup' %}">Register</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'account_login' %}">Login</a>
+          </li>
         {% endif %}
       </ul>
     </li>
+
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'view_bag' %}">Bag – €{{ bag_total|default:0|floatformat:2 }}</a>
+      <a class="nav-link" href="{% url 'view_bag' %}">
+        Bag – €{{ bag_total|default:0|floatformat:2 }}
+      </a>
     </li>
   </ul>
+
 </div>
