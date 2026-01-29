@@ -82,7 +82,6 @@ class Order(models.Model):
         return f"Order {self.id}"
 
 
-
 class OrderLineItem(models.Model):
     """
     Line items for each order.

@@ -166,6 +166,11 @@ Key features include cupcake box-size pricing with clear per-item costs, bespoke
   - ![Remove item](docs/readme/18_bag_remove_item.png)
   - ![free delivery](docs/readme/free_delivery_threshold.png)
 
+  **Testing evidence:**  
+- [Bag add/update/remove + totals](TESTING.md#manual-test-matrix)  
+- [Assessor fix: delivery not shown on empty bag](TESTING.md#evidence-index-assessor-critical)
+
+
 - **Discount codes** (see below) integrated into totals.
   - ![Discount applied](docs/readme/discount_apply.png)
 
@@ -178,50 +183,101 @@ Key features include cupcake box-size pricing with clear per-item costs, bespoke
 - Stripe PaymentIntent uses the **discounted** grand total.
 - On success, order is created; bag/discount cleared; success page shown.
   - ![Bag cleared](docs/readme/23_bag_cleared.png)
+- Stripe Payment – Declined Card Handling
+  - Stripe test cards were also used to verify correct handling of failed and declined payments. If a card is declined, the payment is not completed. The user remains on the checkout page and is shown a clear error message. No order is created and no payment intent is confirmed. The user can correct their details and retry payment without losing their bag contents.
+  - ![Card declined](docs/readme/card_declined.png)
 
 - Webhooks ready for robust fulfilment (test mode used).
   - ![Checkout success page](docs/readme/22_checkout_success_page.png)
   - ![Payment card form](docs/readme/20_payment_card_form.png)
 
-### Profiles
-- Saved default delivery details; order history and detailed order view.
-  - ![Order list](docs/readme/my_orders.png)
-  - ![Order detail](docs/readme/order_details.png)
+  **Testing evidence:**  
+- [Checkout success (order number)](TESTING.md#evidence-index-assessor-critical)  
+- [No console errors during checkout](TESTING.md#manual-test-matrix)  
+- [Webhook sets paid=True](TESTING.md#evidence-index-assessor-critical)
 
-> Note: Completed orders show any applied discount code and discount amount to provide pricing transparency.
+
+### Profiles
+
+Registered users have access to a dedicated **Profile** area which provides a personalised account experience.
+
+- Users can **save and update default delivery details**, reducing friction during repeat checkouts.
+- A complete **order history** is displayed, allowing users to review previous purchases.
+- Each order links to a **detailed order view**, showing:
+  - Order date and payment status
+  - Stripe payment reference
+  - Line items with quantities and totals
+  - Any applied **discount code** and **discount amount**
+  - Final grand total charged
+
+This ensures transparency around pricing and gives users confidence when reviewing past transactions.
+
+**Evidence:**
+- ![Profile – order history](docs/readme/my_orders.png)
+- ![Profile – order detail view](docs/readme/order_details.png)
+- ![Profile – update delivery details](docs/readme/profile_update.png)
+
 
 ### Admin
-Administration is handled through the Django Admin panel. Access is restricted to staff/superusers.
-- When logged in as an Admin Shortcut to Django Admin Panel Shortcut 
+
+Administration is handled via the **Django Admin panel**, with access restricted to staff and superusers only.
+
+When logged in as an administrator, a **direct shortcut to the Admin panel** is available from the site navigation to streamline content and order management.
+
 ![Django admin shortcut](docs/readme/django_admin_shortcut.png)
 
-**Security / access control:**
-- Admin access requires staff permissions.
-- Sensitive settings (secret keys, API keys, webhook secrets) are not stored in the repo and are managed via environment variables / Heroku Config Vars.
+---
 
-**Product management:**
-- Staff can add/edit/delete products and maintain catalogue content.
-- Inline **ProductOption** editing supports cupcake pack sizes and pricing.
+#### Security & Access Control
+
+- Admin access requires **staff permissions** enforced by Django.
+- Non-admin users are prevented from accessing admin URLs (RBAC enforced).
+- Sensitive configuration (secret keys, API keys, webhook secrets) is **never committed** and is managed via environment variables / Heroku Config Vars.
+
+---
+
+#### Product Management
+
+- Staff can **add, edit, and delete products** directly via the admin interface.
+- Inline **ProductOption** editing enables efficient management of cupcake box sizes and pricing without navigating multiple screens.
+
+---
+
+#### Order Management
+
+- All customer orders are visible to staff for fulfilment and review.
+- Order line items are displayed **inline**, allowing staff to quickly inspect purchased items and quantities.
+
+![Admin orders list](docs/readme/admin_orders_list.png)
+
+- Staff can manually mark orders as **Paid / Unpaid** using a checkbox on the order record.
+
+![Order not paid](docs/readme/admin_order_paid_unchecked.png)  
+![Order paid](docs/readme/admin_order_paid_checked.png)
+
+- A bulk admin action **“Mark selected orders as paid”** allows efficient processing of multiple orders at once.
+
+![Bulk mark paid](docs/readme/admin_mark_paid.png)
+
+---
+
+#### Custom Cake Requests
+
+- Bespoke custom cake requests are visible to staff in the admin panel for review and follow-up.
+- The **description / notes** field is displayed to ensure all customer requirements are visible.
+- A **thumbnail image preview** is shown when an image is attached, aiding design review.
+
+![Admin custom cake list](docs/readme/admin_custom_cake_list.png)  
+![Admin custom cake detail](docs/readme/admin_custom_cake_detail.png)
+
+---
+
+#### Testing Evidence
+
+- [Role-based access control (RBAC) testing](TESTING.md#manual-test-matrix)
+- [Admin security & access screenshots](TESTING.md#evidence-index-assessor-critical)
 
 
-**Order management:**
-- Orders are visible to staff for fulfilment.
-- Order line items are shown inline on each order.
-  - ![admin order](docs/readme/admin_orders_list.png)
-
-- Staff can mark an order as **Paid/Unpaid** using the `paid` checkbox.
-  - ![order not paid](docs/readme/admin_order_paid_unchecked.png)
-  - ![order paid](docs/readme/admin_order_paid_checked.png)
-
-- Staff can bulk-update multiple orders using **“Mark selected orders as paid”**.
-  - ![bulk payment update](docs/readme/admin_mark_paid.png)
-
-**Custom Cake Requests (admin):**
-- Requests are visible for review and follow-up.
-- The **description/notes** field is displayed for staff.
-- A small **image preview** is shown when an image is attached.
-  - ![Admin: custom cake requests list](docs/readme/admin_custom_cake_list.png)
-  - ![Admin: custom cake detail showing description](docs/readme/admin_custom_cake_detail.png)
 
 ### Discount Codes
 - `WELCOME10` applies **10% off** the bag subtotal (before delivery).
@@ -237,6 +293,10 @@ Administration is handled through the Django Admin panel. Access is restricted t
   - ![Discount checkout](docs/readme/discount_checkout.png)
   - ![Discount checkout success](docs/readme/discount_checkout_success.png)
 
+  **Testing evidence:**  
+- [Discount reuse blocked after purchase](TESTING.md#manual-test-matrix)
+
+
 ### Newsletter (Marketing)
 - Modal popup with email capture.
 - Success view shows a welcome code (`WELCOME10`) with copy button.
@@ -246,6 +306,10 @@ Administration is handled through the Django Admin panel. Access is restricted t
 - ![Newsletter form](docs/readme/newsletter_form.png)
 - ![Newsletter success](docs/readme/newsletter_success.png)
 - ![Newsletter duplicate](docs/readme/newsletter_duplicate.png)
+
+**Testing evidence:**  
+- [Newsletter flow tested](TESTING.md#manual-test-matrix)
+
 
 [Back to Top](#top)
 
@@ -263,7 +327,12 @@ Administration is handled through the Django Admin panel. Access is restricted t
 
 ## Testing
 
-All testing steps and expected outcomes are documented in [**TESTING.md**](TESTING.md). Screenshot evidence captured on the **deployed site**.
+All testing steps and expected outcomes are documented in [**TESTING.md**](TESTING.md):
+
+- [Manual Test Matrix (core user journeys)](TESTING.md#manual-test-matrix)
+- [Validation evidence (HTML/CSS/Python)](TESTING.md#validation)
+- [Assessor-critical Evidence Index](TESTING.md#evidence-index-assessor-critical)
+
 
 [Back to Top](#top)
 
@@ -275,6 +344,12 @@ All testing steps and expected outcomes are documented in [**TESTING.md**](TESTI
 - **CSS:** Jigsaw CSS validator – no blocking issues.
 - **Python:** PEP8/flake8 – warnings addressed where practical.
 - **Lighthouse:** Accessibility & SEO scores captured in TESTING.md.
+Validation evidence (screenshots) is included in TESTING.md:
+- [Python (PEP8 / pycodestyle)](TESTING.md#python-pep8--pycodestyle--79-cols)
+- [HTML (W3C Validator)](TESTING.md#html-w3c-validator)
+- [CSS (Jigsaw Validator)](TESTING.md#css-jigsaw-validator)
+- [Lighthouse Audits](TESTING.md#lighthouse-performance--accessibility--best-practices--seo)
+
 
 [Back to Top](#top)
 
@@ -541,6 +616,10 @@ The application follows a **mobile-first design approach** and is responsive acr
 - ![Am I Responsive – Cake It Easy](docs/readme/am_i_responsive.png)
 - ![Mobile product detail](docs/readme/29_mobile_product_detail.png)
 - ![Mobile bag](docs/readme/30_mobile_bag.png)
+
+**Testing evidence:**  
+- [robots.txt + sitemap.xml proof](TESTING.md#evidence-index-assessor-critical)  
+- [404 page with DEBUG=False](TESTING.md#evidence-index-assessor-critical)
 
 [Back to Top](#top)
 

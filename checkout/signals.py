@@ -9,6 +9,7 @@ def update_on_save(sender, instance, **kwargs):
     if instance.order:
         instance.order.update_total()
 
+
 @receiver(post_delete, sender=OrderLineItem)
 def update_on_delete(sender, instance, **kwargs):
     if instance.order:

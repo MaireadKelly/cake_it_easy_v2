@@ -50,13 +50,17 @@ def bag_contents(request):
         except (TypeError, ValueError):
             continue
 
-        product = Product.objects.select_related("category").filter(pk=pid).first()
+        product = (
+            Product.objects.select_related("category").filter(pk=pid).first()
+        )
         if not product:
             continue
 
         option = None
         if opt_id and _is_cupcake(product):
-            option = ProductOption.objects.filter(pk=opt_id, product_id=pid).first()
+            option = ProductOption.objects.filter(
+                pk=opt_id, product_id=pid
+            ).first()
 
         unit_price = _pack_price(product, option)
         line_total = unit_price * qty
@@ -97,7 +101,9 @@ def bag_contents(request):
 
     discount_amount = Decimal("0.00")
     if discount_code == "WELCOME10":
-        discount_amount = (subtotal * Decimal("0.10")).quantize(Decimal("0.01"))
+        discount_amount = (subtotal * Decimal("0.10")).quantize(
+            Decimal("0.01")
+        )
 
     # Safety clamps
     if discount_amount < 0:

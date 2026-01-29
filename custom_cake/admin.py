@@ -3,7 +3,6 @@ from .models import CustomCake
 from django.utils.html import format_html
 
 
-
 @admin.register(CustomCake)
 class CustomCakeAdmin(admin.ModelAdmin):
     """
@@ -33,7 +32,19 @@ class CustomCakeAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Customer", {"fields": ("user", "name")}),
-        ("Request Details", {"fields": ("occasion", "flavor", "filling", "size", "inscription", "needed_date")}),
+        (
+            "Request Details",
+            {
+                "fields": (
+                    "occasion",
+                    "flavor",
+                    "filling",
+                    "size",
+                    "inscription",
+                    "needed_date",
+                )
+            },
+        ),
         ("Notes", {"fields": ("description",)}),
         ("Media", {"fields": ("image", "image_preview")}),
         ("System", {"fields": ("created_on",)}),
@@ -42,13 +53,13 @@ class CustomCakeAdmin(admin.ModelAdmin):
     @admin.display(description="Notes")
     def short_description(self, obj):
         """
-        Preview the description in the list page without it taking over the table.
+        Preview description in the list page without it taking over the table.
         """
         if not obj.description:
             return ""
         text = obj.description.strip()
         return text[:60] + ("…" if len(text) > 60 else "")
-    
+
     @admin.display(description="Image Preview")
     def image_preview(self, obj):
         """
@@ -56,8 +67,10 @@ class CustomCakeAdmin(admin.ModelAdmin):
         """
         if obj.image:
             return format_html(
-                '<img src="{}" style="max-height: 100px; border-radius: 6px;" />',
-                obj.image.url
+                (
+                    '<img src="{}" style="max-height: 100px; '
+                    'border-radius: 6px;" />'
+                ),
+                obj.image.url,
             )
         return "No image"
-

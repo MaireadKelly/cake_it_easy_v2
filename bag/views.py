@@ -42,7 +42,9 @@ def add_to_bag(request, product_id):
 
     option = None
     if is_cupcake:
-        posted_opt = request.POST.get("option_id") or request.POST.get("box_size")
+        posted_opt = request.POST.get("option_id") or request.POST.get(
+            "box_size"
+        )
         if posted_opt:
             option = ProductOption.objects.filter(
                 pk=posted_opt, product=product
@@ -137,7 +139,9 @@ def remove_from_bag(request, product_id):
 
     return redirect("view_bag")
 
+
 # ---------- discount code endpoints ----------
+
 
 def apply_discount(request):
     """
@@ -167,7 +171,8 @@ def apply_discount(request):
         if already_used:
             messages.info(
                 request,
-                "WELCOME10 has already been used on your account. Please use a different code.",
+                "WELCOME10 has already been used on your account."
+                "Please use a different code.",
             )
             return redirect("view_bag")
 

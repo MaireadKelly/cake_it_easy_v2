@@ -63,7 +63,8 @@ def subscribe(request):
     - Redirects back to the referring page or home.
     - On first-time success, appends ?nl=1&code=... for frontend promo logic.
 
-    If called via fetch/AJAX, returns JSON so the modal can display the correct UI
+    If called via fetch/AJAX,
+    returns JSON so the modal can display the correct UI
     (new subscriber vs already subscribed).
     """
     form = NewsletterSubscriptionForm(request.POST)
