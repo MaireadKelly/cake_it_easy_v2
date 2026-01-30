@@ -159,17 +159,22 @@ Automated tests were reused from the previous iteration of the project and re-ru
 ## Validation
 
 ### Python (PEP8 / pycodestyle @ 79 cols)
-- **Tools:** `pycodestyle` (79-char line length), assisted by `ruff format` (line-wrapping) where needed.
-- **Whole-project report:**
-  
-**Full pycodestyle output:**  
-See `docs/testing/py/val_py_console_transcript.txt`
 
+- **Tool:** `pycodestyle`
+- **Configuration:** 79-character line length, migrations excluded
+- **Command used:**
+```bash
+pycodestyle bag products custom_cake checkout profiles newsletter home cake_it_easy_v2 --exclude=migrations --max-line-length=79
+```
+All project Python files pass PEP8 validation with no errors reported.
+Minor line-length issues identified during development were resolved prior to final submission.
+
+Clean pycodestyle run (no output indicates zero violations)
 ![pycodestyle clean run](docs/testing/py/pep8_pass.png)
 
 
 - **Representative files:**
-  
+  Screenshots below demonstrate validation across key areas of the project:
   - Settings: ![settings.py](docs/testing/py/val_settings.png)
   - Project URLs: ![cake_it_easy_v2/urls.py](docs/testing/py/val_project_url.png)
   - Home views: ![home/views.py](docs/testing/py/val_home_views.png)
@@ -192,7 +197,6 @@ See `docs/testing/py/val_py_console_transcript.txt`
   - Checkout page: ![templates/checkout/checkout.html](docs/testing/html/val_templates_checkout_checkout.png)
   - 404 page: ![templates/404.html](docs/testing/html/val_templates_404.png)
 
-> Add more template screenshots as needed using the same naming convention, e.g. `val_templates_account_login.png` for Allauth.
 
 ---
 

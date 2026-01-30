@@ -35,17 +35,13 @@ _default_csrf = [
     "http://127.0.0.1",
     "https://*.herokuapp.com",
 ]
-_csrf_origins = os.getenv(
-    "CSRF_TRUSTED_ORIGINS",
-    ",".join(_default_csrf),
-)
-
 CSRF_TRUSTED_ORIGINS = [
     o.strip()
-    for o in _csrf_origins.split(",")
+    for o in os.getenv("CSRF_TRUSTED_ORIGINS", ",".join(_default_csrf)).split(
+        ","
+    )
     if o.strip()
 ]
-
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
@@ -61,8 +57,8 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "crispy_forms",
     "crispy_bootstrap5",
-    "cloudinary",
     "cloudinary_storage",
+    "cloudinary",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -179,14 +175,18 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATICFILES_STORAGE = (
-    "whitenoise.storage.CompressedManifestStaticFilesStorage"
-)
 
-# --- Media files ---
-DEFAULT_FILE_STORAGE = (
-    "cloudinary_storage.storage.MediaCloudinaryStorage"
-)
+# --- Storage (Django 4.2+ / recommended) ---
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+}
+
+# --- Media ---
 MEDIA_URL = "/media/"
 
 cloudinary.config(
@@ -194,6 +194,7 @@ cloudinary.config(
     api_key=os.getenv("CLOUDINARY_API_KEY"),
     api_secret=os.getenv("CLOUDINARY_API_SECRET"),
 )
+
 
 # --- Email ---
 DEFAULT_FROM_EMAIL = os.getenv(
