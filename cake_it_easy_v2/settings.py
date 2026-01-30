@@ -19,40 +19,36 @@ def env_bool(key: str, default: bool = False) -> bool:
 # --- Base paths ---
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # --- Security / Hosts ---
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-me")
 DEBUG = env_bool("DEBUG", False)
 
-# Allow common dev hosts + Heroku/Render by default.
-# You can append your custom domain(s) via env var: ALLOWED_HOSTS="example.com,www.example.com"
-_default_hosts = ["localhost", "127.0.0.1", ".herokuapp.com", ".onrender.com"]
+_default_hosts = ["localhost", "127.0.0.1", ".herokuapp.com"]
 ALLOWED_HOSTS = [
     h.strip()
     for h in os.getenv("ALLOWED_HOSTS", ",".join(_default_hosts)).split(",")
     if h.strip()
 ]
 
-# CSRF requires scheme; include common clouds. Add your custom domain(s) via:
-# CSRF_TRUSTED_ORIGINS="https://example.com,https://www.example.com"
 _default_csrf = [
-    "https://localhost",
-    "https://127.0.0.1",
+    "http://localhost",
+    "http://127.0.0.1",
     "https://*.herokuapp.com",
-    "https://*.onrender.com",
 ]
+_csrf_origins = os.getenv(
+    "CSRF_TRUSTED_ORIGINS",
+    ",".join(_default_csrf),
+)
+
 CSRF_TRUSTED_ORIGINS = [
     o.strip()
-    for o in os.getenv("CSRF_TRUSTED_ORIGINS", ",".join(_default_csrf)).split(
-        ","
-    )
+    for o in _csrf_origins.split(",")
     if o.strip()
 ]
 
-# Behind Heroku/Render proxy: respect X-Forwarded-Proto/Host for HTTPS + canonical host
+
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
-
 
 # --- Applications ---
 INSTALLED_APPS = [
@@ -65,13 +61,11 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "crispy_forms",
     "crispy_bootstrap5",
-    # Third-party
     "cloudinary",
     "cloudinary_storage",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    # Local apps
     "home",
     "products",
     "bag",
@@ -81,8 +75,7 @@ INSTALLED_APPS = [
     "newsletter",
 ]
 
-
-# --- Middleware (security + whitenoise first) ---
+# --- Middleware ---
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -95,25 +88,19 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
 # --- URL / WSGI ---
 ROOT_URLCONF = "cake_it_easy_v2.urls"
 WSGI_APPLICATION = "cake_it_easy_v2.wsgi.application"
-
 
 # --- Crispy Forms ---
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-
 # --- Templates ---
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            os.path.join(BASE_DIR, "templates"),
-            os.path.join(BASE_DIR, "templates", "allauth"),
-        ],
+        "DIRS": [BASE_DIR / "templates", BASE_DIR / "templates" / "allauth"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -127,7 +114,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 # --- Database ---
 if os.getenv("DATABASE_URL"):
@@ -146,7 +132,6 @@ else:
         }
     }
 
-
 # --- Authentication ---
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
@@ -156,19 +141,33 @@ SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = "none"
 LOGIN_REDIRECT_URL = "/"
 
-
 # --- Password validation ---
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "UserAttributeSimilarityValidator"
+        ),
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "MinimumLengthValidator"
+        ),
+    },
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "CommonPasswordValidator"
+        ),
+    },
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "NumericPasswordValidator"
+        ),
     },
 ]
-
 
 # --- I18N ---
 LANGUAGE_CODE = "en-us"
@@ -176,21 +175,18 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-
-# --- Static & Media ---
+# --- Static files ---
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
 
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-}
-
+# --- Media files ---
+DEFAULT_FILE_STORAGE = (
+    "cloudinary_storage.storage.MediaCloudinaryStorage"
+)
 MEDIA_URL = "/media/"
 
 cloudinary.config(
@@ -199,20 +195,21 @@ cloudinary.config(
     api_secret=os.getenv("CLOUDINARY_API_SECRET"),
 )
 
-
 # --- Email ---
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@cakeiteasy.local")
-EMAIL_BACKEND = os.getenv(
-    "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    "noreply@cakeiteasy.local",
 )
-
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend",
+)
 
 # --- Stripe ---
 STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_CURRENCY = os.getenv("STRIPE_CURRENCY", "eur")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
-
 
 # --- Security (production) ---
 SECURE_SSL_REDIRECT = not DEBUG
@@ -221,13 +218,9 @@ SESSION_COOKIE_SECURE = not DEBUG
 SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_HSTS_PRELOAD = not DEBUG
-# (Optional) add:
-# SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
-
 
 # --- Defaults ---
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 # --- Logging ---
 LOGGING = {
