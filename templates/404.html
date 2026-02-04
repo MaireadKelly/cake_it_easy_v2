@@ -3,6 +3,10 @@
 
 {% block content %}
 <section class="container py-5 text-center">
+
+  <!-- Required semantic heading for section (hidden visually) -->
+  <h2 class="visually-hidden">Page not found</h2>
+
   <div class="display-4 fw-bold mb-2">Crumbs! 404</div>
   <p class="lead mb-4">We whisked and whisked… but this page didn’t rise. 🍰</p>
 
@@ -17,13 +21,19 @@
 
   <form class="row g-2 justify-content-center" method="get" action="{% url 'product_list' %}">
     <div class="col-10 col-sm-6 col-md-4">
-      <input type="search" class="form-control" name="q" placeholder="Search cakes & accessories…" />
+      <input
+        type="search"
+        class="form-control"
+        name="q"
+        placeholder="Search cakes & accessories…">
     </div>
     <div class="col-auto">
       <button class="btn btn-primary" type="submit">Search</button>
     </div>
   </form>
 
-  <small class="text-muted d-block mt-4">Error code: 404 — Page not found</small>
+  <small class="text-muted d-block mt-4">
+    Error code: 404 — Page not found
+  </small>
 </section>
 {% endblock %}
