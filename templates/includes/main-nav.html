@@ -48,37 +48,46 @@
       </a>
     </li>
 
-    <!-- Search -->
-    <li class="nav-item dropdown">
-      <a
-        class="nav-link dropdown-toggle"
-        href="#"
-        id="navbarSearchDropdown"
-        role="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-        aria-label="Open search"
-      >
-        <i class="fas fa-search" aria-hidden="true"></i>
-      </a>
+<!-- Search -->
+<li class="nav-item dropdown">
+  <a
+    class="nav-link dropdown-toggle"
+    href="#"
+    id="navbarSearchDropdown"
+    role="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+    aria-label="Open search"
+  >
+    <i class="fas fa-search" aria-hidden="true"></i>
+  </a>
 
-      <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="navbarSearchDropdown" style="min-width: 280px;">
-        <form method="get" action="{% url 'product_list' %}" role="search" aria-label="Search products">
-          <div class="input-group input-group-sm">
-            <input
-              class="form-control"
-              type="text"
-              name="q"
-              value="{{ search_term|default:'' }}"
-              placeholder="Search…"
-              aria-label="Search products"
-            >
-            <button class="btn btn-outline-secondary" type="submit">Search</button>
-          </div>
-        </form>
+  <div
+    class="dropdown-menu dropdown-menu-end p-3"
+    style="min-width: 280px;"
+  >
+    <form
+      method="get"
+      action="{% url 'product_list' %}"
+      role="search"
+      aria-label="Search products"
+    >
+      <div class="input-group input-group-sm">
+        <input
+          class="form-control"
+          type="text"
+          name="q"
+          value="{{ search_term|default:'' }}"
+          placeholder="Search…"
+          aria-label="Search products"
+        >
+        <button class="btn btn-outline-secondary" type="submit">
+          Search
+        </button>
       </div>
-    </li>
-
+    </form>
+  </div>
+</li>
 
     <!-- Account dropdown -->
     <li class="nav-item dropdown">

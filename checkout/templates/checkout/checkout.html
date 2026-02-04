@@ -10,7 +10,7 @@
     <!-- Order summary -->
     <div class="col-md-6 mb-4">
       <div class="card card-body">
-        <h5 class="mb-3">Your Order</h5>
+        <h2 class="h5 mb-3">Your Order</h2>
         {% with items|default:bag_items as items %}
         {% if items %}
           <ul class="list-unstyled">
@@ -60,7 +60,7 @@
     <!-- Payment & details -->
     <div class="col-md-6 mb-4">
       <div class="card card-body">
-        <h5 class="mb-3">Billing & Payment</h5>
+        <h3 class="h5 mb-3">Billing & Payment</h3>
 
         <form id="payment-form" method="post" novalidate>
           {% csrf_token %}
@@ -76,16 +76,32 @@
           </div>
 
           {% if stripe_public_key and client_secret and client_secret != 'test_secret_disabled' %}
-            <label for="card-element" class="mt-2">Card details</label>
-            <div id="card-element" class="form-control"></div>
+
+            <p id="card-element-label" class="mt-2 mb-1">
+              Card details
+            </p>
+
+            <div
+              id="card-element"
+              class="form-control"
+              role="group"
+              aria-labelledby="card-element-label">
+            </div>
+
             <div id="card-errors" class="text-danger small mt-2" role="alert"></div>
 
-            <input type="hidden" name="client_secret" id="id_client_secret" value="{{ client_secret }}">
+            <input
+              type="hidden"
+              name="client_secret"
+              id="id_client_secret"
+              value="{{ client_secret }}">
 
             <button type="submit" id="pay-btn" class="btn btn-primary mt-3">
               Pay €{{ grand_total|floatformat:2 }}
             </button>
+
           {% else %}
+
             <p class="text-muted small">
               Stripe not configured — placing order without payment (dev only).
             </p>

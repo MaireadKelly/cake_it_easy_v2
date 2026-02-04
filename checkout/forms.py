@@ -55,6 +55,8 @@ class OrderForm(forms.ModelForm):
             elif isinstance(widget, forms.Select):
                 widget.attrs["class"] = f"{existing_class} form-select".strip()
         # Placeholders
+        self.fields["country"].widget.attrs.pop(
+            "maxlength", None)
 
         self.fields["full_name"].widget.attrs.setdefault(
             "placeholder", "Full name"

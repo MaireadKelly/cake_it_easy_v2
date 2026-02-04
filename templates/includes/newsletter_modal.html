@@ -1,11 +1,20 @@
 {% load static %}
 
-<div class="modal fade" id="newsletterModal" tabindex="-1" aria-labelledby="newsletterModalLabel" aria-hidden="true">
+<div class="modal fade"
+     id="newsletterModal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="newsletterModalLabel"
+     aria-modal="true"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-3">
       <div class="modal-header">
-        <h5 class="modal-title" id="newsletterModalLabel">Join our newsletter</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <p class="modal-title h5 mb-0" id="newsletterModalLabel">Join our newsletter</p>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
       </div>
 
       <div class="modal-body">
@@ -22,7 +31,7 @@
               class="form-control"
               placeholder="you@example.com"
               required
-            />
+            >
             <button class="btn btn-primary" type="submit">Subscribe</button>
           </div>
           {% if form.errors.email %}

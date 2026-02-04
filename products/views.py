@@ -14,7 +14,12 @@ from .models import Category, Product
 
 
 def _apply_search_sort(queryset, request):
-    """Apply ?q=, ?sort=, ?direction= consistently (walkthrough style)."""
+    """
+    Apply query params consistently:
+      - ?q= search term
+      - ?sort= name|price|category
+      - ?direction= asc|desc
+    """
     q = request.GET.get("q", "").strip()
     if q:
         queryset = queryset.filter(
@@ -23,8 +28,13 @@ def _apply_search_sort(queryset, request):
             | Q(category__name__icontains=q)
             | Q(category__friendly_name__icontains=q)
         )
+
     sort = request.GET.get("sort", "")
     direction = request.GET.get("direction", "asc").lower()
+
+    # Harden direction so weird values don't break ordering logic
+    if direction not in ("asc", "desc"):
+        direction = "asc"
 
     sortkey = None
     if sort == "name":
@@ -34,15 +44,17 @@ def _apply_search_sort(queryset, request):
         sortkey = "price"
     elif sort == "category":
         sortkey = "category__name"
+
     if sortkey:
         if direction == "desc":
             sortkey = f"-{sortkey}"
         queryset = queryset.order_by(sortkey)
+
     return queryset, q, sort, direction
 
 
 def _ids_for_category_and_children(slug):
-    """Return [parent.id] + child id Category slug. If none, return (None)"""
+    """Return ([parent.id] + child_ids, parent_category). If slug missing: ([], None)."""
     try:
         parent = Category.objects.get(slug=slug)
     except Category.DoesNotExist:
@@ -64,6 +76,7 @@ def product_list(request):
     slugs = [s for s in cat_param.split(",") if s]
     if slugs:
         qs = qs.filter(category__slug__in=slugs)
+
     qs, q, sort, direction = _apply_search_sort(qs, request)
 
     context = {
@@ -97,6 +110,7 @@ def product_cakes(request):
     slugs = [s for s in cat_param.split(",") if s]
     if slugs:
         qs = qs.filter(category__slug__in=slugs)
+
     qs, q, sort, direction = _apply_search_sort(qs, request)
 
     cupcakes = Category.objects.filter(slug="cupcakes").first()
@@ -133,6 +147,7 @@ def product_accessories(request):
     slugs = [s for s in cat_param.split(",") if s]
     if slugs:
         qs = qs.filter(category__slug__in=slugs)
+
     qs, q, sort, direction = _apply_search_sort(qs, request)
 
     balloons = Category.objects.filter(slug="balloons").first()
@@ -172,9 +187,7 @@ def product_offers(request):
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    return render(
-        request, "products/product_detail.html", {"product": product}
-    )
+    return render(request, "products/product_detail.html", {"product": product})
 
 
 # ----------------------------

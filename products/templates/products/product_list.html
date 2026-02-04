@@ -15,7 +15,9 @@
       <!-- Search -->
       <form method="get" action="." class="form-inline">
         {% for key,val in request_get.items %}
-          {% if key != 'q' %}<input type="hidden" name="{{ key }}" value="{{ val }}">{% endif %}
+          {% if key != 'q' %}
+            <input type="hidden" name="{{ key }}" value="{{ val }}">
+          {% endif %}
         {% endfor %}
         <div class="input-group input-group-sm">
           <input class="form-control" type="text" name="q" value="{{ search_term }}" placeholder="Search…">
@@ -25,22 +27,24 @@
         </div>
       </form>
 
-      <!-- Sort -->
+      <!-- Sort + Direction (no JS, avoids invalid option onclick) -->
       <form method="get" class="form-inline">
         {% for key,val in request_get.items %}
           {% if key != 'sort' and key != 'direction' %}
             <input type="hidden" name="{{ key }}" value="{{ val }}">
           {% endif %}
         {% endfor %}
-        <input type="hidden" name="direction" id="direction" value="{{ current_direction|default:'asc' }}">
+
         <select name="sort" class="form-control form-control-sm" onchange="this.form.submit()">
           <option value="" {% if not current_sort %}selected{% endif %}>Sort by…</option>
-          <option value="name" {% if current_sort == 'name' and current_direction == 'asc' %}selected{% endif %}>Name A–Z</option>
-          <option value="name" {% if current_sort == 'name' and current_direction == 'desc' %}selected{% endif %} onclick="document.getElementById('direction').value='desc'">Name Z–A</option>
-          <option value="price" {% if current_sort == 'price' and current_direction == 'asc' %}selected{% endif %}>Price Low→High</option>
-          <option value="price" {% if current_sort == 'price' and current_direction == 'desc' %}selected{% endif %} onclick="document.getElementById('direction').value='desc'">Price High→Low</option>
-          <option value="category" {% if current_sort == 'category' and current_direction == 'asc' %}selected{% endif %}>Category A–Z</option>
-          <option value="category" {% if current_sort == 'category' and current_direction == 'desc' %}selected{% endif %} onclick="document.getElementById('direction').value='desc'">Category Z–A</option>
+          <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name</option>
+          <option value="price" {% if current_sort == 'price' %}selected{% endif %}>Price</option>
+          <option value="category" {% if current_sort == 'category' %}selected{% endif %}>Category</option>
+        </select>
+
+        <select name="direction" class="form-control form-control-sm" onchange="this.form.submit()">
+          <option value="asc" {% if current_direction|default:'asc' == 'asc' %}selected{% endif %}>A–Z / Low→High</option>
+          <option value="desc" {% if current_direction == 'desc' %}selected{% endif %}>Z–A / High→Low</option>
         </select>
       </form>
     </div>
@@ -99,11 +103,13 @@
           </a>
 
           <div class="card-body d-flex flex-column">
-            <h5 class="card-title mb-1">
+            {# h2 is valid under the page h1 and avoids h1 -> h5 skip #}
+            <h2 class="h5 card-title mb-1">
               <a class="text-dark text-decoration-none" href="{% url 'product_detail' product.id %}">
                 {{ product.name }}
               </a>
-            </h5>
+            </h2>
+
             {% if product.category %}
               <small class="text-muted d-block">
                 {{ product.category.friendly_name|default:product.category.name }}
