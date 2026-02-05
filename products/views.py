@@ -54,7 +54,8 @@ def _apply_search_sort(queryset, request):
 
 
 def _ids_for_category_and_children(slug):
-    """Return ([parent.id] + child_ids, parent_category). If slug missing: ([], None)."""
+    """Return ([parent.id] + child_ids, parent_category).
+      If slug missing: ([], None)."""
     try:
         parent = Category.objects.get(slug=slug)
     except Category.DoesNotExist:
@@ -187,7 +188,11 @@ def product_offers(request):
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    return render(request, "products/product_detail.html", {"product": product})
+    return render(
+        request,
+        "products/product_detail.html",
+        {"product": product},
+    )
 
 
 # ----------------------------
