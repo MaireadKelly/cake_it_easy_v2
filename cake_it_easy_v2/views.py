@@ -3,46 +3,58 @@ from django.shortcuts import render
 from django.urls import reverse
 
 
-def robots_txt(_request):
+def robots_txt(request):
+    """Robots rules for the deployed site.
+
+    Note:
+    - Bag / Checkout / Accounts / Admin are not meant to be indexed.
+    - Sitemap location is provided as an absolute URL for best compatibility.
+    """
+    sitemap_url = request.build_absolute_uri(reverse("sitemap_xml"))
     lines = [
         "User-agent: *",
         "Disallow: /bag/",
         "Disallow: /checkout/",
         "Disallow: /accounts/",
-        "Sitemap: /sitemap.xml",
+        "Disallow: /admin/",
+        f"Sitemap: {sitemap_url}",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
 
 def sitemap_xml(request):
-    """
-    Minimal, hand-rolled sitemap for key pages.
-    If a URL name below doesn't exist in your project, remove it.
-    """
+    """Minimal sitemap for public, indexable pages."""
     url_names = [
+        "home",  # if your home URL name differs, update/remove this
         "product_list",
         "product_cakes",
         "product_accessories",
         "product_offers",
-        "my_orders",  # auth required; still okay to list
         "about",
-        "custom_cake_list",
     ]
+
     urls = []
     for name in url_names:
         try:
             urls.append(request.build_absolute_uri(reverse(name)))
         except Exception:
-            # Ignore missing routes
-            pass
+            # Ignore missing routes (keeps this view safe during refactors)
+            continue
 
     body = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ]
     for u in urls:
-        body += ["  <url>", f"    <loc>{u}</loc>", "  </url>"]
-    body += ["</urlset>"]
+        body.extend(
+            [
+                "  <url>",
+                f"    <loc>{u}</loc>",
+                "  </url>",
+            ]
+        )
+    body.append("</urlset>")
+
     return HttpResponse("\n".join(body), content_type="application/xml")
 
 
