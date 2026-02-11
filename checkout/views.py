@@ -92,6 +92,26 @@ def checkout(request):
     # Use bag context as the single source of truth (includes dynamic discount)
     bag_ctx = bag_contents(request)
 
+    # Defensive enforcement at checkout:
+    # If user logged in with an already-used single-use code in session, remove it.
+    discount_code = bag_ctx.get("discount_code") or ""
+    if discount_code == "WELCOME10":
+        already_used = Order.objects.filter(
+            user=request.user,
+            discount_code="WELCOME10",
+            paid=True,
+        ).exists()
+
+        if already_used:
+            request.session.pop("discount", None)
+            request.session.modified = True
+            messages.warning(
+                request,
+                "WELCOME10 has already been used on your account and "
+                "has been removed from this order."
+            )
+            bag_ctx = bag_contents(request)
+
     subtotal = bag_ctx.get("total", subtotal)  # pre-discount subtotal
     delivery = bag_ctx.get("delivery", Decimal("0.00"))
     discount_amount = bag_ctx.get("discount_amount") or Decimal("0.00")

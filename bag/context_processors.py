@@ -99,6 +99,21 @@ def bag_contents(request):
     disc = request.session.get("discount") or {}
     discount_code = (disc.get("code") or "").strip().upper()
 
+    # Safeguard: if user logs in and WELCOME10 is already used, remove it
+    if discount_code == "WELCOME10" and request.user.is_authenticated:
+        from checkout.models import Order
+
+        already_used = Order.objects.filter(
+            user=request.user,
+            discount_code="WELCOME10",
+            paid=True,
+        ).exists()
+
+        if already_used:
+            request.session.pop("discount", None)
+            request.session.modified = True
+            discount_code = ""
+
     discount_amount = Decimal("0.00")
     if discount_code == "WELCOME10":
         discount_amount = (subtotal * Decimal("0.10")).quantize(
