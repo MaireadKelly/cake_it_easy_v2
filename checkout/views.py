@@ -28,6 +28,16 @@ if STRIPE_PUBLIC_KEY and STRIPE_SECRET_KEY:
     stripe.api_key = STRIPE_SECRET_KEY
 
 
+def _consume_discount_removed_notice(request):
+    notice = request.session.pop("discount_removed_notice", None)
+    if notice == "WELCOME10_USED":
+        request.session.modified = True
+        messages.warning(
+            request,
+            "WELCOME10 has already been used on your account and has been removed from this checkout."
+        )
+
+
 def _pack_price(product, option):
     if option and hasattr(option, "pack_price"):
         return Decimal(option.pack_price())
@@ -89,36 +99,17 @@ def checkout(request):
         messages.info(request, "Your bag is empty.")
         return redirect("product_list")
 
+    # Show one-time message if discount was removed during login/session processing
+    _consume_discount_removed_notice(request)
+
     # Use bag context as the single source of truth (includes dynamic discount)
     bag_ctx = bag_contents(request)
-
-    # Defensive enforcement at checkout:
-    # If user logged in with an already-used single-use code in session, remove it.
-    discount_code = bag_ctx.get("discount_code") or ""
-    if discount_code == "WELCOME10":
-        already_used = Order.objects.filter(
-            user=request.user,
-            discount_code="WELCOME10",
-            paid=True,
-        ).exists()
-
-        if already_used:
-            request.session.pop("discount", None)
-            request.session.modified = True
-            messages.warning(
-                request,
-                "WELCOME10 has already been used on your account and "
-                "has been removed from this order."
-            )
-            bag_ctx = bag_contents(request)
 
     subtotal = bag_ctx.get("total", subtotal)  # pre-discount subtotal
     delivery = bag_ctx.get("delivery", Decimal("0.00"))
     discount_amount = bag_ctx.get("discount_amount") or Decimal("0.00")
     discount_code = bag_ctx.get("discount_code") or ""
 
-    # IMPORTANT: store pre-discount total on the Order model
-    # so Order.grand_total property works correctly.
     pre_discount_total = subtotal + delivery
     grand_total = pre_discount_total - discount_amount
     if grand_total < 0:
@@ -141,7 +132,6 @@ def checkout(request):
                 request.session.get("bag", {})
             )
 
-            # Store totals correctly
             order.order_total = pre_discount_total
             order.discount_amount = discount_amount
             order.discount_code = discount_code
@@ -172,6 +162,7 @@ def checkout(request):
 
             request.session["bag"] = {}
             request.session.pop("discount", None)
+            request.session.pop("discount_removed_notice", None)
             request.session.modified = True
 
             messages.success(request, "Order placed successfully.")

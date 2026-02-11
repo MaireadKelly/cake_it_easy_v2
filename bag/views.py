@@ -1,6 +1,8 @@
 from decimal import Decimal
+
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
+
 from checkout.models import Order
 from products.models import Product, ProductOption
 
@@ -10,8 +12,57 @@ def _get_bag(session):
     return session.setdefault("bag", {})
 
 
+def _consume_discount_removed_notice(request):
+    """
+    If the context processor removed a discount silently (e.g. after login),
+    show a one-time message and clear the notice flag.
+    """
+    notice = request.session.pop("discount_removed_notice", None)
+    if notice == "WELCOME10_USED":
+        request.session.modified = True
+        messages.warning(
+            request,
+            "WELCOME10 has already been used on your account and "
+            "has been removed from your bag totals."
+        )
+
+
+def _enforce_discount_eligibility_for_user(request):
+    """
+    Apply-time enforcement (covers cases where a logged-in user enters
+    WELCOME10 again). The global safeguard is still in the context processor.
+    """
+    disc = request.session.get("discount") or {}
+    code = (disc.get("code") or "").strip().upper()
+
+    if code != "WELCOME10":
+        return
+
+    if not request.user.is_authenticated:
+        return
+
+    already_used = Order.objects.filter(
+        user=request.user,
+        discount_code="WELCOME10",
+        paid=True,
+    ).exists()
+
+    if already_used:
+        request.session.pop("discount", None)
+        request.session["discount_removed_notice"] = "WELCOME10_USED"
+        request.session.modified = True
+
+
 def view_bag(request):
-    """Render the bag page (items & totals come from context processor)."""
+    """
+    Render the bag page (items & totals come from context processor).
+
+    Users should see a message if a previously-applied single-use discount
+    has been removed after login.
+    """
+    _consume_discount_removed_notice(request)
+    _enforce_discount_eligibility_for_user(request)
+    _consume_discount_removed_notice(request)
     return render(request, "bag/bag.html")
 
 
@@ -160,7 +211,7 @@ def apply_discount(request):
         messages.error(request, "Please enter a discount code.")
         return redirect("view_bag")
 
-    # Enforce single-use per registered user
+    # Enforce single-use per registered user (at apply-time)
     if code == "WELCOME10" and request.user.is_authenticated:
         already_used = Order.objects.filter(
             user=request.user,
@@ -169,11 +220,10 @@ def apply_discount(request):
         ).exists()
 
         if already_used:
-            messages.info(
-                request,
-                "WELCOME10 has already been used on your account."
-                "Please use a different code.",
-            )
+            request.session.pop("discount", None)
+            request.session["discount_removed_notice"] = "WELCOME10_USED"
+            request.session.modified = True
+            _consume_discount_removed_notice(request)
             return redirect("view_bag")
 
     # Compute against current subtotal via context processor
