@@ -27,6 +27,7 @@ class OrderAdmin(admin.ModelAdmin):
         "town_or_city",
         "postcode",
         "order_total",
+        "discount_code",
         "discount_amount",
         "paid",
     )
