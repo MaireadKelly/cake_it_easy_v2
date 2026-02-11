@@ -107,6 +107,8 @@ def product_cakes(request):
         else Product.objects.none()
     )
 
+    qs = qs.filter(is_custom=False)
+
     cat_param = request.GET.get("category", "").strip()
     slugs = [s for s in cat_param.split(",") if s]
     if slugs:
