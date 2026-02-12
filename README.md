@@ -115,27 +115,63 @@ Key features include cupcake box-size pricing with clear per-item costs, bespoke
 ## Features
 
 ### Products & Discovery
-- Home Page
+
+- **Home page** with featured navigation and category access.
   - ![Home (nav + footer)](docs/readme/01_home_nav_footer.png)
 
-- Product list, detail, search, sort, and category filters (Cakes/Accessories/Cupcakes).
-  - ![Cakes listing](docs/readme/02_cakes_listing.png)
-  - ![Accessories listing](docs/readme/03_accessories_listing.png)
+- **Product listing pages** support:
+  - Category filtering (parent + subcategories)
+  - Keyword search
+  - Sorting by name and price
+  - Direction toggle (A–Z / Z–A, Low → High / High → Low)
+
+- **Category filtering**
+  - Products can be filtered by main category (e.g. Cakes, Accessories).
+  - Subcategory links (e.g. Cupcakes, Balloons, Candles) dynamically refine results.
+  - Category filters include products from child categories where applicable.
+
+  - ![Accessories category filter](docs/readme/accessories_category.png)
+  - ![Cakes category filter](docs/readme/cake_category.png)
+
+- **Search**
+  - Keyword search matches against product name, description, and category.
+  - Search terms persist when combined with category filters.
   - ![Search results](docs/readme/08_search_results.png)
-  - ![Sort price low→high](docs/readme/09_sort_price_low_high.png)
+
+- **Sorting**
+  - Products can be sorted by:
+    - Name (A–Z / Z–A)
+    - Price (Low → High / High → Low)
+  - Sorting works in combination with category filters and search.
+  - ![Sort dropdown](docs/readme/sort_dropdown.png)
+
+- **Product cards**
+  - Clearly display price and category.
+  - Cupcake products display a **“From €…”** badge based on the lowest available box price.
   - ![Cupcakes badge](docs/readme/10_cupcakes_badge.png)
 
-### Cupcake Box-Size Pricing
-- Product detail shows **€X.XX per cupcake**.
-  - ![Product detail top](docs/readme/11_product_detail_top.png)
 
-- A **Box size** dropdown (4/6/10/12) appears above Quantity (boxes).
-  - ![Box dropdown open](docs/readme/12_box_dropdown_open.png)
+---
 
-- Pack price auto-calculates from per-cupcake × quantity (or uses an override price for bundles).
-- Bag line shows **(Box of N)** and **≈ € per cupcake**.
-- Cupcake cards display **“From €…”** based on the cheapest configured box.
-  - ![Dynamic pack price](docs/readme/13_dynamic_pack_price.png)
+## Cupcake Box-Size Pricing
+
+- Product detail pages display **€X.XX per cupcake**.
+- ![Product detail top](docs/readme/11_product_detail_top.png)
+
+- A **Box size** dropdown (4 / 6 / 10 / 12 cupcakes) appears above quantity selection.
+- ![Box dropdown open](docs/readme/12_box_dropdown_open.png)
+
+- Pack price auto-calculates from:
+  - Per-cupcake price
+  - Selected box size
+  - Quantity of boxes
+- Bundle override pricing is supported where applicable.
+- Bag line items display:
+  - Selected box size (e.g. *Box of 6*)
+  - Approximate per-cupcake price
+- Cupcake cards display **“From €…”** based on the lowest available box price.
+- ![Dynamic pack price](docs/readme/13_dynamic_pack_price.png)
+
 
 ### Authentication
 - Users can register, log in, and log out securely.
@@ -158,6 +194,11 @@ Key features include cupcake box-size pricing with clear per-item costs, bespoke
   - ![Custom cake deposit](docs/readme/custom_cake_deposit.png)
 
 - Multiple custom cake deposits may be added to support multiple bespoke orders in a single session.
+
+- The Custom Cake deposit product is excluded from the main Cakes
+  product listing to prevent catalogue confusion.
+  It remains accessible only through the Custom Cake workflow.
+
 
 ### Shopping Bag
 - Add, update, remove with toasts; free-delivery threshold message.
@@ -233,6 +274,8 @@ When logged in as an administrator, a **direct shortcut to the Admin panel** is 
 - Admin access requires **staff permissions** enforced by Django.
 - Non-admin users are prevented from accessing admin URLs (RBAC enforced).
 - Sensitive configuration (secret keys, API keys, webhook secrets) is **never committed** and is managed via environment variables / Heroku Config Vars.
+- Checkout is protected by authentication, preventing guest users from completing purchases.
+
 
 ---
 
@@ -246,6 +289,8 @@ When logged in as an administrator, a **direct shortcut to the Admin panel** is 
 #### Order Management
 
 - All customer orders are visible to staff for fulfilment and review.
+- The admin order list view displays the applied `discount_code`
+  and `discount_amount` for quick at-a-glance visibility.
 - Order line items are displayed **inline**, allowing staff to quickly inspect purchased items and quantities.
 
 ![Admin orders list](docs/readme/admin_orders_list.png)
@@ -292,6 +337,20 @@ When logged in as an administrator, a **direct shortcut to the Admin panel** is 
   - ![Discount updated](docs/readme/discount_line_bag.png)
   - ![Discount checkout](docs/readme/discount_checkout.png)
   - ![Discount checkout success](docs/readme/discount_checkout_success.png)
+
+- Discount eligibility is revalidated at checkout after user login.
+  - If a previously used single-use code (e.g. `WELCOME10`) is detected,
+    it is automatically removed from the session.
+  - The grand total is recalculated before payment.
+  - A warning message is displayed to the user.
+  - This prevents session-based bypass of single-use restrictions.
+  - If the discount is removed after login, a clear warning message is displayed on the Shopping Bag or Checkout page so the user can review totals before proceeding.
+  - ![Discount applied via guest](docs/readme/discount_not_logged_in.png)
+  - ![Discount removed with message](docs/readme/discount_removed_after_login.png)
+  This demonstrates that single-use discounts cannot be reused via guest session bypass, and users are clearly informed before proceeding to checkout.
+
+
+
 
   **Testing evidence:**  
 - [Discount reuse blocked after purchase](TESTING.md#manual-test-matrix)
@@ -574,6 +633,8 @@ Sensitive configuration values (secret keys, API keys, webhook secrets) are mana
 - **Newsletter modal** previously showed code before submit → fixed by unifying modal IDs & JS.
 - **Delivery shown on empty bag** → context processor logic fixed.
 - **RBAC** for product CRUD → guarded with `@staff_member_required` and template gating.
+- Single-use discount session bypass (guest → login) → resolved with session revalidation and user-facing warning.
+
 
 [Back to Top](#top)
 
@@ -628,7 +689,7 @@ The application follows a **mobile-first design approach** and is responsive acr
 
 ## Business Model & UX Rationale
 
-## Marketing Strategy
+### Marketing Strategy
 
 Cake It Easy is positioned as a small, local bakery offering handmade cakes, custom designs, and party accessories.  
 The marketing strategy focuses on clear navigation, promotional incentives, and repeat customer engagement rather than aggressive upselling.
@@ -666,17 +727,20 @@ This approach balances usability, transparency, and commercial viability while r
 
 - **Differentiator:** transparent per-cupcake pricing with selectable box sizes, allowing users to understand costs clearly before checkout.
 
-- **UX:** clear navigation, large product imagery, user feedback via toast messages, and a free-delivery banner to support usability and reduce checkout friction.
+- **UX:** clear navigation, large product imagery, user feedback via alert banners, and a free-delivery banner to support usability and reduce checkout friction.
 
 - **Admin efficiency:** Django admin features and structured product models allow efficient product and price management.
 
-- **Accessories availability:** Accessories such as candles and balloons are offered via a dedicated Accessories category and prominent navigation, allowing customers to add complementary items to their order.
+- Accessories Availability: Accessories are displayed consistently across all product pages to maximise cross-selling opportunities and increase average order value.
+
 
 ![Newsletter form](docs/readme/newsletter_form.png)
 ![Newsletter success](docs/readme/newsletter_success.png)
 ![Newsletter already subscribed](docs/readme/newsletter_duplicate.png)
-![Facebook cover](docs/readme/fb_01_page_cover_about.png)
-- **Facebook:** branded post mockup![Facebook cover](docs/readme/fb_01_page_cover_about.png)
+
+
+**Facebook:** branded post mockup![Facebook cover](docs/readme/fb_01_page_cover_about.png)
+
 [Back to Top](#top)
 
 ---

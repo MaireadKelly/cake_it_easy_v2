@@ -34,7 +34,10 @@ def _consume_discount_removed_notice(request):
         request.session.modified = True
         messages.warning(
             request,
-            "WELCOME10 has already been used on your account and has been removed from this checkout."
+            (
+                "WELCOME10 has already been used on your account "
+                "and has been removed from this checkout."
+            ),
         )
 
 
@@ -99,7 +102,8 @@ def checkout(request):
         messages.info(request, "Your bag is empty.")
         return redirect("product_list")
 
-    # Show one-time message if discount was removed during login/session processing
+    # Show one-time message if discount was removed
+    # during login/session processing
     _consume_discount_removed_notice(request)
 
     # Use bag context as the single source of truth (includes dynamic discount)
