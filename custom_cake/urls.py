@@ -17,4 +17,5 @@ urlpatterns = [
     path(
         "<int:pk>/delete/", views.custom_cake_delete, name="delete_custom_cake"
     ),
+    path("design-your-own/", views.design_your_own, name="design_your_own"),
 ]
