@@ -735,7 +735,7 @@ This approach balances usability, transparency, and commercial viability while r
 
 
 ![Newsletter form](docs/readme/newsletter_form.png)
-![Newsletter success](docs/readme/newsletter_success.png)
+![Newsletter success](<docs/readme/newsletter_success .png>)
 ![Newsletter already subscribed](docs/readme/newsletter_duplicate.png)
 
 

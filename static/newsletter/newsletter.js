@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("nl-form");
     if (!form) return;
 
+    const intro = document.getElementById("nl-intro");
     const successPanel = document.getElementById("nl-success");
     const hint = document.getElementById("nl-hint");
     const codeEl = document.getElementById("nl-code");
@@ -23,9 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const showSuccess = (code) => {
-        // Show success panel, hide form/hint
+        // Show success panel, hide form/intro/hint
         if (codeEl && code) codeEl.textContent = code;
         if (successPanel) successPanel.classList.remove("d-none");
+        if (intro) intro.classList.add("d-none");
         form.classList.add("d-none");
         hideHint();
     };
@@ -33,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const resetUIForRetry = (message) => {
         // Keep the form visible, show a helpful message
         if (successPanel) successPanel.classList.add("d-none");
+        if (intro) intro.classList.remove("d-none");
         form.classList.remove("d-none");
         if (message) setHint(message);
     };

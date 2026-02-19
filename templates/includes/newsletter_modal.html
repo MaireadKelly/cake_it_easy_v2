@@ -7,7 +7,6 @@
   aria-labelledby="newsletterModalLabel"
   aria-hidden="true"
 >
-
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
@@ -24,10 +23,14 @@
       </div>
 
       <div class="modal-body">
-        <p class="mb-3">
-          Subscribe to our newsletter and receive a <strong>WELCOME10</strong>
-          discount code straight to your inbox.
-        </p>
+
+        <!-- Intro text (hidden after successful subscription) -->
+        <div id="nl-intro">
+          <p class="mb-3">
+            Subscribe to unlock <strong>10% off</strong> your first order.
+            Your discount code will appear after you subscribe.
+          </p>
+        </div>
 
         <form id="nl-form" method="post" action="/newsletter/subscribe/">
           {% csrf_token %}
@@ -54,11 +57,27 @@
           </div>
         </form>
 
-        <div
-          id="nl-feedback"
-          class="mt-3 text-center"
-          aria-live="polite"
-        ></div>
+        <!-- Hint / error messages (shown when invalid or already subscribed) -->
+        <p id="nl-hint" class="mt-3 text-center d-none" aria-live="polite"></p>
+
+        <!-- Success panel (hidden until subscription succeeds) -->
+        <div id="nl-success" class="mt-3 text-center d-none" aria-live="polite">
+          <p class="mb-2 fw-semibold">You're subscribed! 🎉</p>
+          <p class="mb-3">Your discount code is:</p>
+
+          <div class="d-inline-flex align-items-center gap-2">
+            <code id="nl-code" class="px-3 py-2 border rounded bg-light">WELCOME10</code>
+
+            <button id="nl-copy" type="button" class="btn btn-outline-primary btn-sm">
+              Copy
+            </button>
+          </div>
+
+          <div id="nl-copied" class="small mt-2 d-none" role="status">
+            Copied!
+          </div>
+        </div>
+
       </div>
 
     </div>
