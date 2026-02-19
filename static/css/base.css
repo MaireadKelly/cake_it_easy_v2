@@ -89,9 +89,6 @@ body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
 
-    /* Offset content below fixed header stack */
-    padding-top: var(--fixed-stack-h);
-
     /* Sticky footer */
     min-height: 100vh;
     display: flex;
@@ -100,6 +97,7 @@ body {
 
 main.site-main {
     flex: 1 0 auto;
+    padding-top: var(--fixed-stack-h);
 }
 
 /* If a page’s first container adds extra top margin, zero it safely */
@@ -141,8 +139,8 @@ main.site-main {
 ---------------------------- */
 header {
     background-color: #fff;
-    border-bottom: 2px solid var(--neutral-light);
-    padding: .5rem 0;
+    border-bottom: none;
+    padding: 0;
     box-shadow: 0 4px 10px rgba(0, 0, 0, .04);
 }
 
@@ -217,7 +215,7 @@ header.container-fluid.fixed-top {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -1px;
+    bottom: 0;
     height: 2px;
     background: var(--accent-color);
     opacity: .8;
@@ -725,16 +723,12 @@ header.container-fluid.fixed-top {
 /* Mobile / tablet adjustments */
 @media (max-width: 991.98px) {
 
-    /* NEW: header stack math for mobile
-       - collapse row closed height = 0
-       - add mobile topbar height
-       - add banner height
-    */
     :root {
         --nav-row-min-h: 0px;
         /* eliminate white gap */
-        --fixed-stack-h: calc(var(--mobile-topbar-h) + var(--banner-h));
+        --fixed-stack-h: calc(var(--mobile-topbar-h) + var(--banner-h) + 16px);
     }
+
 
     /* Desktop-only bits stay hidden on mobile */
     .nav-center-logo,
@@ -770,6 +764,45 @@ header.container-fluid.fixed-top {
         z-index: 1030;
     }
 }
+
+/* =========================
+   About page hero
+   ========================= */
+
+.shopfront-hero {
+    position: relative;
+    min-height: 360px;
+    background: url("../images/shopfront.jpg") center / cover no-repeat;
+    background-color: #000;
+    /* fallback so no light seam shows */
+    color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+/* If the hero is the first element in main, pull the background up under the fixed header,
+   but keep content readable by padding the top */
+.site-main>.shopfront-hero:first-child {
+    margin-top: calc(-1 * var(--fixed-stack-h));
+    padding-top: var(--fixed-stack-h);
+}
+
+/* Overlay sits on top of background, behind content */
+.shopfront-hero .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Content above overlay */
+.shopfront-hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+
 
 /* =========================
    Footer – Final Polished Version

@@ -5,8 +5,9 @@
 
 {% block content %}
 <!-- Shopfront hero (replace the background image path as needed) -->
-<section class="shopfront-hero position-relative">
-  <div class="hero-overlay"></div>
+<section class="shopfront-hero">
+  <div class="hero-overlay" aria-hidden="true"></div>
+
   <div class="container py-5">
     <div class="row align-items-center">
       <div class="col-12 col-lg-6 text-white">
@@ -16,20 +17,20 @@
           Every order is baked fresh, decorated by hand, and available for collection or local delivery.
         </p>
       </div>
+
       <div class="col-12 col-lg-6 text-center mt-4 mt-lg-0">
-        <!-- Brand logo -->
         <img
           src="{% static 'images/logo.png' %}"
           class="img-fluid about-logo"
           alt="Cake It Easy brand logo"
-          width="280" height="280"
+          width="280"
+          height="280"
           loading="lazy"
-        />
+        >
       </div>
     </div>
   </div>
 </section>
-
 <!-- Story -->
 <section class="py-5">
   <div class="container">
@@ -83,14 +84,4 @@
 {% endblock %}
 
 {% block extra_css %}
-<style>
-  .shopfront-hero {
-    min-height: 360px;
-    background: url("{% static 'images/shopfront.jpg' %}") center/cover no-repeat;
-  }
-  .shopfront-hero .hero-overlay {
-    position:absolute; inset:0; background: rgba(0,0,0,0.35);
-  }
-  .about-logo { max-width: 280px; border-radius: 9999px; background: #fff; padding: .75rem; }
-</style>
 {% endblock %}

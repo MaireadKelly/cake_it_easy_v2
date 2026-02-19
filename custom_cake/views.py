@@ -111,10 +111,12 @@ def custom_cake_delete(request, pk: int):
         request, "custom_cake/custom_cake_confirm_delete.html", {"cake": cake}
     )
 
+
 def design_your_own(request):
     """
     Gatekeeper for the 'Design Your Own' nav link.
-    If user is not authenticated, show message and redirect to login with ?next=
+    If user is not authenticated, show message,
+    and redirect to login with ?next=
     so they return to the custom cake form after logging in.
     """
     create_url = reverse("custom_cake_create")
