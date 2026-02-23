@@ -156,6 +156,20 @@ def checkout(request):
                     user=request.user
                 )
                 cd = order_form.cleaned_data
+
+                # ✅ Save full name to User model (no migration required)
+                full_name = (cd.get("full_name") or "").strip()
+                if full_name:
+                    parts = full_name.split()
+                    request.user.first_name = parts[0]
+                    request.user.last_name = (
+                        " ".join(parts[1:]) if len(parts) > 1 else ""
+                    )
+                    request.user.save(
+                        update_fields=["first_name", "last_name"]
+                    )
+
+                # Save delivery defaults to profile
                 profile.default_phone_number = cd.get("phone_number")
                 profile.default_country = cd.get("country")
                 profile.default_postcode = cd.get("postcode")
@@ -180,11 +194,13 @@ def checkout(request):
                 request.user, "profile", None
             )
             if profile:
-                full_name = (
-                    f"{request.user.first_name} "
-                    f"{request.user.last_name}".strip()
-                    or getattr(request.user, "username", "")
-                )
+                full_name = f"{request.user.first_name} {request.user.last_name}".strip()
+
+                # If the username looks like an email address, don't use it as "full name"
+                if not full_name:
+                    username = (getattr(request.user, "username", "") or "").strip()
+                    if username and "@" not in username:
+                        full_name = username
                 initial = {
                     "full_name": full_name,
                     "email": request.user.email,
