@@ -633,7 +633,8 @@ Sensitive configuration values (secret keys, API keys, webhook secrets) are mana
 - **Newsletter modal** previously showed code before submit → fixed by unifying modal IDs & JS.
 - **Delivery shown on empty bag** → context processor logic fixed.
 - **RBAC** for product CRUD → guarded with `@staff_member_required` and template gating.
-- Single-use discount session bypass (guest → login) → resolved with session revalidation and user-facing warning.
+- **Single-use discount** session bypass (guest → login) → resolved with session revalidation and user-facing warning.
+- **Custom Cake Deposit** is an internal product used for custom cake orders; it may appear in global search/all-products view but is excluded from category listings.”
 
 
 [Back to Top](#top)
