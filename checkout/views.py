@@ -73,7 +73,7 @@ def _session_items(request):
         if opt_id and ProductOption:
             option = ProductOption.objects.filter(
                 pk=opt_id,
-                product_id=pid
+                product_id=pid,
             ).first()
 
         unit_price = _pack_price(product, option)
@@ -142,13 +142,13 @@ def checkout(request):
 
             order.save()
 
-            for i in items:
+            for item in items:
                 OrderLineItem.objects.create(
                     order=order,
-                    product=i["product"],
-                    option=i.get("option"),
-                    quantity=i["quantity"],
-                    lineitem_price=i.get("unit_price"),
+                    product=item["product"],
+                    option=item.get("option"),
+                    quantity=item["quantity"],
+                    lineitem_price=item.get("unit_price"),
                 )
 
             if request.POST.get("save_info") == "on":
@@ -157,7 +157,7 @@ def checkout(request):
                 )
                 cd = order_form.cleaned_data
 
-                # ✅ Save full name to User model (no migration required)
+                # Save full name to User model (no migration required)
                 full_name = (cd.get("full_name") or "").strip()
                 if full_name:
                     parts = full_name.split()
@@ -185,40 +185,48 @@ def checkout(request):
 
             messages.success(request, "Order placed successfully.")
             return redirect("checkout_success", order_id=order.id)
-        else:
-            messages.error(request, "Please correct the errors in the form.")
+
+        messages.error(request, "Please correct the errors in the form.")
+
     else:
         initial = {}
-        if request.user.is_authenticated:
-            profile = getattr(request.user, "userprofile", None) or getattr(
-                request.user, "profile", None
-            )
-            if profile:
-                full_name = f"{request.user.first_name} {request.user.last_name}".strip()
 
-                # If the username looks like an email address, don't use it as "full name"
-                if not full_name:
-                    username = (getattr(request.user, "username", "") or "").strip()
-                    if username and "@" not in username:
-                        full_name = username
-                initial = {
-                    "full_name": full_name,
-                    "email": request.user.email,
-                    "phone_number": getattr(
-                        profile, "default_phone_number", ""
-                    ),
-                    "country": getattr(profile, "default_country", ""),
-                    "postcode": getattr(profile, "default_postcode", ""),
-                    "town_or_city": getattr(
-                        profile, "default_town_or_city", ""
-                    ),
-                    "street_address1": getattr(
-                        profile, "default_street_address1", ""
-                    ),
-                    "street_address2": getattr(
-                        profile, "default_street_address2", ""
-                    ),
-                }
+        profile = getattr(request.user, "userprofile", None) or getattr(
+            request.user, "profile", None
+        )
+
+        if profile:
+            full_name = (
+                f"{request.user.first_name} "
+                f"{request.user.last_name}"
+            ).strip()
+
+            # If username looks like an email, don't use it as "full name"
+            if not full_name:
+                username = (
+                    (getattr(request.user, "username", "") or "").strip()
+                )
+                if username and "@" not in username:
+                    full_name = username
+
+            initial = {
+                "full_name": full_name,
+                "email": request.user.email,
+                "phone_number": getattr(
+                    profile, "default_phone_number", ""
+                ),
+                "country": getattr(profile, "default_country", ""),
+                "postcode": getattr(profile, "default_postcode", ""),
+                "town_or_city": getattr(
+                    profile, "default_town_or_city", ""
+                ),
+                "street_address1": getattr(
+                    profile, "default_street_address1", ""
+                ),
+                "street_address2": getattr(
+                    profile, "default_street_address2", ""
+                ),
+            }
 
         order_form = OrderForm(initial=initial)
 
