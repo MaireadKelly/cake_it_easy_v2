@@ -305,13 +305,13 @@ Audits were performed on a representative selection of **public-facing pages** a
 
 | Page | Performance | Accessibility | Best Practices | SEO |
 |-----|------------|---------------|----------------|-----|
-| Home | 97 | 100 | 92 | 100 |
+| Home | 84 | 100 | 96 | 100 |
 | Cakes listing | 67 | 91 | 96 | 100 |
 | Accessories listing | 84 | 91 | 96 | 100 |
-| Custom Cake | 98 | 100 | 96 | 100 |
-| About | 97 | 100 | 92 | 100 |
+| Custom Cake | 99 | 100 | 96 | 100 |
+| About | 98 | 100 | 96| 100 |
 | Bag | 83 | 91 | 96 | 66 |
-| Checkout | 93 | 100 | 96 | 66 |
+| Checkout | 96 | 100 | 96 | 66 |
 
 **Evidence:**
 

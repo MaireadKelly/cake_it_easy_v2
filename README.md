@@ -114,69 +114,71 @@ Key features include cupcake box-size pricing with clear per-item costs, bespoke
 
 ## Features
 
-### Products & Discovery
+---
 
+## 🛍️ Product Discovery & Browsing
+
+### Home Page
 - **Home page** with featured navigation and category access.
   - ![Home (nav + footer)](docs/readme/01_home_nav_footer.png)
 
-- **Product listing pages** support:
-  - Category filtering (parent + subcategories)
-  - Keyword search
-  - Sorting by name and price
-  - Direction toggle (A–Z / Z–A, Low → High / High → Low)
+### Product Listing Pages
+Support:
+- Category filtering (parent + subcategories)
+- Keyword search
+- Sorting by name and price
+- Direction toggle (A–Z / Z–A, Low → High / High → Low)
 
-- **Category filtering**
-  - Products can be filtered by main category (e.g. Cakes, Accessories).
-  - Subcategory links (e.g. Cupcakes, Balloons, Candles) dynamically refine results.
-  - Category filters include products from child categories where applicable.
+### Category Filtering
+- Filter by main category (Cakes, Accessories).
+- Subcategory refinement (Cupcakes, Balloons, Candles).
+- Includes child categories where applicable.
 
   - ![Accessories category filter](docs/readme/accessories_category.png)
   - ![Cakes category filter](docs/readme/cake_category.png)
 
-- **Search**
-  - Keyword search matches against product name, description, and category.
-  - Search terms persist when combined with category filters.
+### Search
+- Matches product name, description, and category.
+- Works with category filters.
   - ![Search results](docs/readme/08_search_results.png)
 
-- **Sorting**
-  - Products can be sorted by:
-    - Name (A–Z / Z–A)
-    - Price (Low → High / High → Low)
-  - Sorting works in combination with category filters and search.
+### Sorting
+- Name (A–Z / Z–A)
+- Price (Low → High / High → Low)
+- Works alongside filtering and search.
   - ![Sort dropdown](docs/readme/sort_dropdown.png)
 
-- **Product cards**
-  - Clearly display price and category.
-  - Cupcake products display a **“From €…”** badge based on the lowest available box price.
+### Product Cards
+- Display price and category.
+- Cupcakes display **“From €…”** badge based on lowest box price.
   - ![Cupcakes badge](docs/readme/10_cupcakes_badge.png)
-
 
 ---
 
-## Cupcake Box-Size Pricing
+## 🧁 Cupcake Box-Size Pricing
 
-- Product detail pages display **€X.XX per cupcake**.
-- ![Product detail top](docs/readme/11_product_detail_top.png)
+- Product detail displays **€X.XX per cupcake**.
+  - ![Product detail top](docs/readme/11_product_detail_top.png)
 
-- A **Box size** dropdown (4 / 6 / 10 / 12 cupcakes) appears above quantity selection.
-- ![Box dropdown open](docs/readme/12_box_dropdown_open.png)
+- Box size dropdown (4 / 6 / 10 / 12).
+  - ![Box dropdown open](docs/readme/12_box_dropdown_open.png)
 
 - Pack price auto-calculates from:
   - Per-cupcake price
   - Selected box size
   - Quantity of boxes
-- Bundle override pricing is supported where applicable.
-- Bag line items display:
-  - Selected box size (e.g. *Box of 6*)
-  - Approximate per-cupcake price
-- Cupcake cards display **“From €…”** based on the lowest available box price.
-- ![Dynamic pack price](docs/readme/13_dynamic_pack_price.png)
+- Bundle override pricing supported.
+- Bag displays selected box size and approx per-cupcake price.
+  - ![Dynamic pack price](docs/readme/13_dynamic_pack_price.png)
 
+---
 
-### Authentication
-- Users can register, log in, and log out securely.
-- Auth flows use Django’s built-in authentication with CSRF protection and server-side validation.
-- Feedback is provided via Bootstrap alerts (messages framework).
+## 🔐 Authentication & User Accounts
+
+### Registration & Login
+- Secure registration, login, logout.
+- CSRF protection and server-side validation.
+- Bootstrap alert feedback.
 
 **Evidence:**
 - ![Register form](docs/readme/04_register_form.png)
@@ -185,199 +187,140 @@ Key features include cupcake box-size pricing with clear per-item costs, bespoke
 - ![Logout confirm](docs/readme/06_logout_confirm.png)
 - ![Logout success](docs/readme/07_logout_success.png)
 
-### Custom Cake Orders
-- Customers can submit a bespoke cake request via a form capturing **flavour, filling, icing, dietary notes, message**, and optional image.
-- Requests are linked to the logged-in user and visible to staff via admin.
+---
+
+## 🎂 Custom Cake Orders
+
+- Bespoke request form capturing flavour, filling, icing, notes, message, optional image.
+- Linked to logged-in user.
   - ![custom cake form](docs/readme/custom_cake_form.png)
 
-- Custom cake orders use a fixed deposit product added to the bag.
+- Uses fixed deposit product.
   - ![Custom cake deposit](docs/readme/custom_cake_deposit.png)
 
-- Multiple custom cake deposits may be added to support multiple bespoke orders in a single session.
+- Deposit excluded from main Cakes listing to prevent catalogue confusion.
+- Accessible only via Custom Cake workflow.
 
-- The Custom Cake deposit product is excluded from the main Cakes
-  product listing to prevent catalogue confusion.
-  It remains accessible only through the Custom Cake workflow.
+---
 
+## 🛒 Shopping Bag
 
-### Shopping Bag
-- Add, update, remove with toasts; free-delivery threshold message.
+- Add / update / remove items.
+- Toast notifications.
+- Free-delivery threshold messaging.
+
   - ![Add to bag toast](docs/readme/14_add_to_bag_toast.png)
   - ![Update quantity](docs/readme/17_bag_update_qty.png)
   - ![Remove item](docs/readme/18_bag_remove_item.png)
-  - ![free delivery](docs/readme/free_delivery_threshold.png)
+  - ![Free delivery](docs/readme/free_delivery_threshold.png)
 
-  **Testing evidence:**  
-- [Bag add/update/remove + totals](TESTING.md#manual-test-matrix)  
-- [Assessor fix: delivery not shown on empty bag](TESTING.md#evidence-index-assessor-critical)
-
-
-- **Discount codes** (see below) integrated into totals.
+- Integrated discount code handling.
   - ![Discount applied](docs/readme/discount_apply.png)
 
-- On smaller screens, the bag uses a horizontally scrollable table to ensure pricing information remains accessible.
+- Mobile horizontal scroll for pricing visibility.
   - ![Mobile bag left](docs/readme/mobile_bag_1.png)
   - ![Mobile bag center](docs/readme/mobile_bag_2.png)
   - ![Mobile bag right](docs/readme/mobile_bag_3.png)
 
-### Checkout (Stripe)
-- Stripe PaymentIntent uses the **discounted** grand total.
-- On success, order is created; bag/discount cleared; success page shown.
+**Testing evidence:**  
+- [Bag add/update/remove + totals](TESTING.md#manual-test-matrix)
+
+---
+
+## 💳 Checkout & Payments (Stripe)
+
+- Stripe PaymentIntent uses discounted grand total.
+- Order created on success.
+- Bag and discount cleared.
   - ![Bag cleared](docs/readme/23_bag_cleared.png)
-- Stripe Payment – Declined Card Handling
-  - Stripe test cards were also used to verify correct handling of failed and declined payments. If a card is declined, the payment is not completed. The user remains on the checkout page and is shown a clear error message. No order is created and no payment intent is confirmed. The user can correct their details and retry payment without losing their bag contents.
+
+### Failed Payment Handling
+- Declined card keeps user on checkout.
+- No order created.
+- Clear error message displayed.
   - ![Card declined](docs/readme/card_declined.png)
 
-- Webhooks ready for robust fulfilment (test mode used).
+- Webhook integration sets `paid=True`.
   - ![Checkout success page](docs/readme/22_checkout_success_page.png)
   - ![Payment card form](docs/readme/20_payment_card_form.png)
 
-  **Testing evidence:**  
-- [Checkout success (order number)](TESTING.md#evidence-index-assessor-critical)  
-- [No console errors during checkout](TESTING.md#manual-test-matrix)  
-- [Webhook sets paid=True](TESTING.md#evidence-index-assessor-critical)
+---
 
+## 👤 User Profile
 
-### Profiles
-
-Registered users have access to a dedicated **Profile** area which provides a personalised account experience.
-
-- Users can **save and update default delivery details**, reducing friction during repeat checkouts.
-- A complete **order history** is displayed, allowing users to review previous purchases.
-- Each order links to a **detailed order view**, showing:
-  - Order date and payment status
-  - Stripe payment reference
-  - Line items with quantities and totals
-  - Any applied **discount code** and **discount amount**
-  - Final grand total charged
-
-This ensures transparency around pricing and gives users confidence when reviewing past transactions.
+- Save/update default delivery details.
+- View full order history.
+- Order detail view shows:
+  - Payment status
+  - Stripe reference
+  - Line items
+  - Discount code and amount
+  - Final total
 
 **Evidence:**
 - ![Profile – order history](docs/readme/my_orders.png)
 - ![Profile – order detail view](docs/readme/order_details.png)
 - ![Profile – update delivery details](docs/readme/profile_update.png)
 
-
-### Admin
-
-Administration is handled via the **Django Admin panel**, with access restricted to staff and superusers only.
-
-When logged in as an administrator, a **direct shortcut to the Admin panel** is available from the site navigation to streamline content and order management.
-
-![Django admin shortcut](docs/readme/django_admin_shortcut.png)
-
 ---
 
-#### Security & Access Control
+## 🎟️ Discount Codes
 
-- Admin access requires **staff permissions** enforced by Django.
-- Non-admin users are prevented from accessing admin URLs (RBAC enforced).
-- Sensitive configuration (secret keys, API keys, webhook secrets) is **never committed** and is managed via environment variables / Heroku Config Vars.
-- Checkout is protected by authentication, preventing guest users from completing purchases.
+- `WELCOME10` applies 10% off subtotal.
+- Single-use per authenticated user.
+- Revalidated at checkout after login.
+- Session bypass prevented.
+- Warning message displayed if removed.
 
-
----
-
-#### Product Management
-
-- Staff can **add, edit, and delete products** directly via the admin interface.
-- Inline **ProductOption** editing enables efficient management of cupcake box sizes and pricing without navigating multiple screens.
-
----
-
-#### Order Management
-
-- All customer orders are visible to staff for fulfilment and review.
-- The admin order list view displays the applied `discount_code`
-  and `discount_amount` for quick at-a-glance visibility.
-- Order line items are displayed **inline**, allowing staff to quickly inspect purchased items and quantities.
-
-![Admin orders list](docs/readme/admin_orders_list.png)
-
-- Staff can manually mark orders as **Paid / Unpaid** using a checkbox on the order record.
-
-![Order not paid](docs/readme/admin_order_paid_unchecked.png)  
-![Order paid](docs/readme/admin_order_paid_checked.png)
-
-- A bulk admin action **“Mark selected orders as paid”** allows efficient processing of multiple orders at once.
-
-![Bulk mark paid](docs/readme/admin_mark_paid.png)
-
----
-
-#### Custom Cake Requests
-
-- Bespoke custom cake requests are visible to staff in the admin panel for review and follow-up.
-- The **description / notes** field is displayed to ensure all customer requirements are visible.
-- A **thumbnail image preview** is shown when an image is attached, aiding design review.
-
-![Admin custom cake list](docs/readme/admin_custom_cake_list.png)  
-![Admin custom cake detail](docs/readme/admin_custom_cake_detail.png)
-
----
-
-#### Testing Evidence
-
-- [Role-based access control (RBAC) testing](TESTING.md#manual-test-matrix)
-- [Admin security & access screenshots](TESTING.md#evidence-index-assessor-critical)
-
-
-
-### Discount Codes
-- `WELCOME10` applies **10% off** the bag subtotal (before delivery).
-- The discount is applied at bag level and recalculated automatically if items are added or removed.
-- The discounted total is passed through to Stripe, ensuring customers are charged the reduced amount.
-- Each discount code can be used only once per authenticated user:
-  - Once redeemed, the code is recorded against the user’s order.
-  - Reuse of the same code by the same user is prevented on subsequent checkouts.
   - ![Discount already used](docs/readme/discount_used.png)
-
-- Completed orders store both `discount_code` and `discount_amount` for admin visibility and auditing.
-  - ![Discount updated](docs/readme/discount_line_bag.png)
   - ![Discount checkout](docs/readme/discount_checkout.png)
-  - ![Discount checkout success](docs/readme/discount_checkout_success.png)
-
-- Discount eligibility is revalidated at checkout after user login.
-  - If a previously used single-use code (e.g. `WELCOME10`) is detected,
-    it is automatically removed from the session.
-  - The grand total is recalculated before payment.
-  - A warning message is displayed to the user.
-  - This prevents session-based bypass of single-use restrictions.
-  - If the discount is removed after login, a clear warning message is displayed on the Shopping Bag or Checkout page so the user can review totals before proceeding.
-  - ![Discount applied via guest](docs/readme/discount_not_logged_in.png)
   - ![Discount removed with message](docs/readme/discount_removed_after_login.png)
-  This demonstrates that single-use discounts cannot be reused via guest session bypass, and users are clearly informed before proceeding to checkout.
 
+---
 
+## 📰 Newsletter (Marketing)
 
+- Modal email capture.
+- Welcome code display.
+- Duplicate email handling.
 
-  **Testing evidence:**  
-- [Discount reuse blocked after purchase](TESTING.md#manual-test-matrix)
+  - ![Newsletter form](docs/readme/newsletter_modal.png)
+  - ![Newsletter success](docs/readme/newsletter_success.png)
+  - ![Newsletter duplicate](docs/readme/newsletter_duplicate.png)
 
+---
 
-### Newsletter (Marketing)
-- Modal popup with email capture.
-- Success view shows a welcome code (`WELCOME10`) with copy button.
-- Duplicate emails are handled with a friendly message.
+## ⚙️ Admin Features
 
-**Evidence:**
-- ![Newsletter form](docs/readme/newsletter_form.png)
-- ![Newsletter success](docs/readme/newsletter_success.png)
-- ![Newsletter duplicate](docs/readme/newsletter_duplicate.png)
+### Security & Access Control
+- Staff-only admin access.
+- RBAC enforced.
+- Secrets managed via environment variables.
 
-**Testing evidence:**  
-- [Newsletter flow tested](TESTING.md#manual-test-matrix)
+### Product Management
+- Add/edit/delete products.
+- Inline ProductOption editing.
 
+### Order Management
+- View discount_code and discount_amount.
+- Inline line items.
+- Bulk “Mark selected orders as paid”.
 
-[Back to Top](#top)
+  - ![Admin orders list](docs/readme/admin_orders_list.png)
+  - ![Bulk mark paid](docs/readme/admin_mark_paid.png)
+
+### Custom Cake Requests
+- Staff view submissions.
+- Image preview for design reference.
+
+  - ![Admin custom cake list](docs/readme/admin_custom_cake_list.png)
 
 ---
 
 ## Future Features
 
-- Loyalty scheme (points per order)
-- Multi‑currency selector
+- Loyalty scheme
+- Multi-currency selector
 - Product reviews & ratings
 
 [Back to Top](#top)
@@ -641,7 +584,7 @@ Sensitive configuration values (secret keys, API keys, webhook secrets) are mana
 
 ---
 
-## SEO & Responsiveness
+## Marketing & SEO Evidence
 
 ### Search Engine Optimisation (SEO)
 
@@ -690,57 +633,139 @@ The application follows a **mobile-first design approach** and is responsive acr
 
 ## Business Model & UX Rationale
 
-### Marketing Strategy
+### 📣 Marketing & SEO Evidence
 
-Cake It Easy is positioned as a small, local bakery offering handmade cakes, custom designs, and party accessories.  
-The marketing strategy focuses on clear navigation, promotional incentives, and repeat customer engagement rather than aggressive upselling.
+## Business Model
 
-### Target Audience
-- Customers ordering celebration cakes (birthdays, events, special occasions)
-- Users seeking custom cake designs
-- Customers purchasing party accessories alongside cakes
+Cake It Easy v2.0 follows a **B2C (Business-to-Consumer)** model.
+The site is designed to sell:
 
-### Promotional Features
-- **Newsletter signup incentive:**  
-  Users are offered a welcome discount code when signing up to the newsletter, encouraging first-time purchases.
+* Artisan cakes
+* Custom cake deposits
+* Cupcakes (single and boxed options)
+* Party accessories
 
-- **Discount codes:**  
-  Promotional discount codes can be applied at checkout to incentivise conversion and increase basket value.
+The goal is to provide a seamless e-commerce journey from browsing to checkout using Stripe for secure payment processing.
 
-### Product Discovery & Upsell Approach
-- **Accessories availability:**  
-  Accessories such as candles and balloons are sold via a dedicated *Accessories* category, accessible through prominent navigation.
-  This allows customers to easily add complementary products to their order.
+The custom cake deposit model allows customers to secure bespoke orders while maintaining clear transactional separation from standard product purchases.
 
-- **Clear navigation structure:**  
-  Separate categories for Cakes, Accessories, and Custom Cakes help users explore products intuitively and increase engagement.
+---
 
-### Customer Retention
-- User accounts allow customers to:
-  - View previous orders
-  - Save delivery details
-  - Experience a faster checkout on repeat visits
+## Target Audience
 
-This approach balances usability, transparency, and commercial viability while remaining appropriate for a small-scale e-commerce application.
+The primary target audience includes:
 
+* Parents organising birthday parties
+* Customers ordering celebration cakes
+* Event planners
+* Individuals seeking personalised cake designs
+* Customers purchasing party accessories
 
-- **Revenue:** core product sales (cakes, cupcakes, and accessories), with promotional discounts used to encourage conversion.
+The UX is designed to be:
 
-- **Differentiator:** transparent per-cupcake pricing with selectable box sizes, allowing users to understand costs clearly before checkout.
+* Clear and simple
+* Mobile responsive
+* Conversion-focused
+* Accessible and easy to navigate
 
-- **UX:** clear navigation, large product imagery, user feedback via alert banners, and a free-delivery banner to support usability and reduce checkout friction.
+---
 
-- **Admin efficiency:** Django admin features and structured product models allow efficient product and price management.
+## SEO Strategy
 
-- Accessories Availability: Accessories are displayed consistently across all product pages to maximise cross-selling opportunities and increase average order value.
+SEO was implemented through:
 
+* Meaningful page titles
+* Meta descriptions
+* Semantic HTML structure
+* Clean URL structure
+* Descriptive alt attributes on images
+* Logical heading hierarchy (H1 → H2 → H3 etc.)
+* Robots.txt file
+* XML sitemap
 
-![Newsletter form](docs/readme/newsletter_form.png)
-![Newsletter success](<docs/readme/newsletter_success .png>)
-![Newsletter already subscribed](docs/readme/newsletter_duplicate.png)
+Meta descriptions are included in `base.html` and overridden where appropriate using Django template blocks.
 
+### Example Meta Description
 
-**Facebook:** branded post mockup![Facebook cover](docs/readme/fb_01_page_cover_about.png)
+```html
+<meta name="description"
+      content="Hand-made cakes, artisan cakes, custom orders and accessories. Secure checkout with Stripe.">
+```
+
+---
+
+## Newsletter Marketing
+
+A newsletter subscription modal is included to encourage repeat engagement and customer retention.
+
+Features:
+
+* Modal triggered via site interaction
+* Email validation
+* Server-side form handling
+* Success and error messaging
+* Accessible form labelling (WAVE compliant)
+
+### Newsletter Modal
+
+![Newsletter modal](docs/readme/newsletter_modal.png)
+
+### Newsletter Success Message
+
+![Newsletter success](docs/readme/newsletter_success.png)
+
+---
+
+## Social Media Marketing
+
+A branded Facebook page mockup was created to demonstrate social media integration and brand presence.
+
+The page includes:
+
+* Consistent brand styling
+* Product highlights
+* Call-to-action messaging
+* Visual alignment with the website branding
+
+### Facebook Page Mockup
+
+![Facebook mockup](docs/readme/facebook_mockup.png)
+
+---
+
+## Conversion Strategy
+
+The site includes multiple conversion-focused UX elements:
+
+* Free delivery banner
+* Clear pricing
+* “From €…” cupcake pricing for transparency
+* Discount code functionality (WELCOME10)
+* Immediate feedback messages
+* Clear call-to-action buttons
+* Continue shopping flow after order completion
+
+The discount system includes safeguards to prevent multiple uses per user account.
+
+---
+
+## Performance & Responsiveness
+
+The site was tested using:
+
+* Lighthouse audits (Performance, Accessibility, Best Practices, SEO)
+* W3C HTML Validator
+* W3C CSS Validator
+* Manual cross-device testing
+
+The layout adapts correctly across:
+
+* Mobile
+* Tablet
+* Desktop
+
+Bootstrap 5 is used for grid and responsive components.
+
 
 [Back to Top](#top)
 
