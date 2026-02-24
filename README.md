@@ -297,6 +297,13 @@ Support:
 - RBAC enforced.
 - Secrets managed via environment variables.
 
+### Admin Panel Shortcut (Staff Only)
+
+When logged in as a staff/admin user, an **Admin shortcut** is available from the account menu in the site navigation.  
+This provides quick access to the Django Admin panel for product, order, and custom cake request management.
+
+![Admin shortcut in navigation](docs/readme/django_admin_shortcut.png)
+
 ### Product Management
 - Add/edit/delete products.
 - Inline ProductOption editing.
@@ -773,9 +780,12 @@ Bootstrap 5 is used for grid and responsive components.
 
 ## Credits
 
-- Code Institute **Boutique Ado** walkthrough.
-- Stripe Docs.
-- Canva/Unsplash for imagery (placeholders).
+- Code Institute **Boutique Ado** walkthrough project (structure and core e-commerce architecture).
+- Stripe documentation and official Stripe test card guidance.
+- Django and Django Allauth documentation.
+- Bootstrap 5 documentation.
+- Canva and Unsplash for placeholder imagery.
+- ChatGPT (OpenAI) for debugging assistance, code review guidance, validation troubleshooting, and documentation structuring support.
 
 ## Licence
 
